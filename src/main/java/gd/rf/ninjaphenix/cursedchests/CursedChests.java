@@ -11,7 +11,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.container.GenericContainer;
 import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.DefaultedList;

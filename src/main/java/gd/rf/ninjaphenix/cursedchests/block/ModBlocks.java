@@ -1,8 +1,5 @@
 package gd.rf.ninjaphenix.cursedchests.block;
 
-import gd.rf.ninjaphenix.cursedchests.CursedChestClient;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
