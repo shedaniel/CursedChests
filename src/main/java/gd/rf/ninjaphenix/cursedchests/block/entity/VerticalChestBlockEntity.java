@@ -186,7 +186,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	}
 
 	protected DefaultedList<ItemStack> getInvStackList() { return this.inventory; }
-	protected void setInvStackList(DefaultedList<ItemStack> defaultedList_1) { this.inventory = defaultedList_1; }
+	public void setInvStackList(DefaultedList<ItemStack> defaultedList_1) { this.inventory = defaultedList_1; }
 	@Environment(EnvType.CLIENT) public float getAnimationProgress(float float_1) { return MathHelper.lerp(float_1, this.lastAnimationAngle, this.animationAngle); }
 	protected Container createContainer(int int_1, PlayerInventory playerInventory_1) { return new GenericContainer(ContainerType.GENERIC_9X6, int_1, playerInventory_1, this, getInvSize()/9); }
 
