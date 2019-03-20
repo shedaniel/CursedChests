@@ -1,7 +1,5 @@
 package gd.rf.ninjaphenix.cursedchests.block;
 
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.block.BlockItem;
@@ -17,10 +15,10 @@ public class ModBlocks
 
 	public static void init()
 	{
-		wooden_chest = register(new WoodVerticalChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()));
-		iron_chest = register(new IronVerticalChestBlock(FabricBlockSettings.copy(Blocks.IRON_BLOCK).build()));
-		gold_chest = register(new GoldVerticalChestBlock(FabricBlockSettings.copy(Blocks.GOLD_BLOCK).build()));
-		diamond_chest = register(new DiamondVerticalChestBlock(FabricBlockSettings.copy(Blocks.DIAMOND_BLOCK).build()));
+		wooden_chest = register(new WoodVerticalChestBlock());
+		iron_chest = register(new IronVerticalChestBlock());
+		gold_chest = register(new GoldVerticalChestBlock());
+		diamond_chest = register(new DiamondVerticalChestBlock());
 	}
 
 	private static VerticalChestBlock register(VerticalChestBlock block)
