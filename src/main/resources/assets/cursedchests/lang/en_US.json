@@ -1,0 +1,15 @@
+{
+	"container.cursedchests.wood_chest": "Chest",
+	"container.cursedchests.iron_chest": "Iron Chest",
+	"container.cursedchests.gold_chest": "Gold Chest",
+	"container.cursedchests.diamond_chest": "Diamond Chest",
+	"container.cursedchests.obsidian_chest": "Obsidian Chest",
+
+	"container.cursedchests.generic_double": "Large ",
+
+	"block.cursedchests.wood_chest": "Chest",
+	"block.cursedchests.iron_chest": "Iron Chest",
+	"block.cursedchests.gold_chest": "Gold Chest",
+	"block.cursedchests.diamond_chest": "Diamond Chest",
+	"block.cursedchests.obsidian_chest": "Obsidian Chest"
+}

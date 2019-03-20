@@ -1,0 +1,17 @@
+{
+	"id": "cursedchests",
+	"name": "CursedChests",
+	"description": "Adds cursed chests to minecraft.",
+	"version": "${version}",
+	"side": "universal",
+	"initializers": [
+		"gd.rf.ninjaphenix.cursedchests.CursedChests",
+		"gd.rf.ninjaphenix.cursedchests.CursedChestClient"
+	],
+	"requires": {
+		"fabric": "*"
+	},
+	"mixins": {
+		"client": "gd.rf.ninjaphenix.cursedchests.mixins.client.json"
+	}
+}

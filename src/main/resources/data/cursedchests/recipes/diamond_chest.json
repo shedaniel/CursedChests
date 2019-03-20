@@ -1,0 +1,22 @@
+{
+	"type": "crafting_shaped",
+	"pattern": [
+		"GGG",
+		"ICI",
+		"GGG"
+	],
+	"key": {
+		"I": {
+			"item": "minecraft:diamond"
+		},
+		"C": {
+			"item": "cursedchests:gold_chest"
+		},
+		"G": {
+			"item": "minecraft:glass"
+		}
+	},
+	"result": {
+		"item": "cursedchests:diamond_chest"
+	}
+}

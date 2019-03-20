@@ -1,0 +1,7 @@
+{
+  "mappings": {
+      "gd/rf/ninjaphenix/cursedchests/mixins/ItemDynamicRenderer": {
+        "render": "net/minecraft/client/render/item/ItemDynamicRenderer.render(Lnet/minecraft/item/ItemStack;)V"
+      }
+    }
+}
