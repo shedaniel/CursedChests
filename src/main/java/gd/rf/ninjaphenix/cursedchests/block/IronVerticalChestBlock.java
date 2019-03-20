@@ -6,6 +6,6 @@ import net.minecraft.world.BlockView;
 
 public class IronVerticalChestBlock extends VerticalChestBlock
 {
-	IronVerticalChestBlock(Settings block$Settings_1) { super(block$Settings_1, "iron_chest"); }
+	IronVerticalChestBlock(Settings blockSettings) { super(blockSettings, "iron_chest"); }
 	@Override public BlockEntity createBlockEntity(BlockView blockView) { return new IronVerticalChestBlockEntity(); }
 }
