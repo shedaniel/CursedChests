@@ -9,6 +9,7 @@ import net.minecraft.client.gui.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
 public class ScrollableScreen extends ContainerScreen<ScrollableContainer> implements ContainerProvider<ScrollableContainer>
@@ -28,7 +29,7 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 	{
 		super(container, playerInventory, containerTitle);
 		this.realRows = container.getRows();
-		this.topRow = realRows-6;
+		this.topRow = 0;
 		this.rows = realRows > 6 ? 6 : realRows;
 		this.height = 114 + this.rows * 18;
 	}
@@ -58,8 +59,30 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 		{
 			this.client.getTextureManager().bindTexture(SCROLL_TEXTURE);
 			this.drawTexturedRect(int_3+172, int_4, 0, 0, 22, 132);
-			this.drawTexturedRect(int_3+174, (int) (int_4+18 + 91*((double) topRow / (double) (realRows-5))), 22, 0, 12, 15);
+			this.drawTexturedRect(int_3+174, (int) (int_4+18 + 91*((double) topRow / (double) (realRows-6))), 22, 0, 12, 15);
 		}
+	}
+
+
+	@Override public boolean mouseScrolled(double mouseX, double mouseY, double scrollDelta)
+	{
+		if(this.realRows > 6)
+		{
+			topRow = topRow - (int) scrollDelta;
+			if(topRow < 0) topRow = 0;
+			if(topRow > realRows - 6) topRow = realRows - 6;
+			return true;
+		}
+		return false;
+		//if (!this.doRenderScrollBar()) {
+		//	return false;
+		//} else {
+		//	int int_1 = (((CreativePlayerInventoryScreen.CreativeContainer)this.container).itemList.size() + 9 - 1) / 9 - 5;
+		//	this.scrollPosition = (float)((double)this.scrollPosition - double_3 / (double)int_1);
+		//	this.scrollPosition = MathHelper.clamp(this.scrollPosition, 0.0F, 1.0F);
+		//	((CreativePlayerInventoryScreen.CreativeContainer)this.container).method_2473(this.scrollPosition);
+		//	return true;
+		//}
 	}
 
 	@Override protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int mouseButton)
