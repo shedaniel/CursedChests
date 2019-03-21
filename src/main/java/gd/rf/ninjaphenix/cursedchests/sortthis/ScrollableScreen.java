@@ -18,6 +18,7 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 	private int topRow;
 	private final int rows;
 	private final int realRows;
+	private double progress;
 
 	public static ScrollableScreen createScreen(ScrollableContainer container)
 	{
@@ -31,6 +32,7 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 		this.topRow = 0;
 		this.rows = realRows > 6 ? 6 : realRows;
 		this.height = 114 + this.rows * 18;
+		this.progress = 0;
 	}
 
 	@Override public void render(int int_1, int int_2, float float_1)
@@ -58,7 +60,7 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 		{
 			this.client.getTextureManager().bindTexture(SCROLL_TEXTURE);
 			this.drawTexturedRect(int_3+172, int_4, 0, 0, 22, 132);
-			this.drawTexturedRect(int_3+174, (int) (int_4+18 + 91*((double) topRow / (double) (realRows-6))), 22, 0, 12, 15);
+			this.drawTexturedRect(int_3+174, (int) (int_4+18 + 91*progress), 22, 0, 12, 15);
 		}
 	}
 
@@ -70,18 +72,10 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 			topRow = topRow - (int) scrollDelta;
 			if(topRow < 0) topRow = 0;
 			if(topRow > realRows - 6) topRow = realRows - 6;
+			progress = ((double) topRow) / ((double) (realRows - 6));
 			return true;
 		}
 		return false;
-		//if (!this.doRenderScrollBar()) {
-		//	return false;
-		//} else {
-		//	int int_1 = (((CreativePlayerInventoryScreen.CreativeContainer)this.container).itemList.size() + 9 - 1) / 9 - 5;
-		//	this.scrollPosition = (float)((double)this.scrollPosition - double_3 / (double)int_1);
-		//	this.scrollPosition = MathHelper.clamp(this.scrollPosition, 0.0F, 1.0F);
-		//	((CreativePlayerInventoryScreen.CreativeContainer)this.container).method_2473(this.scrollPosition);
-		//	return true;
-		//}
 	}
 
 	@Override protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int mouseButton)
@@ -90,6 +84,21 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 		boolean right = mouseX > left + this.width;
 		if(realRows > 6) { right = (right && mouseY > top + 132) || mouseX > left + this.width + 18; }
 		return left_up_down || right;
+	}
+
+	@Override public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double deltaX, double deltaY)
+	{
+		// doesnt seem to work???
+		if(!this.isCursorDragging)
+		{
+			if(mouseX > this.left + 172 && mouseX < this.left + 184 && mouseY > this.top + 18 && mouseY < this.top + 124)
+			{
+				progress = (mouseY - this.top - 18)/105;
+				topRow = (int) (progress * (realRows-6));
+				return true;
+			}
+		}
+		return super.mouseDragged(mouseX, mouseY, mouseButton, deltaX, deltaY);
 	}
 }
 
