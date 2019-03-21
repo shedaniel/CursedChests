@@ -85,14 +85,14 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 
 	@Override public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double deltaX, double deltaY)
 	{
-		// doesnt seem to work???
-		if(!this.isCursorDragging)
+		if(this.playerInventory.getCursorStack().isEmpty())
 		{
 			if(mouseX > this.left + 172 && mouseX < this.left + 184 && mouseY > this.top + 18 && mouseY < this.top + 124)
 			{
 				progress = (mouseY - this.top - 18)/105;
 				topRow = (int) (progress * (realRows-6));
-				container.setTopRow(topRow);
+				// todo: change to translating slots
+				container.updateSlotPositions(topRow);
 				return true;
 			}
 		}
@@ -105,7 +105,7 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 		if(topRow < 0) topRow = 0;
 		if(topRow > realRows - 6) topRow = realRows - 6;
 		progress = ((double) topRow) / ((double) (realRows - 6));
-		container.setTopRow(topRow);
+		container.updateSlotPositions(topRow);
 	}
 }
 

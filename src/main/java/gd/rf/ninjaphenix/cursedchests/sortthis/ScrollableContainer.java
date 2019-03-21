@@ -9,7 +9,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.text.TextComponent;
 
-public class ScrollableContainer  extends Container
+public class ScrollableContainer extends Container
 {
 	private final TextComponent containerName;
 	private final Inventory inventory;
@@ -27,9 +27,12 @@ public class ScrollableContainer  extends Container
 		int int_3 = (rows - 4) * 18;
 		inventory.onInvOpen(playerInventory.player);
 
-		for(int y = 0; y < rows; ++y) {
-			for(int x = 0; x < 9; ++x) {
-				this.addSlot(new Slot(inventory, x + y * 9, 8 + x * 18, 18 + y * 18));
+		for(int y = 0; y < realRows; ++y) {
+			int yPos = 18 + y * 18;
+			if(y >= rows){yPos = -2000;}
+			for(int x = 0; x < 9; ++x)
+			{
+				this.addSlot(new Slot(inventory, x + y * 9, 8 + x * 18, yPos));
 			}
 		}
 
@@ -50,20 +53,22 @@ public class ScrollableContainer  extends Container
 		this.inventory.onInvClose(player);
 	}
 
-	// This method should only be called when there are more than 6 rows
-	public void setTopRow(int row)
-	{
-		for(int y = 0; y < rows; ++y)
-		{
-			for(int x = 0; x < 9; ++x)
-			{
-				this.slotList.set(x + y*9, new Slot(this.inventory, x + (row + y)*9, 8+x*18, 18+y*18));
-			}
-		}
-	}
-
 	public Inventory getInventory() {
 		return this.inventory;
+	}
+
+	public void updateSlotPositions(int offset)
+	{
+		for(int y = 0; y < realRows; ++y)
+		{
+			int ny = (y-offset);
+			int yPos = 18 + ny * 18;
+			if(ny >= rows || ny < 0){yPos = -2000;}
+			for(int x = 0; x < 9; ++x)
+			{
+				this.slotList.get(x + 9*y).yPosition = yPos;
+			}
+		}
 	}
 
 	@Environment(EnvType.CLIENT) int getRows() {

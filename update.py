@@ -5,5 +5,5 @@ if __name__ == "__main__":
     system("gradlew --stop")
     system("gradlew cleanLoomBinaries cleanLoomMappings")
     system("gradlew")
-    system("gradlew cleanIdea openIdea")
+    system("gradlew cleanIdea idea openIdea")
     input("Press any key to exit.")

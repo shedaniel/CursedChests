@@ -33,7 +33,7 @@ public class CursedChests implements ModInitializer
 	{
 		ModBlocks.init();
 		// TODO: expand, just testing this feature atm
-		// Maybe create a dedicated
+		// Maybe create a dedicated method
 		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) -> {
 			int inventorySize = buf.readInt();
 			TextComponent containerName = buf.readTextComponent();
