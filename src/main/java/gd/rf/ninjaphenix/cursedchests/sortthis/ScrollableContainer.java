@@ -14,13 +14,16 @@ public class ScrollableContainer  extends Container
 	private final TextComponent containerName;
 	private final Inventory inventory;
 	private final int rows;
+	private final int realRows;
 
+	// todo: Make it scroll and sync inventory
 	public ScrollableContainer(int syncId, PlayerInventory playerInventory, Inventory inventory, TextComponent containerName)
 	{
 		super(null, syncId);
 		this.inventory = inventory;
 		this.containerName = containerName;
-		rows = inventory.getInvSize()/9;
+		realRows = inventory.getInvSize()/9;
+		rows = realRows > 6 ? 6 : realRows;
 		int int_3 = (rows - 4) * 18;
 		inventory.onInvOpen(playerInventory.player);
 
@@ -52,7 +55,7 @@ public class ScrollableContainer  extends Container
 	}
 
 	@Environment(EnvType.CLIENT) int getRows() {
-		return this.rows;
+		return realRows;
 	}
 
 	TextComponent getDisplayName()
