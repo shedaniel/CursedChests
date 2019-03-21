@@ -187,26 +187,27 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Override public boolean activate(BlockState state, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
 		if (world.isClient) return true;
-		//NameableContainerProvider nameableContainerProvider_1 = this.createContainerProvider(blockState_1, world_1, blockPos_1);
-		//if (nameableContainerProvider_1 != null)
+		//Inventory combined = createCombinedInventory(state, world, blockPos);
+		//DefaultedList<ItemStack> inventoryData = DefaultedList.create(combined.getInvSize(), ItemStack.EMPTY);
+		//for(int slotIndex=0; slotIndex<combined.getInvSize(); slotIndex++)
 		//{
-		Inventory combined = createCombinedInventory(state, world, blockPos);
-		DefaultedList<ItemStack> inventoryData = DefaultedList.create(combined.getInvSize(), ItemStack.EMPTY);
-		for(int slotIndex=0; slotIndex<combined.getInvSize(); slotIndex++)
-		{
-			inventoryData.set(slotIndex, combined.getInvStack(slotIndex));
-		}
-		CompoundTag tag = Inventories.toTag(new CompoundTag(), inventoryData);
-		TextComponent containerName = method_17459(state, world, blockPos, displayNameCombiner);
-		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf -> {
-				packetByteBuf.writeInt(combined.getInvSize());
-				packetByteBuf.writeTextComponent(containerName);
-				packetByteBuf.writeCompoundTag(tag);
-
-		}));
-			//playerEntity_1.openContainer(nameableContainerProvider_1);
-			player.incrementStat(this.getOpenStat());
+		//	inventoryData.set(slotIndex, combined.getInvStack(slotIndex));
 		//}
+		//CompoundTag tag = Inventories.toTag(new CompoundTag(), inventoryData);
+		TextComponent containerName = method_17459(state, world, blockPos, displayNameCombiner);
+		//ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf -> {
+		//		packetByteBuf.writeInt(combined.getInvSize());
+		//		packetByteBuf.writeTextComponent(containerName);
+		//		packetByteBuf.writeCompoundTag(tag);
+		//
+		//}));
+		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf -> {
+			packetByteBuf.writeBlockPos(blockPos);
+			//packetByteBuf.writeInt(combined.getInvSize());
+			packetByteBuf.writeTextComponent(containerName);
+			//packetByteBuf.writeCompoundTag(tag);
+		}));
+		player.incrementStat(this.getOpenStat());
 		return true;
 	}
 
@@ -251,7 +252,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		}
 	}
 
-	private static Inventory createCombinedInventory(BlockState blockState_1, World world_1, BlockPos blockPos_1) { return method_17459(blockState_1, world_1, blockPos_1, inventoryCombiner); }
+	public static Inventory createCombinedInventory(BlockState blockState_1, World world_1, BlockPos blockPos_1) { return method_17459(blockState_1, world_1, blockPos_1, inventoryCombiner); }
 
 	private static boolean isChestBlocked(IWorld iWorld_1, BlockPos blockPos_1)
 	{

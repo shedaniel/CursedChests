@@ -20,10 +20,7 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 	private final int realRows;
 	private double progress;
 
-	public static ScrollableScreen createScreen(ScrollableContainer container)
-	{
-		return new ScrollableScreen(container, MinecraftClient.getInstance().player.inventory, container.getDisplayName());
-	}
+	public static ScrollableScreen createScreen(ScrollableContainer container) { return new ScrollableScreen(container, MinecraftClient.getInstance().player.inventory, container.getDisplayName()); }
 
 	public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, TextComponent containerTitle)
 	{
@@ -67,11 +64,7 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 
 	@Override public boolean mouseScrolled(double mouseX, double mouseY, double scrollDelta)
 	{
-		if(this.realRows > 6)
-		{
-			setTopRow(topRow - (int) scrollDelta);
-			return true;
-		}
+		if(this.realRows > 6) { setTopRow(topRow - (int) scrollDelta); return true; }
 		return false;
 	}
 
@@ -91,7 +84,6 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 			{
 				progress = (mouseY - this.top - 18)/105;
 				topRow = (int) (progress * (realRows-6));
-				// todo: change to translating slots
 				container.updateSlotPositions(topRow);
 				return true;
 			}

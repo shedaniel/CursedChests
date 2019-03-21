@@ -1,22 +1,17 @@
 package gd.rf.ninjaphenix.cursedchests;
 
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
-import gd.rf.ninjaphenix.cursedchests.block.entity.DiamondVerticalChestBlockEntity;
-import gd.rf.ninjaphenix.cursedchests.block.entity.GoldVerticalChestBlockEntity;
-import gd.rf.ninjaphenix.cursedchests.block.entity.IronVerticalChestBlockEntity;
-import gd.rf.ninjaphenix.cursedchests.block.entity.WoodVerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.block.entity.*;
 import gd.rf.ninjaphenix.cursedchests.sortthis.ScrollableContainer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.inventory.BasicInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.TextComponent;
-import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 public class CursedChests implements ModInitializer
 {
@@ -32,20 +27,11 @@ public class CursedChests implements ModInitializer
 	@Override public void onInitialize()
 	{
 		ModBlocks.init();
-		// TODO: expand, just testing this feature atm
-		// Maybe create a dedicated method
 		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) -> {
-			int inventorySize = buf.readInt();
+			BlockPos pos = buf.readBlockPos();
 			TextComponent containerName = buf.readTextComponent();
-			CompoundTag data = buf.readCompoundTag();
-			DefaultedList<ItemStack> stacks =  DefaultedList.create(inventorySize, ItemStack.EMPTY);
-			Inventories.fromTag(data, stacks);
-			BasicInventory inventory = new BasicInventory(inventorySize);
-			for(int i=0; i<inventorySize; i++)
-			{
-				inventory.setInvStack(i, stacks.get(i));
-			}
-			return new ScrollableContainer(syncId, player.inventory, inventory, containerName);
+			World world = player.getEntityWorld();
+			return new ScrollableContainer(syncId, player.inventory, VerticalChestBlock.createCombinedInventory(world.getBlockState(pos), world, pos), containerName);
 		}));
 	}
 }
