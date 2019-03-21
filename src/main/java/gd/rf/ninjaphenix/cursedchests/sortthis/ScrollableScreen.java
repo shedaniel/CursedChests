@@ -69,10 +69,7 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 	{
 		if(this.realRows > 6)
 		{
-			topRow = topRow - (int) scrollDelta;
-			if(topRow < 0) topRow = 0;
-			if(topRow > realRows - 6) topRow = realRows - 6;
-			progress = ((double) topRow) / ((double) (realRows - 6));
+			setTopRow(topRow - (int) scrollDelta);
 			return true;
 		}
 		return false;
@@ -95,10 +92,20 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 			{
 				progress = (mouseY - this.top - 18)/105;
 				topRow = (int) (progress * (realRows-6));
+				container.setTopRow(topRow);
 				return true;
 			}
 		}
 		return super.mouseDragged(mouseX, mouseY, mouseButton, deltaX, deltaY);
+	}
+
+	private void setTopRow(int value)
+	{
+		this.topRow = value;
+		if(topRow < 0) topRow = 0;
+		if(topRow > realRows - 6) topRow = realRows - 6;
+		progress = ((double) topRow) / ((double) (realRows - 6));
+		container.setTopRow(topRow);
 	}
 }
 

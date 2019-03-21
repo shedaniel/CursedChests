@@ -50,6 +50,18 @@ public class ScrollableContainer  extends Container
 		this.inventory.onInvClose(player);
 	}
 
+	// This method should only be called when there are more than 6 rows
+	public void setTopRow(int row)
+	{
+		for(int y = 0; y < rows; ++y)
+		{
+			for(int x = 0; x < 9; ++x)
+			{
+				this.slotList.set(x + y*9, new Slot(this.inventory, x + (row + y)*9, 8+x*18, 18+y*18));
+			}
+		}
+	}
+
 	public Inventory getInventory() {
 		return this.inventory;
 	}
