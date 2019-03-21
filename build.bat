@@ -1,1 +1,2 @@
 gradlew clean build
+pause

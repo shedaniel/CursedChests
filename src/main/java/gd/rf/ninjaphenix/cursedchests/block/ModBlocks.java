@@ -8,14 +8,14 @@ import net.minecraft.util.registry.Registry;
 
 public class ModBlocks
 {
-	public static VerticalChestBlock wooden_chest;
+	public static VerticalChestBlock wood_chest;
 	public static VerticalChestBlock iron_chest;
 	public static VerticalChestBlock gold_chest;
 	public static VerticalChestBlock diamond_chest;
 
 	public static void init()
 	{
-		wooden_chest = register(new WoodVerticalChestBlock());
+		wood_chest = register(new WoodVerticalChestBlock());
 		iron_chest = register(new IronVerticalChestBlock());
 		gold_chest = register(new GoldVerticalChestBlock());
 		diamond_chest = register(new DiamondVerticalChestBlock());

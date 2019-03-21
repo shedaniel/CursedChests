@@ -25,7 +25,7 @@ public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<Vertic
 		GlStateManager.enableDepthTest();
 		GlStateManager.depthFunc(515);
 		GlStateManager.depthMask(true);
-		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : ModBlocks.wooden_chest.getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH).with(VerticalChestBlock.TYPE, VerticalChestBlock.VerticalChestType.SINGLE);
+		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : ModBlocks.wood_chest.getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH).with(VerticalChestBlock.TYPE, VerticalChestBlock.VerticalChestType.SINGLE);
 		VerticalChestBlock.VerticalChestType chestType = state.get(VerticalChestBlock.TYPE);
 		boolean isDouble = chestType != VerticalChestBlock.VerticalChestType.SINGLE;
 		if(chestType == VerticalChestBlock.VerticalChestType.TOP && int_1  < 0) return;
