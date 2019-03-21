@@ -9,8 +9,6 @@ import net.minecraft.client.gui.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import org.lwjgl.system.MathUtil;
 
 @Environment(EnvType.CLIENT)
 public class ScrollableScreen extends ContainerScreen<ScrollableContainer> implements ContainerProvider<ScrollableContainer>
@@ -29,8 +27,8 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 	public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, TextComponent containerTitle)
 	{
 		super(container, playerInventory, containerTitle);
-		this.topRow = 1;
 		this.realRows = container.getRows();
+		this.topRow = realRows-6;
 		this.rows = realRows > 6 ? 6 : realRows;
 		this.height = 114 + this.rows * 18;
 	}
@@ -60,7 +58,16 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 		{
 			this.client.getTextureManager().bindTexture(SCROLL_TEXTURE);
 			this.drawTexturedRect(int_3+172, int_4, 0, 0, 22, 132);
-			this.drawTexturedRect(int_3+174, (int) (int_4+18 + 106*((double) topRow / (double) realRows)), 22, 0, 12, 15);
+			this.drawTexturedRect(int_3+174, (int) (int_4+18 + 91*((double) topRow / (double) (realRows-5))), 22, 0, 12, 15);
 		}
 	}
+
+	@Override protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int mouseButton)
+	{
+		boolean left_up_down = mouseX < left || mouseY < top || mouseY > top + this.height;
+		boolean right = mouseX > left + this.width;
+		if(realRows > 6) { right = (right && mouseY > top + 132) || mouseX > left + this.width + 18; }
+		return left_up_down || right;
+	}
 }
+
