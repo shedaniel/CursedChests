@@ -184,29 +184,28 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		}
 	}
 
-	@Override public boolean activate(BlockState blockState_1, World world_1, BlockPos blockPos_1, PlayerEntity playerEntity_1, Hand hand_1, BlockHitResult blockHitResult_1)
+	@Override public boolean activate(BlockState state, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
-		if (world_1.isClient) return true;
+		if (world.isClient) return true;
 		//NameableContainerProvider nameableContainerProvider_1 = this.createContainerProvider(blockState_1, world_1, blockPos_1);
 		//if (nameableContainerProvider_1 != null)
 		//{
-		Inventory combined = createCombinedInventory(blockState_1, world_1, blockPos_1);
+		Inventory combined = createCombinedInventory(state, world, blockPos);
 		DefaultedList<ItemStack> inventoryData = DefaultedList.create(combined.getInvSize(), ItemStack.EMPTY);
 		for(int slotIndex=0; slotIndex<combined.getInvSize(); slotIndex++)
 		{
 			inventoryData.set(slotIndex, combined.getInvStack(slotIndex));
 		}
 		CompoundTag tag = Inventories.toTag(new CompoundTag(), inventoryData);
-		TextComponent containerName = method_17459(blockState_1, world_1, blockPos_1, displayNameCombiner);
-		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), playerEntity_1, (packetByteBuf -> {
-
+		TextComponent containerName = method_17459(state, world, blockPos, displayNameCombiner);
+		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf -> {
 				packetByteBuf.writeInt(combined.getInvSize());
 				packetByteBuf.writeTextComponent(containerName);
 				packetByteBuf.writeCompoundTag(tag);
 
 		}));
 			//playerEntity_1.openContainer(nameableContainerProvider_1);
-			playerEntity_1.incrementStat(this.getOpenStat());
+			player.incrementStat(this.getOpenStat());
 		//}
 		return true;
 	}

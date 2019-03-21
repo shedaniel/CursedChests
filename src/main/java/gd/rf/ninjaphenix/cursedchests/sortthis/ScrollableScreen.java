@@ -9,7 +9,6 @@ import net.minecraft.client.gui.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
 public class ScrollableScreen extends ContainerScreen<ScrollableContainer> implements ContainerProvider<ScrollableContainer>
