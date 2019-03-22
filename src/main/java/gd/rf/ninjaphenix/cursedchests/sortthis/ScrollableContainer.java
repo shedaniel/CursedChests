@@ -58,5 +58,5 @@ public class ScrollableContainer extends Container
 	public Inventory getInventory(){return this.inventory;}
 	@Environment(EnvType.CLIENT) int getRows() { return realRows; }
 	TextComponent getDisplayName() { return containerName; }
-	@Override public boolean canUse(PlayerEntity playerEntity) { return true; }
+	@Override public boolean canUse(PlayerEntity player) { return this.inventory.canPlayerUseInv(player); }
 }
