@@ -7,6 +7,7 @@ import net.minecraft.container.Slot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.TextComponent;
 
 public class ScrollableContainer extends Container
@@ -59,4 +60,23 @@ public class ScrollableContainer extends Container
 	@Environment(EnvType.CLIENT) int getRows() { return realRows; }
 	TextComponent getDisplayName() { return containerName; }
 	@Override public boolean canUse(PlayerEntity player) { return this.inventory.canPlayerUseInv(player); }
+
+	@Override public ItemStack transferSlot(PlayerEntity player, int slotIndex)
+	{
+		ItemStack stack = ItemStack.EMPTY;
+		Slot slot = this.slotList.get(slotIndex);
+		if (slot != null && slot.hasStack())
+		{
+			ItemStack slotStack = slot.getStack();
+			stack = slotStack.copy();
+			if (slotIndex < this.inventory.getInvSize())
+			{
+				if (!this.insertItem(slotStack, this.inventory.getInvSize(), this.slotList.size(), true)) return ItemStack.EMPTY;
+			}
+			else if (!this.insertItem(slotStack, 0, this.inventory.getInvSize(), false)) return ItemStack.EMPTY;
+			if (slotStack.isEmpty()) slot.setStack(ItemStack.EMPTY);
+			else slot.markDirty();
+		}
+		return stack;
+	}
 }
