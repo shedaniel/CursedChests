@@ -23,6 +23,8 @@ public class CursedChests implements ModInitializer
 			BlockEntityType.Builder.create(GoldVerticalChestBlockEntity::new).build(null));
 	public static final BlockEntityType<DiamondVerticalChestBlockEntity> DIAMOND_VERTICAL_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "diamond_vertical_chest"),
 			BlockEntityType.Builder.create(DiamondVerticalChestBlockEntity::new).build(null));
+	public static final BlockEntityType<ObsidianVerticalChestBlockEntity> OBSIDIAN_VERTICAL_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "obsidian_vertical_chest"),
+			BlockEntityType.Builder.create(ObsidianVerticalChestBlockEntity::new).build(null));
 
 	@Override public void onInitialize()
 	{

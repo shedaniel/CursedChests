@@ -12,6 +12,7 @@ public class ModBlocks
 	public static VerticalChestBlock iron_chest;
 	public static VerticalChestBlock gold_chest;
 	public static VerticalChestBlock diamond_chest;
+	public static VerticalChestBlock obsidian_chest;
 
 	public static void init()
 	{
@@ -19,6 +20,7 @@ public class ModBlocks
 		iron_chest = register(new IronVerticalChestBlock());
 		gold_chest = register(new GoldVerticalChestBlock());
 		diamond_chest = register(new DiamondVerticalChestBlock());
+		obsidian_chest = register(new ObsidianVerticalChestBlock());
 	}
 
 	private static VerticalChestBlock register(VerticalChestBlock block)

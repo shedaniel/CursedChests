@@ -1,9 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.mixins;
 
-import gd.rf.ninjaphenix.cursedchests.block.DiamondVerticalChestBlock;
-import gd.rf.ninjaphenix.cursedchests.block.GoldVerticalChestBlock;
-import gd.rf.ninjaphenix.cursedchests.block.IronVerticalChestBlock;
-import gd.rf.ninjaphenix.cursedchests.block.WoodVerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.block.*;
 import gd.rf.ninjaphenix.cursedchests.block.entity.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
@@ -22,6 +19,7 @@ public class ItemDynamicRenderer
 	private VerticalChestBlockEntity IRON_VERTICAL_CHEST = new IronVerticalChestBlockEntity();
 	private VerticalChestBlockEntity GOLD_VERTICAL_CHEST = new GoldVerticalChestBlockEntity();
 	private VerticalChestBlockEntity DIAMOND_VERTICAL_CHEST = new DiamondVerticalChestBlockEntity();
+	private VerticalChestBlockEntity OBSIDIAN_VERTICAL_CHEST = new ObsidianVerticalChestBlockEntity();
 
 	@Inject(at = @At("HEAD"), method="render", cancellable=true)
 	private void render(ItemStack itemStack, CallbackInfo info)
@@ -46,7 +44,10 @@ public class ItemDynamicRenderer
 			{
 				BlockEntityRenderDispatcher.INSTANCE.renderEntity(DIAMOND_VERTICAL_CHEST); info.cancel();
 			}
+			else if(block instanceof ObsidianVerticalChestBlock)
+			{
+				BlockEntityRenderDispatcher.INSTANCE.renderEntity(OBSIDIAN_VERTICAL_CHEST); info.cancel();
+			}
 		}
-
 	}
 }
