@@ -32,16 +32,16 @@ public class ScrollableScreen extends ContainerScreen<ScrollableContainer> imple
 		this.progress = 0;
 	}
 
-	@Override public void render(int int_1, int int_2, float float_1)
+	@Override public void draw(int int_1, int int_2, float float_1)
 	{
 		this.drawBackground();
-		super.render(int_1, int_2, float_1);
+		super.draw(int_1, int_2, float_1);
 		this.drawMouseoverTooltip(int_1, int_2);
 	}
 
 	@Override protected void drawForeground(int int_1, int int_2)
 	{
-		this.fontRenderer.draw(this.title.getFormattedText(), 8.0F, 6.0F, 4210752);
+		this.fontRenderer.draw(this.name.getFormattedText(), 8.0F, 6.0F, 4210752);
 		this.fontRenderer.draw(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.height - 96 + 2), 4210752);
 	}
 
