@@ -14,11 +14,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.DoubleInventory;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sortme.ItemScatterer;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
@@ -187,25 +185,10 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Override public boolean activate(BlockState state, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
 		if (world.isClient) return true;
-		//Inventory combined = createCombinedInventory(state, world, blockPos);
-		//DefaultedList<ItemStack> inventoryData = DefaultedList.create(combined.getInvSize(), ItemStack.EMPTY);
-		//for(int slotIndex=0; slotIndex<combined.getInvSize(); slotIndex++)
-		//{
-		//	inventoryData.set(slotIndex, combined.getInvStack(slotIndex));
-		//}
-		//CompoundTag tag = Inventories.toTag(new CompoundTag(), inventoryData);
 		TextComponent containerName = method_17459(state, world, blockPos, displayNameCombiner);
-		//ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf -> {
-		//		packetByteBuf.writeInt(combined.getInvSize());
-		//		packetByteBuf.writeTextComponent(containerName);
-		//		packetByteBuf.writeCompoundTag(tag);
-		//
-		//}));
 		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf -> {
 			packetByteBuf.writeBlockPos(blockPos);
-			//packetByteBuf.writeInt(combined.getInvSize());
 			packetByteBuf.writeTextComponent(containerName);
-			//packetByteBuf.writeCompoundTag(tag);
 		}));
 		player.incrementStat(this.getOpenStat());
 		return true;
