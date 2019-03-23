@@ -34,6 +34,13 @@ public class CursedChestRegistry
 
 	}
 
+	/**
+	 * Gets an instance of a registered chest block's block entity.
+	 * Used in {@link gd.rf.ninjaphenix.cursedchests.mixins.ItemDynamicRenderer} to render the chests properly in inventories.
+	 * @param block The vertical chest block.
+	 * @return An instance of that block's block entity.
+	 * @since 1.0.5
+	 */
 	@Environment(EnvType.CLIENT)
 	public static BlockEntity getChestBlockEntity(VerticalChestBlock block)
 	{
