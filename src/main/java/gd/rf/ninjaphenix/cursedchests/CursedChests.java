@@ -1,9 +1,9 @@
 package gd.rf.ninjaphenix.cursedchests;
 
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
-import gd.rf.ninjaphenix.cursedchests.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
 import gd.rf.ninjaphenix.cursedchests.block.entity.*;
-import gd.rf.ninjaphenix.cursedchests.sortthis.ScrollableContainer;
+import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.entity.BlockEntityType;

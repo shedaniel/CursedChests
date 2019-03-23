@@ -1,6 +1,7 @@
-package gd.rf.ninjaphenix.cursedchests.sortthis;
+package gd.rf.ninjaphenix.cursedchests.api.client.gui.container;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;

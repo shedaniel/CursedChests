@@ -1,8 +1,8 @@
 package gd.rf.ninjaphenix.cursedchests;
 
-import gd.rf.ninjaphenix.cursedchests.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
 import gd.rf.ninjaphenix.cursedchests.client.render.block.entity.VerticalChestBlockEntityRenderer;
-import gd.rf.ninjaphenix.cursedchests.sortthis.ScrollableScreen;
+import gd.rf.ninjaphenix.cursedchests.api.client.gui.container.ScrollableScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

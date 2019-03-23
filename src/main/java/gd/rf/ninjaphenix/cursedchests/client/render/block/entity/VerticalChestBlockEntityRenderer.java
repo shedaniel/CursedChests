@@ -2,8 +2,8 @@ package gd.rf.ninjaphenix.cursedchests.client.render.block.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
-import gd.rf.ninjaphenix.cursedchests.block.VerticalChestBlock;
-import gd.rf.ninjaphenix.cursedchests.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
 import gd.rf.ninjaphenix.cursedchests.client.render.entity.model.ChestDoubleEntityModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

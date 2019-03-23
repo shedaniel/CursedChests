@@ -1,5 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.block;
 
+import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.block.BlockItem;

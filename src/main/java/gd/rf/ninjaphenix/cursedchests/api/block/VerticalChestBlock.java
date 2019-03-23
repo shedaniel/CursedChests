@@ -1,6 +1,6 @@
-package gd.rf.ninjaphenix.cursedchests.block;
+package gd.rf.ninjaphenix.cursedchests.api.block;
 
-import gd.rf.ninjaphenix.cursedchests.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
@@ -90,8 +90,6 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		@Override
 		public TextComponent method_17464(VerticalChestBlockEntity var1) { return var1.getDisplayName(); }
 	};
-
-	public VerticalChestBlock(Settings block$Settings_1){ this(block$Settings_1, "wood_chest"); }
 
 	public VerticalChestBlock(Settings block$Settings_1, String name)
 	{

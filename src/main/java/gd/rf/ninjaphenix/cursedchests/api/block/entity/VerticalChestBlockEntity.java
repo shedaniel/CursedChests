@@ -1,7 +1,7 @@
-package gd.rf.ninjaphenix.cursedchests.block.entity;
+package gd.rf.ninjaphenix.cursedchests.api.block.entity;
 
-import gd.rf.ninjaphenix.cursedchests.block.VerticalChestBlock;
-import gd.rf.ninjaphenix.cursedchests.sortthis.ScrollableContainer;
+import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.EnvironmentInterface;
@@ -40,7 +40,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	private int viewerCount;
 	private int ticksOpen;
 
-	VerticalChestBlockEntity(BlockEntityType type)
+	public VerticalChestBlockEntity(BlockEntityType type)
 	{
 		super(type);
 		this.inventory = DefaultedList.create(getInvSize(), ItemStack.EMPTY);

@@ -1,5 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.mixins;
 
+import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
 import gd.rf.ninjaphenix.cursedchests.block.*;
 import gd.rf.ninjaphenix.cursedchests.block.entity.*;
 import net.minecraft.block.Block;

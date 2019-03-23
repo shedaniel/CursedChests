@@ -1,4 +1,4 @@
-package gd.rf.ninjaphenix.cursedchests.sortthis;
+package gd.rf.ninjaphenix.cursedchests.api.container;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -57,8 +57,8 @@ public class ScrollableContainer extends Container
 	}
 
 	public Inventory getInventory(){return this.inventory;}
-	@Environment(EnvType.CLIENT) int getRows() { return realRows; }
-	TextComponent getDisplayName() { return containerName; }
+	@Environment(EnvType.CLIENT) public int getRows() { return realRows; }
+	@Environment(EnvType.CLIENT) public TextComponent getDisplayName() { return containerName; }
 	@Override public boolean canUse(PlayerEntity player) { return this.inventory.canPlayerUseInv(player); }
 
 	@Override public ItemStack transferSlot(PlayerEntity player, int slotIndex)

@@ -1,6 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests.block.entity;
 
 import gd.rf.ninjaphenix.cursedchests.CursedChests;
+import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
 import net.minecraft.text.TextComponent;
 import net.minecraft.text.TranslatableTextComponent;
 import net.minecraft.util.Identifier;

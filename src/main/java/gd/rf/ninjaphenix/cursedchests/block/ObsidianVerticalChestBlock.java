@@ -1,5 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.block;
 
+import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
 import gd.rf.ninjaphenix.cursedchests.block.entity.ObsidianVerticalChestBlockEntity;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Blocks;
