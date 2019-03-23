@@ -15,7 +15,7 @@ import net.minecraft.util.Identifier;
 public class ScrollableScreen extends ContainerScreen<ScrollableContainer> implements ContainerProvider<ScrollableContainer>
 {
 	private static final Identifier BASE_TEXTURE = new Identifier("textures/gui/container/generic_54.png");
-	private static final Identifier SCROLL_TEXTURE = new Identifier("cursedchests", "textures/screen/container/scroll.png");
+	private static final Identifier SCROLL_TEXTURE = new Identifier("cursedchests", "textures/gui/container/scroll.png");
 	private int topRow;
 	private final int rows;
 	private final int realRows;
