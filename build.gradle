@@ -5,7 +5,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 archivesBaseName = "CursedChests"
-version = "1.0.4"
+version = "1.0.5"
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
