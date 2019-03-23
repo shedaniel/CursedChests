@@ -1,6 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests.api.block;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.api.item.ChestModifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
@@ -66,7 +67,6 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	private static final VoxelShape SINGLE_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 15);
 	private static final VoxelShape TOP_SHAPE = Block.createCuboidShape(1, -16, 1, 15, 14, 15);
 	private static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 30, 15);
-	public String name;
 
 	private static final someInterface<Inventory> inventoryCombiner = new someInterface<Inventory>() {
 		public Inventory method_17465(VerticalChestBlockEntity var1, VerticalChestBlockEntity var2) {
@@ -91,25 +91,19 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		public TextComponent method_17464(VerticalChestBlockEntity var1) { return var1.getDisplayName(); }
 	};
 
-	public VerticalChestBlock(Settings block$Settings_1, String name)
+	public VerticalChestBlock(Settings block$Settings_1)
 	{
 		super(block$Settings_1);
 		this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH)
 				                                   .with(WATERLOGGED, false)
 				                                   .with(TYPE, VerticalChestType.SINGLE));
-		this.name = name;
 	}
 
 	@Environment(EnvType.CLIENT) @Override public boolean hasBlockEntityBreakingRender(BlockState blockState_1) { return true; }
 	@Override public BlockRenderType getRenderType(BlockState blockState_1) { return BlockRenderType.ENTITYBLOCK_ANIMATED; }
-	@Override public FluidState getFluidState(BlockState state)
-	{
-		return state.get(WATERLOGGED) ? Fluids.WATER.getState(false) : super.getFluidState(state);
-	}
-	@Override protected void appendProperties(StateFactory.Builder<Block, BlockState> stateBuilder)
-	{
-		stateBuilder.with(FACING, TYPE, WATERLOGGED);
-	}
+	@Override public FluidState getFluidState(BlockState state) { return state.get(WATERLOGGED) ? Fluids.WATER.getState(false) : super.getFluidState(state); }
+	@Override protected void appendProperties(StateFactory.Builder<Block, BlockState> stateBuilder) { stateBuilder.with(FACING, TYPE, WATERLOGGED); }
+	public abstract String getName();
 
 	@Override public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, VerticalEntityPosition verticalEntityPosition_1)
 	{
@@ -183,6 +177,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Override public boolean activate(BlockState state, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
 		if (world.isClient) return true;
+		if (player.getStackInHand(hand).getItem() instanceof ChestModifier) return true;
 		TextComponent containerName = method_17459(state, world, blockPos, displayNameCombiner);
 		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf -> {
 			packetByteBuf.writeBlockPos(blockPos);

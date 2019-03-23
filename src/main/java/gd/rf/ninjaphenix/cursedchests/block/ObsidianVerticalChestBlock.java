@@ -9,6 +9,8 @@ import net.minecraft.world.BlockView;
 
 public class ObsidianVerticalChestBlock extends VerticalChestBlock
 {
-	ObsidianVerticalChestBlock() { super(FabricBlockSettings.copy(Blocks.OBSIDIAN).build(), "obsidian_chest"); }
+	ObsidianVerticalChestBlock() { super(FabricBlockSettings.copy(Blocks.OBSIDIAN).build()); }
+
 	@Override public BlockEntity createBlockEntity(BlockView blockView) { return new ObsidianVerticalChestBlockEntity(); }
+	@Override public String getName() { return "obsidian_chest"; }
 }

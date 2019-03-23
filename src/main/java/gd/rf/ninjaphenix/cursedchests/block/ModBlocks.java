@@ -1,5 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.block;
 
+import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -26,8 +27,9 @@ public class ModBlocks
 
 	private static VerticalChestBlock register(VerticalChestBlock block)
 	{
-		Registry.register(Registry.BLOCK, new Identifier("cursedchests", block.name), block);
-		Registry.register(Registry.ITEM, new Identifier("cursedchests", block.name), new BlockItem(block, new Item.Settings().itemGroup(ItemGroup.DECORATIONS)));
+		Registry.register(Registry.BLOCK, new Identifier("cursedchests", block.getName()), block);
+		Registry.register(Registry.ITEM, new Identifier("cursedchests", block.getName()), new BlockItem(block, new Item.Settings().itemGroup(ItemGroup.DECORATIONS)));
+		CursedChestRegistry.registerChest(block);
 		return block;
 	}
 }

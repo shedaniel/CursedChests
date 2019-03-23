@@ -1,9 +1,9 @@
 package gd.rf.ninjaphenix.cursedchests.client.render.block.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import gd.rf.ninjaphenix.cursedchests.client.render.entity.model.ChestDoubleEntityModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -76,10 +76,10 @@ public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<Vertic
 		return isDouble ? this.modelDoubleChest : this.modelSingleChest;
 	}
 
-	private void method_3561(VerticalChestBlockEntity blockEntity_1, float float_1, ChestEntityModel chestEntityModel_1)
+	private void method_3561(VerticalChestBlockEntity blockEntity, float float_1, ChestEntityModel model)
 	{
-		float float_2 = 1.0F - blockEntity_1.getAnimationProgress(float_1);
+		float float_2 = 1.0F - blockEntity.getAnimationProgress(float_1);
 		float_2 = 1.0F - float_2 * float_2 * float_2;
-		chestEntityModel_1.method_2798().pitch = -(float_2 * 1.5707964F);
+		model.method_2798().pitch = -(float_2 * 1.5707964F);
 	}
 }

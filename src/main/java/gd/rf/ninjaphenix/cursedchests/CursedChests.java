@@ -1,15 +1,22 @@
 package gd.rf.ninjaphenix.cursedchests;
 
-import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
-import gd.rf.ninjaphenix.cursedchests.block.entity.*;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
+import gd.rf.ninjaphenix.cursedchests.api.item.ChestModifier;
+import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
+import gd.rf.ninjaphenix.cursedchests.block.entity.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.item.Item;
 import net.minecraft.text.TextComponent;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
@@ -29,11 +36,47 @@ public class CursedChests implements ModInitializer
 	@Override public void onInitialize()
 	{
 		ModBlocks.init();
+
 		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) -> {
 			BlockPos pos = buf.readBlockPos();
 			TextComponent containerName = buf.readTextComponent();
 			World world = player.getEntityWorld();
 			return new ScrollableContainer(syncId, player.inventory, VerticalChestBlock.createCombinedInventory(world.getBlockState(pos), world, pos), containerName);
 		}));
+
+		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+			Item handItem = player.getStackInHand(hand).getItem();
+			if(handItem instanceof ChestModifier)
+			{
+				return ((ChestModifier) handItem).useOnEntity(world, player, hand, entity, hitResult);
+			}
+			return ActionResult.PASS;
+		});
+
+		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+			Item handItem = player.getStackInHand(hand).getItem();
+			if(handItem instanceof ChestModifier)
+			{
+				BlockPos hitBlockPos = hitResult.getBlockPos();
+				if(world.getBlockState(hitBlockPos).getBlock() instanceof VerticalChestBlock)
+				{
+					BlockState usedChestBlockState = world.getBlockState(hitBlockPos);
+					VerticalChestBlock.VerticalChestType type = usedChestBlockState.get(VerticalChestBlock.TYPE);
+					if(type == VerticalChestBlock.VerticalChestType.SINGLE)
+					{
+						((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, null);
+					}
+					else if(type == VerticalChestBlock.VerticalChestType.TOP)
+					{
+						((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos.offset(Direction.DOWN), hitBlockPos);
+					}
+					else if(type == VerticalChestBlock.VerticalChestType.BOTTOM)
+					{
+						((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, hitBlockPos.offset(Direction.UP));
+					}
+				}
+			}
+			return ActionResult.PASS;
+		});
 	}
 }

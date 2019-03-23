@@ -9,6 +9,8 @@ import net.minecraft.world.BlockView;
 
 public class WoodVerticalChestBlock extends VerticalChestBlock
 {
-	WoodVerticalChestBlock() { super(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build(), "wood_chest"); }
+	WoodVerticalChestBlock() { super(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()); }
+
 	@Override public BlockEntity createBlockEntity(BlockView blockView) { return new WoodVerticalChestBlockEntity(); }
+	@Override public String getName() { return "wood_chest"; }
 }
