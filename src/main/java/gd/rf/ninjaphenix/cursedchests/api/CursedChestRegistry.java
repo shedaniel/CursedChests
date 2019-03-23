@@ -18,6 +18,11 @@ public class CursedChestRegistry
 	@Environment(EnvType.CLIENT)
 	private static HashMap<VerticalChestBlock, BlockEntity> block2blockEntityMap = new HashMap<>();
 
+	/**
+	 * Registers a new chest block. Currently only used by the ItemRenderer Mixin to correctly render chest blocks in inventories, otherwise they will look like vanilla chests.
+	 * @param block The chest block to be registered.
+	 * @since 1.0.5
+	 */
 	public static void registerChest(VerticalChestBlock block)
 	{
 		assert block != null : "Tried to register a null chest block.";
