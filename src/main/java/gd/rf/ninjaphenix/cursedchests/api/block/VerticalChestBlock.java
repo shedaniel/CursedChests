@@ -108,7 +108,6 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		}
 	}
 
-	// todo: fix this so placement behaves like vanilla's chest (might need to change above too)
 	@Override public BlockState getPlacementState(ItemPlacementContext context)
 	{
 		World world = context.getWorld();
@@ -116,7 +115,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		VerticalChestType chestType_1 = VerticalChestType.SINGLE;
 		Direction direction_1 = context.getPlayerHorizontalFacing().getOpposite();
 		Direction direction_2 = context.getFacing();
-		if (direction_2.getAxis().isVertical())
+		if (direction_2.getAxis().isVertical() && context.isPlayerSneaking())
 		{
 			BlockState state = world.getBlockState(pos.offset(direction_2.getOpposite()));
 			Direction direction_3 = state.getBlock() == this && state.get(TYPE) == VerticalChestType.SINGLE ? state.get(FACING) : null;
