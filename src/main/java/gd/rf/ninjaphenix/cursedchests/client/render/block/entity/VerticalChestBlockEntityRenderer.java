@@ -14,52 +14,48 @@ import net.minecraft.client.render.entity.model.ChestEntityModel;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
-@Environment(EnvType.CLIENT)
-public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<VerticalChestBlockEntity>
+@Environment(EnvType.CLIENT) public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<VerticalChestBlockEntity>
 {
 	private final ChestEntityModel modelSingleChest = new ChestEntityModel();
 	private final ChestEntityModel modelDoubleChest = new ChestDoubleEntityModel();
 
-	@Override public void render(VerticalChestBlockEntity blockEntity, double double_1, double double_2, double double_3, float float_1, int int_1)
+	@Override public void render(VerticalChestBlockEntity blockEntity, double x, double y, double z, float lidPitch, int breaking_stage)
 	{
 		GlStateManager.enableDepthTest();
 		GlStateManager.depthFunc(515);
 		GlStateManager.depthMask(true);
-		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : ModBlocks.wood_chest.getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH).with(VerticalChestBlock.TYPE, VerticalChestBlock.VerticalChestType.SINGLE);
+		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : ModBlocks.wood_chest.getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH);
 		VerticalChestBlock.VerticalChestType chestType = state.get(VerticalChestBlock.TYPE);
 		boolean isDouble = chestType != VerticalChestBlock.VerticalChestType.SINGLE;
-		if(chestType == VerticalChestBlock.VerticalChestType.TOP && int_1  < 0) return;
-		ChestEntityModel chestEntityModel_1 = this.method_3562(blockEntity, int_1, isDouble);
-		if (int_1 >= 0)
+		if (chestType == VerticalChestBlock.VerticalChestType.TOP && breaking_stage  < 0) return;
+		ChestEntityModel chestModel = getChestModelAndBindTexture(blockEntity, breaking_stage, isDouble);
+		if (breaking_stage >= 0)
 		{
 			GlStateManager.matrixMode(5890);
 			GlStateManager.pushMatrix();
-			GlStateManager.scalef(4.0F, isDouble ? 8.0F : 4.0F, 1.0F);
+			GlStateManager.scalef(4, isDouble ? 8 : 4, 1);
 			GlStateManager.translatef(0.0625F, 0.0625F, 0.0625F);
 			GlStateManager.matrixMode(5888);
 		}
-		else
-		{
-			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		else GlStateManager.color4f(1, 1, 1, 1);
 		GlStateManager.pushMatrix();
 		GlStateManager.enableRescaleNormal();
-		GlStateManager.translatef((float)double_1, (float)double_2 + 1.0F, (float)double_3 + 1.0F);
-		GlStateManager.scalef(1.0F, -1.0F, -1.0F);
-		float float_2 = state.get(ChestBlock.FACING).asRotation();
-		if ((double)Math.abs(float_2) > 1.0E-5D)
+		GlStateManager.translated(x, y + 1, z + 1);
+		GlStateManager.scalef(1, -1, -1);
+		float chestYaw = state.get(ChestBlock.FACING).asRotation();
+		if (Math.abs(chestYaw) > 1.0E-5D)
 		{
-			GlStateManager.translatef(0.5F, 0.5F, 0.5F);
-			GlStateManager.rotatef(float_2, 0.0F, 1.0F, 0.0F);
-			GlStateManager.translatef(-0.5F, -0.5F, -0.5F);
+			GlStateManager.translated(0.5, 0.5, 0.5);
+			GlStateManager.rotatef(chestYaw, 0, 1, 0);
+			GlStateManager.translated(-0.5, -0.5, -0.5);
 		}
-		if(chestType == VerticalChestBlock.VerticalChestType.TOP) GlStateManager.translatef(0, 1, 0);
-		this.method_3561(blockEntity, float_1, chestEntityModel_1);
-		chestEntityModel_1.method_2799();
+		if (chestType == VerticalChestBlock.VerticalChestType.TOP) GlStateManager.translatef(0, 1, 0);
+		setLidPitch(blockEntity, lidPitch, chestModel);
+		chestModel.method_2799();
 		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		if (int_1 >= 0)
+		GlStateManager.color4f(1, 1, 1, 1);
+		if (breaking_stage >= 0)
 		{
 			GlStateManager.matrixMode(5890);
 			GlStateManager.popMatrix();
@@ -67,19 +63,18 @@ public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<Vertic
 		}
 	}
 
-	private ChestEntityModel method_3562(VerticalChestBlockEntity blockEntity, int breaking_stage, boolean isDouble)
+	private ChestEntityModel getChestModelAndBindTexture(VerticalChestBlockEntity blockEntity, int breaking_stage, boolean isDouble)
 	{
 		Identifier identifier_5;
-		if (breaking_stage >= 0) { identifier_5 = DESTROY_STAGE_TEXTURES[breaking_stage]; }
-		else { identifier_5 = blockEntity.getTexture(isDouble); }
-		this.bindTexture(identifier_5);
-		return isDouble ? this.modelDoubleChest : this.modelSingleChest;
+		if (breaking_stage >= 0) identifier_5 = DESTROY_STAGE_TEXTURES[breaking_stage];
+		else identifier_5 = blockEntity.getTexture(isDouble);
+		bindTexture(identifier_5);
+		return isDouble ? modelDoubleChest : modelSingleChest;
 	}
 
-	private void method_3561(VerticalChestBlockEntity blockEntity, float float_1, ChestEntityModel model)
+	private void setLidPitch(VerticalChestBlockEntity blockEntity, float lidPitch, ChestEntityModel model)
 	{
-		float float_2 = 1.0F - blockEntity.getAnimationProgress(float_1);
-		float_2 = 1.0F - float_2 * float_2 * float_2;
-		model.method_2798().pitch = -(float_2 * 1.5707964F);
+		float newPitch = 1.0F - blockEntity.getAnimationProgress(lidPitch);
+		model.method_2798().pitch = -((1.0F - newPitch * newPitch * newPitch) * 1.5707964F);
 	}
 }

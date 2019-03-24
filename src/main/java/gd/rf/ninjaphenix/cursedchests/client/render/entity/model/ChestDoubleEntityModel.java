@@ -1,28 +1,30 @@
 package gd.rf.ninjaphenix.cursedchests.client.render.entity.model;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Cuboid;
 import net.minecraft.client.render.entity.model.ChestEntityModel;
 
-public class ChestDoubleEntityModel extends ChestEntityModel
+@Environment(EnvType.CLIENT) public class ChestDoubleEntityModel extends ChestEntityModel
 {
 	public ChestDoubleEntityModel()
 	{
-		this.lid = new Cuboid(this, 0, 0).setTextureSize(64, 128);
-		this.lid.addBox(0.0F, -5.0F, -14.0F, 14, 5, 14, 0.0F);
-		this.lid.rotationPointX = 1.0F;
-		this.lid.rotationPointY = 7.0F;
-		this.lid.rotationPointZ = 15.0F;
-		this.lid.y -= 1;
-		this.hatch = new Cuboid(this, 0, 0).setTextureSize(64, 128);
-		this.hatch.addBox(-1.0F, -2.0F, -15.0F, 2, 4, 1, 0.0F);
-		this.hatch.rotationPointX = 8.0F;
-		this.hatch.rotationPointY = 7.0F;
-		this.hatch.rotationPointZ = 15.0F;
-		this.hatch.y -= 1;
-		this.base = new Cuboid(this, 0, 19).setTextureSize(64, 128);
-		this.base.addBox(0.0F, -16.0F, 0.0F, 14, 26, 14, 0.0F);
-		this.base.rotationPointX = 1.0F;
-		this.base.rotationPointY = 6.0F;
-		this.base.rotationPointZ = 1.0F;
+		lid = new Cuboid(this, 0, 0).setTextureSize(64, 128);
+		lid.addBox(0, -5, -14, 14, 5, 14, 0);
+		lid.rotationPointX = 1;
+		lid.rotationPointY = 7;
+		lid.rotationPointZ = 15;
+		lid.y -= 1;
+		hatch = new Cuboid(this, 0, 0).setTextureSize(64, 128);
+		hatch.addBox(-1, -2, -15, 2, 4, 1, 0);
+		hatch.rotationPointX = 8;
+		hatch.rotationPointY = 7;
+		hatch.rotationPointZ = 15;
+		hatch.y -= 1;
+		base = new Cuboid(this, 0, 19).setTextureSize(64, 128);
+		base.addBox(0, -16, 0, 14, 26, 14, 0);
+		base.rotationPointX = 1;
+		base.rotationPointY = 6;
+		base.rotationPointZ = 1;
 	}
 }

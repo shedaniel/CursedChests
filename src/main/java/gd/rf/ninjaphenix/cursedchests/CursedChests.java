@@ -37,43 +37,34 @@ public class CursedChests implements ModInitializer
 	{
 		ModBlocks.init();
 
-		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) -> {
+		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->
+		{
 			BlockPos pos = buf.readBlockPos();
 			TextComponent containerName = buf.readTextComponent();
 			World world = player.getEntityWorld();
 			return new ScrollableContainer(syncId, player.inventory, VerticalChestBlock.createCombinedInventory(world.getBlockState(pos), world, pos), containerName);
 		}));
 
-		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->
+		{
 			Item handItem = player.getStackInHand(hand).getItem();
-			if(handItem instanceof ChestModifier)
-			{
-				return ((ChestModifier) handItem).useOnEntity(world, player, hand, entity, hitResult);
-			}
+			if (handItem instanceof ChestModifier) return ((ChestModifier) handItem).useOnEntity(world, player, hand, entity, hitResult);
 			return ActionResult.PASS;
 		});
 
-		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+		UseBlockCallback.EVENT.register((player, world, hand, hitResult) ->
+		{
 			Item handItem = player.getStackInHand(hand).getItem();
-			if(handItem instanceof ChestModifier)
+			if (handItem instanceof ChestModifier)
 			{
 				BlockPos hitBlockPos = hitResult.getBlockPos();
-				if(world.getBlockState(hitBlockPos).getBlock() instanceof VerticalChestBlock)
+				if (world.getBlockState(hitBlockPos).getBlock() instanceof VerticalChestBlock)
 				{
 					BlockState usedChestBlockState = world.getBlockState(hitBlockPos);
 					VerticalChestBlock.VerticalChestType type = usedChestBlockState.get(VerticalChestBlock.TYPE);
-					if(type == VerticalChestBlock.VerticalChestType.SINGLE)
-					{
-						((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, null);
-					}
-					else if(type == VerticalChestBlock.VerticalChestType.TOP)
-					{
-						((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos.offset(Direction.DOWN), hitBlockPos);
-					}
-					else if(type == VerticalChestBlock.VerticalChestType.BOTTOM)
-					{
-						((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, hitBlockPos.offset(Direction.UP));
-					}
+					if (type == VerticalChestBlock.VerticalChestType.SINGLE) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, null);
+					else if (type == VerticalChestBlock.VerticalChestType.TOP) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos.offset(Direction.DOWN), hitBlockPos);
+					else if (type == VerticalChestBlock.VerticalChestType.BOTTOM) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, hitBlockPos.offset(Direction.UP));
 				}
 			}
 			return ActionResult.PASS;

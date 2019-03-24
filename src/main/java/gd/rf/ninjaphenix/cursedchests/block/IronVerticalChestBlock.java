@@ -11,6 +11,6 @@ public class IronVerticalChestBlock extends VerticalChestBlock
 {
 	IronVerticalChestBlock() { super(FabricBlockSettings.copy(Blocks.IRON_BLOCK).build()); }
 
-	@Override public BlockEntity createBlockEntity(BlockView blockView) { return new IronVerticalChestBlockEntity(); }
-	@Override public String getName() { return "iron_chest"; }
+	@Override public BlockEntity createBlockEntity(BlockView view){ return new IronVerticalChestBlockEntity(); }
+	@Override public String getName(){ return "iron_chest"; }
 }

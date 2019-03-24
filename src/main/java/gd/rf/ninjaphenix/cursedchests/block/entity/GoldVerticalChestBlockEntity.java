@@ -8,14 +8,14 @@ import net.minecraft.util.Identifier;
 
 public class GoldVerticalChestBlockEntity extends VerticalChestBlockEntity
 {
-	public GoldVerticalChestBlockEntity() { super(CursedChests.GOLD_VERTICAL_CHEST); }
+	public GoldVerticalChestBlockEntity(){ super(CursedChests.GOLD_VERTICAL_CHEST); }
 
-	@Override protected TextComponent getContainerName() { return new TranslatableTextComponent("container.cursedchests.gold_chest"); }
-	@Override public int getInvSize() { return 81; }
+	@Override protected TextComponent getContainerName(){ return new TranslatableTextComponent("container.cursedchests.gold_chest"); }
+	@Override public int getInvSize(){ return 81; }
 
 	@Override public Identifier getTexture(boolean isDouble)
 	{
-		if(isDouble) return new Identifier("cursedchests", "textures/entity/gold_chest/double.png");
+		if (isDouble) return new Identifier("cursedchests", "textures/entity/gold_chest/double.png");
 		return new Identifier("cursedchests", "textures/entity/gold_chest/single.png");
 	}
 }
