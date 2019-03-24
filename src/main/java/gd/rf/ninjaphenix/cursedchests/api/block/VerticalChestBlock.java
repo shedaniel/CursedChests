@@ -108,38 +108,48 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		}
 	}
 
-	@Override public BlockState getStateForNeighborUpdate(BlockState state_1, Direction direction, BlockState state_2, IWorld world, BlockPos pos_1, BlockPos pos_2)
-	{
-		if (state_1.get(WATERLOGGED)) world.getFluidTickScheduler().schedule(pos_1, Fluids.WATER, Fluids.WATER.getTickRate(world));
-		if (state_1.get(TYPE) == VerticalChestType.TOP) if (world.getBlockState(pos_1.offset(Direction.DOWN)).getBlock() != this) return state_1.with(TYPE, VerticalChestType.SINGLE);
-		else if (state_1.get(TYPE) == VerticalChestType.BOTTOM) if (world.getBlockState(pos_1.offset(Direction.UP)).getBlock() != this) return state_1.with(TYPE, VerticalChestType.SINGLE);
-		else
-		{
-			if (direction.getAxis().isVertical())
-			{
-				BlockState state_3 = world.getBlockState(pos_1.offset(direction));
-				if (!state_3.contains(TYPE)) return state_1.with(TYPE, VerticalChestType.SINGLE);
-				else if (direction == Direction.UP && state_3.get(TYPE) == VerticalChestType.TOP) return state_1.with(TYPE, VerticalChestType.BOTTOM);
-				else if (direction == Direction.DOWN && state_3.get(TYPE) == VerticalChestType.BOTTOM) return state_1.with(TYPE, VerticalChestType.TOP);
-				else return state_1.with(TYPE, VerticalChestType.SINGLE);
-			}
-		}
-		return super.getStateForNeighborUpdate(state_1, direction, state_2, world, pos_1, pos_2);
-	}
-
 	// todo: fix this so placement behaves like vanilla's chest (might need to change above too)
 	@Override public BlockState getPlacementState(ItemPlacementContext context)
 	{
+		World world = context.getWorld();
+		BlockPos pos = context.getBlockPos();
 		VerticalChestType chestType_1 = VerticalChestType.SINGLE;
 		Direction direction_1 = context.getPlayerHorizontalFacing().getOpposite();
 		Direction direction_2 = context.getFacing();
-		if (direction_2.getAxis().isVertical() && context.isPlayerSneaking())
+		if (direction_2.getAxis().isVertical())
 		{
-			BlockState state = context.getWorld().getBlockState(context.getBlockPos().offset(direction_2.getOpposite()));
+			BlockState state = world.getBlockState(pos.offset(direction_2.getOpposite()));
 			Direction direction_3 = state.getBlock() == this && state.get(TYPE) == VerticalChestType.SINGLE ? state.get(FACING) : null;
 			if (direction_3 != null && direction_3.getAxis() != direction_2.getAxis()) chestType_1 = direction_2 == Direction.UP ? VerticalChestType.TOP : VerticalChestType.BOTTOM;
 		}
-		return getDefaultState().with(FACING, direction_1).with(TYPE, chestType_1).with(WATERLOGGED, context.getWorld().getFluidState(context.getBlockPos()).getFluid() == Fluids.WATER);
+		else
+		{
+			BlockState aboveBlockState = world.getBlockState(pos.offset(Direction.UP));
+			if (aboveBlockState.getBlock() == this && aboveBlockState.get(TYPE) == VerticalChestType.SINGLE) chestType_1 = VerticalChestType.BOTTOM;
+			else
+			{
+				BlockState belowBlockState = world.getBlockState(pos.offset(Direction.DOWN));
+				if (belowBlockState.getBlock() == this && belowBlockState.get(TYPE) == VerticalChestType.SINGLE) chestType_1 = VerticalChestType.TOP;
+			}
+		}
+		return getDefaultState().with(FACING, direction_1).with(TYPE, chestType_1).with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
+	}
+
+	@Override public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState otherState, IWorld world, BlockPos pos, BlockPos otherPos)
+	{
+
+		if (state.get(WATERLOGGED)) world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+		if (state.get(TYPE) == VerticalChestType.TOP && world.getBlockState(pos.offset(Direction.DOWN)).getBlock() != this) return state.with(TYPE, VerticalChestType.SINGLE);
+		else if (state.get(TYPE) == VerticalChestType.BOTTOM && world.getBlockState(pos.offset(Direction.UP)).getBlock() != this) return state.with(TYPE, VerticalChestType.SINGLE);
+		else if (state.get(TYPE) == VerticalChestType.SINGLE && direction.getAxis().isVertical())
+		{
+			BlockState realOtherState = world.getBlockState(pos.offset(direction));
+			if (!realOtherState.contains(TYPE)) return state.with(TYPE, VerticalChestType.SINGLE);
+			else if (direction == Direction.UP && realOtherState.get(TYPE) == VerticalChestType.TOP) return state.with(TYPE, VerticalChestType.BOTTOM);
+			else if (direction == Direction.DOWN && realOtherState.get(TYPE) == VerticalChestType.BOTTOM) return state.with(TYPE, VerticalChestType.TOP);
+			else return state.with(TYPE, VerticalChestType.SINGLE);
+		}
+		return super.getStateForNeighborUpdate(state, direction, otherState, world, pos, otherPos);
 	}
 
 	@Override public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
