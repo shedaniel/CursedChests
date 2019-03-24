@@ -5,6 +5,7 @@ import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import gd.rf.ninjaphenix.cursedchests.api.item.ChestModifier;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import gd.rf.ninjaphenix.cursedchests.block.entity.*;
+import gd.rf.ninjaphenix.cursedchests.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -36,6 +37,7 @@ public class CursedChests implements ModInitializer
 	@Override public void onInitialize()
 	{
 		ModBlocks.init();
+		ModItems.init();
 
 		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->
 		{
