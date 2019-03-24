@@ -115,13 +115,14 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		VerticalChestType chestType_1 = VerticalChestType.SINGLE;
 		Direction direction_1 = context.getPlayerHorizontalFacing().getOpposite();
 		Direction direction_2 = context.getFacing();
-		if (direction_2.getAxis().isVertical() && context.isPlayerSneaking())
+		boolean sneaking = context.isPlayerSneaking();
+		if (direction_2.getAxis().isVertical() && sneaking)
 		{
 			BlockState state = world.getBlockState(pos.offset(direction_2.getOpposite()));
 			Direction direction_3 = state.getBlock() == this && state.get(TYPE) == VerticalChestType.SINGLE ? state.get(FACING) : null;
 			if (direction_3 != null && direction_3.getAxis() != direction_2.getAxis()) chestType_1 = direction_2 == Direction.UP ? VerticalChestType.TOP : VerticalChestType.BOTTOM;
 		}
-		else
+		else if(!sneaking)
 		{
 			BlockState aboveBlockState = world.getBlockState(pos.offset(Direction.UP));
 			if (aboveBlockState.getBlock() == this && aboveBlockState.get(TYPE) == VerticalChestType.SINGLE) chestType_1 = VerticalChestType.BOTTOM;
