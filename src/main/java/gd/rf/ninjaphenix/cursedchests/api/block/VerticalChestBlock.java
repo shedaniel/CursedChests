@@ -40,6 +40,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public abstract class VerticalChestBlock extends BlockWithEntity implements Waterloggable
 {
 	public enum VerticalChestType implements StringRepresentable
