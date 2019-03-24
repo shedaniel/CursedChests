@@ -36,7 +36,7 @@ public interface ChestModifier
 	 * @since 1.0.5
 	 * @see UseBlockCallback
 	 */
-	default ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos topBlockPos){return ActionResult.PASS;}
+	default ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos topBlockPos){ return ActionResult.PASS; }
 
 	/**
 	 * This method is called automatically when an Item implementing this interface is used on an entity.
@@ -55,5 +55,5 @@ public interface ChestModifier
 	 * @since 1.0.5
 	 */
 	//player, world, hand, entity, hitResult
-	default ActionResult useOnEntity(World world, PlayerEntity player, Hand hand, Entity entity, EntityHitResult hitResult){return ActionResult.PASS;}
+	default ActionResult useOnEntity(World world, PlayerEntity player, Hand hand, Entity entity, EntityHitResult hitResult){ return ActionResult.PASS; }
 }
