@@ -2,21 +2,21 @@ package gd.rf.ninjaphenix.cursedchests.api.item;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sortme.ChatMessageType;
-import net.minecraft.text.StringTextComponent;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
@@ -55,26 +55,28 @@ public class ChestConversionItem extends Item implements ChestModifier
 	@Override public ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos topBlockPos)
 	{
 		if (world.isClient) return ActionResult.FAIL;
-		ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
-		VerticalChestBlock mainBlock = (VerticalChestBlock) world.getBlockState(mainBlockPos).getBlock();
+		BlockState mainBlockState = world.getBlockState(mainBlockPos);
+		VerticalChestBlock mainBlock = (VerticalChestBlock) mainBlockState.getBlock();
 		if (Registry.BLOCK.getId(mainBlock) != from) return ActionResult.FAIL;
 		ItemStack handStack = player.getStackInHand(hand);
 		BlockEntity mainBlockEntity = world.getBlockEntity(mainBlockPos);
+		Direction rotation = mainBlockState.get(Properties.FACING_HORIZONTAL);
 		if (topBlockPos == null)
 		{
-			handStack.setAmount(handStack.getAmount() - 1);
-			CompoundTag mainTag = new CompoundTag();
-			mainBlockEntity.toTag(mainTag);
 			DefaultedList<ItemStack> inventoryData = DefaultedList.create(((VerticalChestBlockEntity) mainBlockEntity).getInvSize(), ItemStack.EMPTY);
-			Inventories.fromTag(mainTag, inventoryData);
-			serverPlayer.sendChatMessage(mainTag.toTextComponent(), ChatMessageType.CHAT);
+			Inventories.fromTag(mainBlockEntity.toTag(new CompoundTag()), inventoryData);
+			world.removeBlockEntity(mainBlockPos);
+			world.setBlockState(mainBlockPos, Registry.BLOCK.get(to).getDefaultState().with(Properties.FACING_HORIZONTAL, rotation));
+			mainBlockEntity = world.getBlockEntity(mainBlockPos);
+			mainBlockEntity.fromTag(Inventories.toTag(mainBlockEntity.toTag(new CompoundTag()), inventoryData));
+			handStack.setAmount(handStack.getAmount() - 1);
 		}
 		else
 		{
 			BlockEntity topBlockEntity = world.getBlockEntity(topBlockPos);
+
 			handStack.setAmount(handStack.getAmount() - 2);
 		}
-		serverPlayer.sendChatMessage(new StringTextComponent("Used item on block!"), ChatMessageType.GAME_INFO);
 		return ActionResult.PASS;
 	}
 }
