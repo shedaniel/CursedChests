@@ -13,7 +13,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-
 /**
  * @author NinjaPhenix
  * @version 1.0.5
@@ -38,6 +37,7 @@ public class ChestConversionItem extends Item implements ChestModifier
 	}
 
 	/**
+	 * Ignore this, this will be gone once this method is complete.
 	 * This method is called automatically when an Item implementing this interface is used on a cursed chest.
 	 * Implementations of this method should:
 	 *  - check if the modifier can be applied

@@ -18,7 +18,6 @@ import net.minecraft.world.World;
  */
 public interface ChestModifier
 {
-
 	/**
 	 * This method is called automatically when an Item implementing this interface is used on a cursed chest.
 	 * Implementations of this method should:
@@ -54,6 +53,5 @@ public interface ChestModifier
 	 * @see UseEntityCallback
 	 * @since 1.0.5
 	 */
-	//player, world, hand, entity, hitResult
 	default ActionResult useOnEntity(World world, PlayerEntity player, Hand hand, Entity entity, EntityHitResult hitResult){ return ActionResult.PASS; }
 }

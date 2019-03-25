@@ -2,9 +2,10 @@ package gd.rf.ninjaphenix.cursedchests.client.render.block.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
-import gd.rf.ninjaphenix.cursedchests.client.render.entity.model.ChestDoubleEntityModel;
+import gd.rf.ninjaphenix.cursedchests.client.render.entity.model.TallChestEntityModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -17,7 +18,7 @@ import net.minecraft.util.math.Direction;
 @Environment(EnvType.CLIENT) public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<VerticalChestBlockEntity>
 {
 	private final ChestEntityModel modelSingleChest = new ChestEntityModel();
-	private final ChestEntityModel modelDoubleChest = new ChestDoubleEntityModel();
+	private final ChestEntityModel modelDoubleChest = new TallChestEntityModel();
 
 	@Override public void render(VerticalChestBlockEntity blockEntity, double x, double y, double z, float lidPitch, int breaking_stage)
 	{
@@ -25,9 +26,9 @@ import net.minecraft.util.math.Direction;
 		GlStateManager.depthFunc(515);
 		GlStateManager.depthMask(true);
 		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : ModBlocks.wood_chest.getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH);
-		VerticalChestBlock.VerticalChestType chestType = state.get(VerticalChestBlock.TYPE);
-		boolean isDouble = chestType != VerticalChestBlock.VerticalChestType.SINGLE;
-		if (chestType == VerticalChestBlock.VerticalChestType.TOP && breaking_stage  < 0) return;
+		VerticalChestType chestType = state.get(VerticalChestBlock.TYPE);
+		boolean isDouble = chestType != VerticalChestType.SINGLE;
+		if (chestType == VerticalChestType.TOP && breaking_stage  < 0) return;
 		ChestEntityModel chestModel = getChestModelAndBindTexture(blockEntity, breaking_stage, isDouble);
 		if (breaking_stage >= 0)
 		{
@@ -49,7 +50,7 @@ import net.minecraft.util.math.Direction;
 			GlStateManager.rotatef(chestYaw, 0, 1, 0);
 			GlStateManager.translated(-0.5, -0.5, -0.5);
 		}
-		if (chestType == VerticalChestBlock.VerticalChestType.TOP) GlStateManager.translatef(0, 1, 0);
+		if (chestType == VerticalChestType.TOP) GlStateManager.translatef(0, 1, 0);
 		setLidPitch(blockEntity, lidPitch, chestModel);
 		chestModel.method_2799();
 		GlStateManager.disableRescaleNormal();

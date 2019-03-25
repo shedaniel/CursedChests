@@ -1,6 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import gd.rf.ninjaphenix.cursedchests.api.item.ChestModifier;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
@@ -63,10 +64,10 @@ public class CursedChests implements ModInitializer
 				if (world.getBlockState(hitBlockPos).getBlock() instanceof VerticalChestBlock)
 				{
 					BlockState usedChestBlockState = world.getBlockState(hitBlockPos);
-					VerticalChestBlock.VerticalChestType type = usedChestBlockState.get(VerticalChestBlock.TYPE);
-					if (type == VerticalChestBlock.VerticalChestType.SINGLE) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, null);
-					else if (type == VerticalChestBlock.VerticalChestType.TOP) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos.offset(Direction.DOWN), hitBlockPos);
-					else if (type == VerticalChestBlock.VerticalChestType.BOTTOM) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, hitBlockPos.offset(Direction.UP));
+					VerticalChestType type = usedChestBlockState.get(VerticalChestBlock.TYPE);
+					if (type == VerticalChestType.SINGLE) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, null);
+					else if (type == VerticalChestType.TOP) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos.offset(Direction.DOWN), hitBlockPos);
+					else if (type == VerticalChestType.BOTTOM) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, hitBlockPos.offset(Direction.UP));
 				}
 			}
 			return ActionResult.PASS;

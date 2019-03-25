@@ -5,9 +5,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Cuboid;
 import net.minecraft.client.render.entity.model.ChestEntityModel;
 
-@Environment(EnvType.CLIENT) public class ChestDoubleEntityModel extends ChestEntityModel
+@Environment(EnvType.CLIENT) public class TallChestEntityModel extends ChestEntityModel
 {
-	public ChestDoubleEntityModel()
+	public TallChestEntityModel()
 	{
 		lid = new Cuboid(this, 0, 0).setTextureSize(64, 128);
 		lid.addBox(0, -5, -14, 14, 5, 14, 0);

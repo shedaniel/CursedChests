@@ -1,6 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests.api.block.entity;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -83,8 +84,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 
 	@Override public void tick()
 	{
-		++ticksOpen;
-		viewerCount = recalculateViewerCountIfNecessary(world, this, ticksOpen, pos.getX(), pos.getY(), pos.getZ(), viewerCount);
+		viewerCount = recalculateViewerCountIfNecessary(world, this, ++ticksOpen, pos.getX(), pos.getY(), pos.getZ(), viewerCount);
 		lastAnimationAngle = animationAngle;
 		if (viewerCount > 0 && animationAngle == 0.0F) playSound(SoundEvents.BLOCK_CHEST_OPEN);
 		if (viewerCount == 0 && animationAngle > 0.0F || viewerCount > 0 && animationAngle < 1.0F)
@@ -92,8 +92,8 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 			float float_2 = animationAngle;
 			if (viewerCount > 0) animationAngle += 0.1F; else animationAngle -= 0.1F;
 			if (animationAngle > 1.0F) animationAngle = 1.0F;
-			else if (animationAngle < 0.5F && float_2 >= 0.5F) playSound(SoundEvents.BLOCK_CHEST_CLOSE);
 			else if (animationAngle < 0.0F) animationAngle = 0.0F;
+			else if (animationAngle < 0.5F && float_2 >= 0.5F) playSound(SoundEvents.BLOCK_CHEST_CLOSE);
 		}
 	}
 
@@ -119,7 +119,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 					inventory = ((ScrollableContainer) player.container).getInventory();
 				}
 				while (inventory != instance && (!(inventory instanceof DoubleInventory) || !((DoubleInventory) inventory).isPart(instance)));
-				++viewerCount;
+				viewerCount++;
 			}
 		}
 		else return viewerCount;
@@ -128,9 +128,9 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	private void playSound(SoundEvent soundEvent)
 	{
 		double z = pos.getZ();
-		VerticalChestBlock.VerticalChestType chestType = getCachedState().get(VerticalChestBlock.TYPE);
-		if (chestType == VerticalChestBlock.VerticalChestType.SINGLE) z += 0.5D;
-		else if (chestType == VerticalChestBlock.VerticalChestType.BOTTOM) z += 1.0D;
+		VerticalChestType chestType = getCachedState().get(VerticalChestBlock.TYPE);
+		if (chestType == VerticalChestType.SINGLE) z += 0.5D;
+		else if (chestType == VerticalChestType.BOTTOM) z += 1.0D;
 		world.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, z, soundEvent, SoundCategory.BLOCK, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
 	}
 

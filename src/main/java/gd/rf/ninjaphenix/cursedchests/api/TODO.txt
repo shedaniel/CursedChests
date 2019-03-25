@@ -1,0 +1,3 @@
+todo:
+    Change where screen and slots are rendered so that they are more centered on screen
+    maybe add custom stats for each chest type

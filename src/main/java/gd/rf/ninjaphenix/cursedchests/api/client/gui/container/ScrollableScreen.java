@@ -32,32 +32,32 @@ import net.minecraft.util.Identifier;
 
 	public static ScrollableScreen createScreen(ScrollableContainer container){ return new ScrollableScreen(container, MinecraftClient.getInstance().player.inventory, container.getDisplayName()); }
 
-	@Override public void render(int int_1, int int_2, float float_1)
+	@Override public void render(int mouseX, int mouseY, float float_1)
 	{
-		drawBackground();
-		super.render(int_1, int_2, float_1);
-		drawMouseoverTooltip(int_1, int_2);
+		drawBackground(float_1, mouseX, mouseY);
+		super.render(mouseX, mouseY, float_1);
+		drawMouseoverTooltip(mouseX, mouseY);
 	}
 
 	@Override protected void drawForeground(int int_1, int int_2)
 	{
-		fontRenderer.draw(title.getFormattedText(), 8, 6, 4210752);
-		fontRenderer.draw(playerInventory.getDisplayName().getFormattedText(), 8, height - 94, 4210752);
+		font.draw(title.getFormattedText(), 8, 6, 4210752);
+		font.draw(playerInventory.getDisplayName().getFormattedText(), 8, height - 94, 4210752);
 	}
 
 	@Override protected void drawBackground(float float_1, int int_1, int int_2)
 	{
 		GlStateManager.color4f(1, 1, 1, 1);
-		client.getTextureManager().bindTexture(BASE_TEXTURE);
-		int int_3 = (screenWidth - width) / 2;
-		int int_4 = (screenHeight - height) / 2;
-		drawTexturedRect(int_3, int_4, 0, 0, width, rows * 18 + 17);
-		drawTexturedRect(int_3, int_4 + rows * 18 + 17, 0, 126, width, 96);
+		minecraft.getTextureManager().bindTexture(BASE_TEXTURE);
+		int int_3 = (width - containerWidth) / 2;
+		int int_4 = (height - containerHeight) / 2;
+		blit(int_3, int_4, 0, 0, containerWidth, rows * 18 + 17);
+		blit(int_3, int_4 + rows * 18 + 17, 0, 126, containerWidth, 96);
 		if (realRows > 6)
 		{
-			client.getTextureManager().bindTexture(SCROLL_TEXTURE);
-			drawTexturedRect(int_3+172, int_4, 0, 0, 22, 132);
-			drawTexturedRect(int_3+174, (int) (int_4+18 + 91*progress), 22, 0, 12, 15);
+			minecraft.getTextureManager().bindTexture(SCROLL_TEXTURE);
+			blit(int_3+172, int_4, 0, 0, 22, 132);
+			blit(int_3+174, (int) (int_4+18 + 91*progress), 22, 0, 12, 15);
 		}
 	}
 

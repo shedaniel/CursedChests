@@ -28,7 +28,10 @@ import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.TextComponent;
 import net.minecraft.text.TranslatableTextComponent;
-import net.minecraft.util.*;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BoundingBox;
@@ -43,19 +46,6 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public abstract class VerticalChestBlock extends BlockWithEntity implements Waterloggable
 {
-	public enum VerticalChestType implements StringRepresentable
-	{
-		SINGLE("single"),
-		TOP("top"),
-		BOTTOM("bottom");
-
-		private final String name;
-
-		VerticalChestType(String string){ name = string; }
-
-		public String asString(){ return name; }
-	}
-
 	interface someInterface<T>
 	{
 		T method_17465(VerticalChestBlockEntity var1, VerticalChestBlockEntity var2);
@@ -97,6 +87,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Override public BlockRenderType getRenderType(BlockState state){ return BlockRenderType.ENTITYBLOCK_ANIMATED; }
 	@Override public FluidState getFluidState(BlockState state){ return state.get(WATERLOGGED) ? Fluids.WATER.getState(false) : super.getFluidState(state); }
 	@Override protected void appendProperties(StateFactory.Builder<Block, BlockState> stateBuilder){ stateBuilder.with(FACING, TYPE, WATERLOGGED); }
+	private Stat<Identifier> getOpenStat(){ return Stats.CUSTOM.getOrCreateStat(Stats.OPEN_CHEST); }
 	public abstract String getName();
 
 	@Override public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, VerticalEntityPosition verticalEntityPosition)
@@ -113,7 +104,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	{
 		World world = context.getWorld();
 		BlockPos pos = context.getBlockPos();
-		VerticalChestType chestType_1 = VerticalChestType.SINGLE;
+		VerticalChestType chestType = VerticalChestType.SINGLE;
 		Direction direction_1 = context.getPlayerHorizontalFacing().getOpposite();
 		Direction direction_2 = context.getFacing();
 		boolean sneaking = context.isPlayerSneaking();
@@ -121,19 +112,19 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		{
 			BlockState state = world.getBlockState(pos.offset(direction_2.getOpposite()));
 			Direction direction_3 = state.getBlock() == this && state.get(TYPE) == VerticalChestType.SINGLE ? state.get(FACING) : null;
-			if (direction_3 != null && direction_3.getAxis() != direction_2.getAxis()) chestType_1 = direction_2 == Direction.UP ? VerticalChestType.TOP : VerticalChestType.BOTTOM;
+			if (direction_3 != null && direction_3.getAxis() != direction_2.getAxis()) chestType = direction_2 == Direction.UP ? VerticalChestType.TOP : VerticalChestType.BOTTOM;
 		}
 		else if(!sneaking)
 		{
 			BlockState aboveBlockState = world.getBlockState(pos.offset(Direction.UP));
-			if (aboveBlockState.getBlock() == this && aboveBlockState.get(TYPE) == VerticalChestType.SINGLE) chestType_1 = VerticalChestType.BOTTOM;
+			if (aboveBlockState.getBlock() == this && aboveBlockState.get(TYPE) == VerticalChestType.SINGLE) chestType = VerticalChestType.BOTTOM;
 			else
 			{
 				BlockState belowBlockState = world.getBlockState(pos.offset(Direction.DOWN));
-				if (belowBlockState.getBlock() == this && belowBlockState.get(TYPE) == VerticalChestType.SINGLE) chestType_1 = VerticalChestType.TOP;
+				if (belowBlockState.getBlock() == this && belowBlockState.get(TYPE) == VerticalChestType.SINGLE) chestType = VerticalChestType.TOP;
 			}
 		}
-		return getDefaultState().with(FACING, direction_1).with(TYPE, chestType_1).with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
+		return getDefaultState().with(FACING, direction_1).with(TYPE, chestType).with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
 	}
 
 	@Override public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState otherState, IWorld world, BlockPos pos, BlockPos otherPos)
@@ -189,9 +180,6 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		player.incrementStat(getOpenStat());
 		return true;
 	}
-
-	// todo: maybe add custom stats for each chest type
-	private Stat<Identifier> getOpenStat(){ return Stats.CUSTOM.getOrCreateStat(Stats.OPEN_CHEST); }
 
 	private static <T> T method_17459(BlockState state_1, IWorld world, BlockPos pos_1, someInterface<T> var_1)
 	{
