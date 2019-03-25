@@ -26,7 +26,7 @@ import net.minecraft.util.Identifier;
 		realRows = container.getRows();
 		topRow = 0;
 		rows = realRows > 6 ? 6 : realRows;
-		height = 114 + rows * 18;
+		containerHeight = 114 + rows * 18;
 		progress = 0;
 	}
 
@@ -42,7 +42,7 @@ import net.minecraft.util.Identifier;
 	@Override protected void drawForeground(int int_1, int int_2)
 	{
 		font.draw(title.getFormattedText(), 8, 6, 4210752);
-		font.draw(playerInventory.getDisplayName().getFormattedText(), 8, height - 94, 4210752);
+		font.draw(playerInventory.getDisplayName().getFormattedText(), 8, containerHeight - 94, 4210752);
 	}
 
 	@Override protected void drawBackground(float float_1, int int_1, int int_2)

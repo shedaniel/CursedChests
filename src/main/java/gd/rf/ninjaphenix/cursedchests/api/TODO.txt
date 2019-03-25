@@ -1,5 +1,4 @@
 todo:
-    Change where screen and slots are rendered so that they are more centered on screen (see vanilla for example)
     Maybe add custom stats for each chest type
     Curse of binding to lock a chest to a specific player
     Prevent merging of chest where top chest rotation != bottom chest rotation
