@@ -3,21 +3,21 @@ package gd.rf.ninjaphenix.cursedchests.api.block.entity;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
+import gd.rf.ninjaphenix.cursedchests.api.inventory.DoubleSidedInventory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.EnvironmentInterface;
 import net.fabricmc.api.EnvironmentInterfaces;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.LockableContainerBlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.client.block.ChestAnimationProgress;
 import net.minecraft.container.Container;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.DoubleInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundCategory;
@@ -27,25 +27,29 @@ import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BoundingBox;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-
+import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
 @EnvironmentInterfaces({@EnvironmentInterface(value = EnvType.CLIENT, itf = ChestAnimationProgress.class)})
-public abstract class VerticalChestBlockEntity extends LootableContainerBlockEntity implements ChestAnimationProgress, Tickable
+public abstract class VerticalChestBlockEntity extends LootableContainerBlockEntity implements ChestAnimationProgress, Tickable, SidedInventory
 {
 	private DefaultedList<ItemStack> inventory;
 	private float animationAngle;
 	private float lastAnimationAngle;
 	private int viewerCount;
 	private int ticksOpen;
+	private int[] SLOTS;
 
 	public VerticalChestBlockEntity(BlockEntityType type)
 	{
 		super(type);
 		inventory = DefaultedList.create(getInvSize(), ItemStack.EMPTY);
+		SLOTS = new int[getInvSize()];
+		for (int i = 0; i<SLOTS.length; i++){ SLOTS[i] = i; }
 	}
 
 	@Override public boolean onBlockAction(int actionId, int value){ if (actionId == 1){ viewerCount = value; return true; } else { return super.onBlockAction(actionId, value); } }
@@ -53,6 +57,9 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	@Override public void setInvStackList(DefaultedList<ItemStack> defaultedList_1){ inventory = defaultedList_1; }
 	@Environment(EnvType.CLIENT) @Override public float getAnimationProgress(float float_1){ return MathHelper.lerp(float_1, lastAnimationAngle, animationAngle); }
 	@Override protected Container createContainer(int int_1, PlayerInventory playerInventory_1){ return null; }
+	@Override public int[] getInvAvailableSlots(Direction direction){ return SLOTS; }
+	@Override public boolean canInsertInvStack(int slot, ItemStack stack, @Nullable Direction direction){ return this.isValidInvStack(slot, stack); }
+	@Override public boolean canExtractInvStack(int slot, ItemStack stack, Direction direction){ return true; }
 	public abstract Identifier getTexture(boolean isDouble);
 
 	@Override public boolean isInvEmpty()
@@ -97,7 +104,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 		}
 	}
 
-	private static int recalculateViewerCountIfNecessary(World world, LockableContainerBlockEntity instance, int ticksOpen, int x, int y, int z, int viewerCount)
+	private static int recalculateViewerCountIfNecessary(World world, VerticalChestBlockEntity instance, int ticksOpen, int x, int y, int z, int viewerCount)
 	{
 		if (!world.isClient && viewerCount != 0 && (ticksOpen + x + y + z) % 200 == 0)
 		{
@@ -118,7 +125,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 					while (!(player.container instanceof ScrollableContainer));
 					inventory = ((ScrollableContainer) player.container).getInventory();
 				}
-				while (inventory != instance && (!(inventory instanceof DoubleInventory) || !((DoubleInventory) inventory).isPart(instance)));
+				while (inventory != instance && (!(inventory instanceof DoubleSidedInventory) || !((DoubleSidedInventory) inventory).isPart(instance)));
 				viewerCount++;
 			}
 		}

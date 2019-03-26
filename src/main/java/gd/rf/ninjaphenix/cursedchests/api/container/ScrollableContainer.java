@@ -6,18 +6,18 @@ import net.minecraft.container.Container;
 import net.minecraft.container.Slot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.TextComponent;
 
 public class ScrollableContainer extends Container
 {
 	private final TextComponent containerName;
-	private final Inventory inventory;
+	private final SidedInventory inventory;
 	private final int rows;
 	private final int realRows;
 
-	public ScrollableContainer(int syncId, PlayerInventory playerInventory, Inventory inventory, TextComponent containerName)
+	public ScrollableContainer(int syncId, PlayerInventory playerInventory, SidedInventory inventory, TextComponent containerName)
 	{
 		super(null, syncId);
 		this.inventory = inventory;
@@ -36,7 +36,7 @@ public class ScrollableContainer extends Container
 		for (int x = 0; x < 9; ++x) addSlot(new Slot(playerInventory, x, 8 + x * 18, 161 + int_3));
 	}
 
-	public Inventory getInventory(){ return inventory; }
+	public SidedInventory getInventory(){ return inventory; }
 	@Environment(EnvType.CLIENT) public int getRows(){ return realRows; }
 	@Environment(EnvType.CLIENT) public TextComponent getDisplayName(){ return containerName; }
 	@Override public boolean canUse(PlayerEntity player){ return inventory.canPlayerUseInv(player); }

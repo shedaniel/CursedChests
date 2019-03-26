@@ -1,7 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests.api.block;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
-import gd.rf.ninjaphenix.cursedchests.api.item.ChestModifier;
+import gd.rf.ninjaphenix.cursedchests.api.inventory.DoubleSidedInventory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
@@ -14,8 +14,8 @@ import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.DoubleInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sortme.ItemScatterer;
@@ -44,7 +44,7 @@ import net.minecraft.world.World;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public abstract class VerticalChestBlock extends BlockWithEntity implements Waterloggable
+public abstract class VerticalChestBlock extends BlockWithEntity implements Waterloggable, InventoryProvider
 {
 	interface someInterface<T>
 	{
@@ -59,10 +59,10 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	private static final VoxelShape TOP_SHAPE = Block.createCuboidShape(1, -16, 1, 15, 14, 15);
 	private static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 30, 15);
 
-	private static final someInterface<Inventory> inventoryCombiner = new someInterface<Inventory>()
+	private static final someInterface<SidedInventory> inventoryCombiner = new someInterface<SidedInventory>()
 	{
-		@Override public Inventory method_17465(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity){ return new DoubleInventory(bottomChestBlockEntity, topChestBlockEntity); }
-		@Override public Inventory method_17464(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity; }
+		@Override public SidedInventory method_17465(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity){ return new DoubleSidedInventory(bottomChestBlockEntity, topChestBlockEntity); }
+		@Override public SidedInventory method_17464(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity; }
 	};
 
 	private static final someInterface<TextComponent> displayNameCombiner = new someInterface<TextComponent>()
@@ -216,7 +216,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		}
 	}
 
-	public static Inventory createCombinedInventory(BlockState state, World world, BlockPos pos){ return method_17459(state, world, pos, inventoryCombiner); }
+	public static SidedInventory createCombinedInventory(BlockState state, World world, BlockPos pos){ return method_17459(state, world, pos, inventoryCombiner); }
 
 	private static boolean isChestBlocked(IWorld world, BlockPos pos)
 	{
@@ -236,19 +236,12 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	}
 
 	@Override public boolean hasComparatorOutput(BlockState state){ return true; }
+	@Override public int getComparatorOutput(BlockState state, World world, BlockPos pos){ return Container.calculateComparatorOutput(createCombinedInventory(state, world, pos)); }
+	@Override public BlockState rotate(BlockState state, Rotation rotation){ return state.with(FACING, rotation.rotate(state.get(FACING))); }
+	@Override public BlockState mirror(BlockState state, Mirror mirror){ return state.rotate(mirror.getRotation(state.get(FACING))); }
 
-	@Override public int getComparatorOutput(BlockState state, World world, BlockPos pos)
+	@Override public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos)
 	{
-		return Container.calculateComparatorOutput(createCombinedInventory(state, world, pos));
-	}
-
-	@Override public BlockState rotate(BlockState state, Rotation rotation)
-	{
-		return state.with(FACING, rotation.rotate(state.get(FACING)));
-	}
-
-	@Override public BlockState mirror(BlockState state, Mirror mirror)
-	{
-		return state.rotate(mirror.getRotation(state.get(FACING)));
+		return method_17459(state, world, pos, inventoryCombiner);
 	}
 }

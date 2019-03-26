@@ -5,5 +5,4 @@ todo:
     Trapped chest variant
     Search bar
     Make it so you can merge 2 already placed chests by shift-clicking on the side you want to merge. ( Or prevent a single upgrade working on double chests)
-    Fix hoppers pulling items out of chest.
-    Potentially fix localization for other languages (where Large is a suffix)
+    Potentially fix localization for other languages (where Large is a suffix instead of prefix)
