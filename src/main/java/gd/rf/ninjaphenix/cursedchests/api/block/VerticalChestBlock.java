@@ -94,6 +94,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Override public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos){ return method_17459(state, world, pos, inventoryCombiner); }
 	private static boolean isChestBlocked(IWorld world, BlockPos pos){ return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos); }
 	private Stat<Identifier> getOpenStat(){ return Stats.CUSTOM.getOrCreateStat(Stats.OPEN_CHEST); }
+	public static SidedInventory getInventoryStatic(BlockState state, IWorld world, BlockPos pos){ return method_17459(state, world, pos, inventoryCombiner); }
 	public abstract String getName();
 
 	@Override public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, VerticalEntityPosition verticalEntityPosition)
