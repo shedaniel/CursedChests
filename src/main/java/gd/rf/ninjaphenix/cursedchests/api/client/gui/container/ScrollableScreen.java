@@ -36,12 +36,13 @@ import net.minecraft.util.Identifier;
 	@Override public void init()
 	{
 		super.init();
-		this.searchBox = new TextFieldWidget(font, left + 81, top + 128, 88, 10);
-		this.searchBox.setMaxLength(50);
-		this.searchBox.setHasBorder(false);
-		this.searchBox.setVisible(realRows > 6);
-		this.searchBox.method_1868(16777215);
-		this.children.add(this.searchBox);
+		searchBox = new TextFieldWidget(font, left + 82, top + 128, 80, 10);
+		searchBox.setMaxLength(50);
+		searchBox.setHasBorder(false);
+		searchBox.setVisible(realRows > 6);
+		searchBox.setFocused(realRows > 6);
+		searchBox.method_1868(16777215);
+		children.add(searchBox);
 	}
 	public static ScrollableScreen createScreen(ScrollableContainer container){ return new ScrollableScreen(container, MinecraftClient.getInstance().player.inventory, container.getDisplayName()); }
 
@@ -108,7 +109,7 @@ import net.minecraft.util.Identifier;
 
 	@Override public boolean mouseReleased(double double_1, double double_2, int int_1)
 	{
-		if(dragging) dragging= false;
+		if(dragging) dragging = false;
 		return super.mouseReleased(double_1, double_2, int_1);
 	}
 	private void setTopRow(int value)
@@ -118,6 +119,44 @@ import net.minecraft.util.Identifier;
 		else if (topRow > realRows - 6) topRow = realRows - 6;
 		progress = ((double) topRow) / ((double) (realRows - 6));
 		container.updateSlotPositions(topRow);
+	}
+
+	@Override public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+	{
+		if(keyCode == 256){ minecraft.player.closeGui(); return true;}
+		else if (searchBox.isFocused() && realRows > 6)
+		{
+			System.out.println("we pressed a key");
+			String originalText = searchBox.getText();
+			if (searchBox.keyPressed(keyCode, scanCode, modifiers))
+			{
+				if (!originalText.equals(searchBox.getText()))
+				{
+					// refresh container items here.
+				}
+			}
+			return true;
+		}
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
+	@Override public boolean charTyped(char character, int int_1)
+	{
+		String originalText = searchBox.getText();
+		if (searchBox.charTyped(character, int_1))
+		{
+			if (!originalText.equals(searchBox.getText()))
+			{
+				// refresh container items here.
+			}
+			return true;
+		}
+		return false;
+	}
+
+	@Override public void tick()
+	{
+		searchBox.tick();
 	}
 }
 
