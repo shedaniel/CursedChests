@@ -1,6 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests.api.item;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -54,29 +55,37 @@ public class ChestConversionItem extends Item implements ChestModifier
 	 */
 	@Override public ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos topBlockPos)
 	{
-		if (world.isClient) return ActionResult.FAIL;
+		if (world.isClient) return player.isSneaking() ? ActionResult.SUCCESS : ActionResult.FAIL;
 		BlockState mainBlockState = world.getBlockState(mainBlockPos);
 		VerticalChestBlock mainBlock = (VerticalChestBlock) mainBlockState.getBlock();
 		if (Registry.BLOCK.getId(mainBlock) != from) return ActionResult.FAIL;
 		ItemStack handStack = player.getStackInHand(hand);
 		BlockEntity mainBlockEntity = world.getBlockEntity(mainBlockPos);
+		if(mainBlockEntity == null) return ActionResult.FAIL;
 		Direction rotation = mainBlockState.get(Properties.FACING_HORIZONTAL);
-		if (topBlockPos == null)
+		if (topBlockPos == null || handStack.getAmount() == 1)
 		{
-			DefaultedList<ItemStack> inventoryData = DefaultedList.create(((VerticalChestBlockEntity) mainBlockEntity).getInvSize(), ItemStack.EMPTY);
-			Inventories.fromTag(mainBlockEntity.toTag(new CompoundTag()), inventoryData);
-			world.removeBlockEntity(mainBlockPos);
-			world.setBlockState(mainBlockPos, Registry.BLOCK.get(to).getDefaultState().with(Properties.FACING_HORIZONTAL, rotation));
-			mainBlockEntity = world.getBlockEntity(mainBlockPos);
-			mainBlockEntity.fromTag(Inventories.toTag(mainBlockEntity.toTag(new CompoundTag()), inventoryData));
-			handStack.setAmount(handStack.getAmount() - 1);
+			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
 		}
 		else
 		{
 			BlockEntity topBlockEntity = world.getBlockEntity(topBlockPos);
-
+			if(topBlockEntity == null) return ActionResult.FAIL;
+			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
+			upgradeChest(world, topBlockPos, topBlockEntity, rotation);
+			world.setBlockState(topBlockPos, world.getBlockState(topBlockPos).with(VerticalChestBlock.TYPE, VerticalChestType.TOP));
 			handStack.setAmount(handStack.getAmount() - 2);
 		}
-		return ActionResult.PASS;
+		return ActionResult.FAIL;
+	}
+
+	private void upgradeChest(World world, BlockPos pos, BlockEntity entity, Direction direction)
+	{
+		DefaultedList<ItemStack> inventoryData = DefaultedList.create(((VerticalChestBlockEntity) entity).getInvSize(), ItemStack.EMPTY);
+		Inventories.fromTag(entity.toTag(new CompoundTag()), inventoryData);
+		world.removeBlockEntity(pos);
+		world.setBlockState(pos, Registry.BLOCK.get(to).getDefaultState().with(Properties.FACING_HORIZONTAL, direction));
+		entity = world.getBlockEntity(pos);
+		entity.fromTag(Inventories.toTag(entity.toTag(new CompoundTag()), inventoryData));
 	}
 }

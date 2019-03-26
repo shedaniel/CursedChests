@@ -65,9 +65,9 @@ public class CursedChests implements ModInitializer
 				{
 					BlockState usedChestBlockState = world.getBlockState(hitBlockPos);
 					VerticalChestType type = usedChestBlockState.get(VerticalChestBlock.TYPE);
-					if (type == VerticalChestType.SINGLE) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, null);
-					else if (type == VerticalChestType.TOP) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos.offset(Direction.DOWN), hitBlockPos);
-					else if (type == VerticalChestType.BOTTOM) ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, hitBlockPos.offset(Direction.UP));
+					if (type == VerticalChestType.SINGLE) return ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, null);
+					else if (type == VerticalChestType.TOP) return ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos.offset(Direction.DOWN), hitBlockPos);
+					else if (type == VerticalChestType.BOTTOM) return ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, hitBlockPos.offset(Direction.UP));
 				}
 			}
 			return ActionResult.PASS;

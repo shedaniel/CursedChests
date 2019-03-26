@@ -170,7 +170,6 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Override public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
 		if (world.isClient) return true;
-		if (player.getStackInHand(hand).getItem() instanceof ChestModifier) return true;
 		TextComponent containerName = method_17459(state, world, pos, displayNameCombiner);
 		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 		{
