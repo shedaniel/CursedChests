@@ -19,7 +19,7 @@ import net.minecraft.util.Identifier;
 	private final int rows;
 	private final int realRows;
 	private double progress;
-	private boolean isDragging;
+	private boolean dragging;
 
 	public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, TextComponent containerTitle)
 	{
@@ -79,11 +79,11 @@ import net.minecraft.util.Identifier;
 	@Override public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double deltaX, double deltaY)
 	{
 		boolean inYRange = mouseY > top + 18 && mouseY < top + 124;
-		boolean condition = isDragging && inYRange;
+		boolean condition = dragging&& inYRange;
 		if(!condition) condition = playerInventory.getCursorStack().isEmpty() && mouseX > left + 172 && mouseX < left + 184 && inYRange;
 		if (condition)
 		{
-			if(!isDragging) isDragging = true;
+			if(!dragging) dragging= true;
 			progress = (mouseY - top - 18)/105;
 			topRow = (int) (progress * (realRows-6));
 			container.updateSlotPositions(topRow);
@@ -94,7 +94,7 @@ import net.minecraft.util.Identifier;
 
 	@Override public boolean mouseReleased(double double_1, double double_2, int int_1)
 	{
-		if(isDragging) isDragging = false;
+		if(dragging) dragging= false;
 		return super.mouseReleased(double_1, double_2, int_1);
 	}
 	private void setTopRow(int value)
