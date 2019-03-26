@@ -155,8 +155,8 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	{
 		if (stack.hasDisplayName())
 		{
-			BlockEntity blockEntity_1 = world.getBlockEntity(pos);
-			if (blockEntity_1 instanceof VerticalChestBlockEntity)((VerticalChestBlockEntity) blockEntity_1).setCustomName(stack.getDisplayName());
+			BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity instanceof VerticalChestBlockEntity) ((VerticalChestBlockEntity) blockEntity).setCustomName(stack.getDisplayName());
 		}
 	}
 
