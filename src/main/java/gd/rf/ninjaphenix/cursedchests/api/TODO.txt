@@ -4,4 +4,4 @@ todo:
     Prevent merging of chest where top chest rotation != bottom chest rotation
     Trapped chest variant
     Search bar
-    Chest Upgrades
+    Make it so you can merge 2 already placed chests by shift-clicking on the side you want to merge.
