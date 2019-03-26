@@ -4,4 +4,6 @@ todo:
     Prevent merging of chest where top chest rotation != bottom chest rotation
     Trapped chest variant
     Search bar
-    Make it so you can merge 2 already placed chests by shift-clicking on the side you want to merge.
+    Make it so you can merge 2 already placed chests by shift-clicking on the side you want to merge. ( Or prevent a single upgrade working on double chests)
+    Fix hoppers pulling items out of chest.
+    Potentially fix localization for other languages (where Large is a suffix)

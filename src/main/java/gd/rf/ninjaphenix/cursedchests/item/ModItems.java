@@ -16,14 +16,11 @@ public class ModItems
 		registerConversionItem(ModBlocks.wood_chest, ModBlocks.gold_chest);
 		registerConversionItem(ModBlocks.wood_chest, ModBlocks.diamond_chest);
 		registerConversionItem(ModBlocks.wood_chest, ModBlocks.obsidian_chest);
-
 		registerConversionItem(ModBlocks.iron_chest, ModBlocks.gold_chest);
 		registerConversionItem(ModBlocks.iron_chest, ModBlocks.diamond_chest);
 		registerConversionItem(ModBlocks.iron_chest, ModBlocks.obsidian_chest);
-
 		registerConversionItem(ModBlocks.gold_chest, ModBlocks.diamond_chest);
 		registerConversionItem(ModBlocks.gold_chest, ModBlocks.obsidian_chest);
-
 		registerConversionItem(ModBlocks.diamond_chest, ModBlocks.obsidian_chest);
 	}
 
