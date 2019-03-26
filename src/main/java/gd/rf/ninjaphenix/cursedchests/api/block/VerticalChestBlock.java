@@ -87,6 +87,12 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Override public BlockRenderType getRenderType(BlockState state){ return BlockRenderType.ENTITYBLOCK_ANIMATED; }
 	@Override public FluidState getFluidState(BlockState state){ return state.get(WATERLOGGED) ? Fluids.WATER.getState(false) : super.getFluidState(state); }
 	@Override protected void appendProperties(StateFactory.Builder<Block, BlockState> stateBuilder){ stateBuilder.with(FACING, TYPE, WATERLOGGED); }
+	@Override public boolean hasComparatorOutput(BlockState state){ return true; }
+	@Override public int getComparatorOutput(BlockState state, World world, BlockPos pos){ return Container.calculateComparatorOutput(getInventory(state, world, pos)); }
+	@Override public BlockState rotate(BlockState state, Rotation rotation){ return state.with(FACING, rotation.rotate(state.get(FACING))); }
+	@Override public BlockState mirror(BlockState state, Mirror mirror){ return state.rotate(mirror.getRotation(state.get(FACING))); }
+	@Override public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos){ return method_17459(state, world, pos, inventoryCombiner); }
+	private static boolean isChestBlocked(IWorld world, BlockPos pos){ return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos); }
 	private Stat<Identifier> getOpenStat(){ return Stats.CUSTOM.getOrCreateStat(Stats.OPEN_CHEST); }
 	public abstract String getName();
 
@@ -216,13 +222,6 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		}
 	}
 
-	public static SidedInventory createCombinedInventory(BlockState state, World world, BlockPos pos){ return method_17459(state, world, pos, inventoryCombiner); }
-
-	private static boolean isChestBlocked(IWorld world, BlockPos pos)
-	{
-		return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos);
-	}
-
 	private static boolean hasBlockOnTop(BlockView view, BlockPos pos)
 	{
 		BlockPos blockPos_2 = pos.up();
@@ -233,15 +232,5 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		List<CatEntity> cats = world.method_18467(CatEntity.class, new BoundingBox(pos.getX(),pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
 		if (!cats.isEmpty()) for (CatEntity catEntity_1 : cats) if (catEntity_1.isSitting()) return true;
 		return false;
-	}
-
-	@Override public boolean hasComparatorOutput(BlockState state){ return true; }
-	@Override public int getComparatorOutput(BlockState state, World world, BlockPos pos){ return Container.calculateComparatorOutput(createCombinedInventory(state, world, pos)); }
-	@Override public BlockState rotate(BlockState state, Rotation rotation){ return state.with(FACING, rotation.rotate(state.get(FACING))); }
-	@Override public BlockState mirror(BlockState state, Mirror mirror){ return state.rotate(mirror.getRotation(state.get(FACING))); }
-
-	@Override public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos)
-	{
-		return method_17459(state, world, pos, inventoryCombiner);
 	}
 }
