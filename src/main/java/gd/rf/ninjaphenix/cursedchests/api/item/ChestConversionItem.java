@@ -39,9 +39,7 @@ public class ChestConversionItem extends Item implements ChestModifier
 
 	public ChestConversionItem(Settings settings, VerticalChestBlock from, VerticalChestBlock to)
 	{
-		super(settings);
-		this.from = Registry.BLOCK.getId(from);
-		this.to = Registry.BLOCK.getId(to);
+		this(settings, Registry.BLOCK.getId(from), Registry.BLOCK.getId(to));
 	}
 
 	/**
