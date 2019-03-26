@@ -7,6 +7,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.ContainerProvider;
 import net.minecraft.client.gui.ContainerScreen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.Identifier;
@@ -20,6 +21,7 @@ import net.minecraft.util.Identifier;
 	private final int realRows;
 	private double progress;
 	private boolean dragging;
+	private TextFieldWidget searchBox;
 
 	public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, TextComponent containerTitle)
 	{
@@ -31,6 +33,16 @@ import net.minecraft.util.Identifier;
 		progress = 0;
 	}
 
+	@Override public void init()
+	{
+		super.init();
+		this.searchBox = new TextFieldWidget(font, left + 81, top + 128, 88, 10);
+		this.searchBox.setMaxLength(50);
+		this.searchBox.setHasBorder(false);
+		this.searchBox.setVisible(realRows > 6);
+		this.searchBox.method_1868(16777215);
+		this.children.add(this.searchBox);
+	}
 	public static ScrollableScreen createScreen(ScrollableContainer container){ return new ScrollableScreen(container, MinecraftClient.getInstance().player.inventory, container.getDisplayName()); }
 
 	@Override public void render(int mouseX, int mouseY, float float_1)
@@ -57,8 +69,10 @@ import net.minecraft.util.Identifier;
 		if (realRows > 6)
 		{
 			minecraft.getTextureManager().bindTexture(SCROLL_TEXTURE);
-			blit(int_3+172, int_4, 0, 0, 22, 132);
-			blit(int_3+174, (int) (int_4+18 + 91*progress), 22, 0, 12, 15);
+			blit(int_3 + 172, int_4, 0, 0, 22, 132);
+			blit(int_3 + 174, (int) (int_4+18 + 91*progress), 22, 0, 12, 15);
+			blit(int_3 + 79, int_4 + 126, 34, 0, 90, 12);
+			searchBox.render(int_1, int_2, float_1);
 		}
 	}
 

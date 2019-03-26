@@ -32,7 +32,7 @@ public class ChestConversionItem extends Item implements ChestModifier
 
 	public ChestConversionItem(Settings settings, Identifier from, Identifier to)
 	{
-		super(settings);
+		super(settings.stackSize(16));
 		this.from = from;
 		this.to = to;
 	}
