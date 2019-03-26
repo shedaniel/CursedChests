@@ -56,7 +56,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	@Override protected DefaultedList<ItemStack> getInvStackList(){ return inventory; }
 	@Override public void setInvStackList(DefaultedList<ItemStack> defaultedList_1){ inventory = defaultedList_1; }
 	@Environment(EnvType.CLIENT) @Override public float getAnimationProgress(float float_1){ return MathHelper.lerp(float_1, lastAnimationAngle, animationAngle); }
-	@Override protected Container createContainer(int int_1, PlayerInventory playerInventory_1){ return null; }
+	@Override protected Container createContainer(int int_1, PlayerInventory playerInventory){ return null; }
 	@Override public int[] getInvAvailableSlots(Direction direction){ return SLOTS; }
 	@Override public boolean canInsertInvStack(int slot, ItemStack stack, @Nullable Direction direction){ return this.isValidInvStack(slot, stack); }
 	@Override public boolean canExtractInvStack(int slot, ItemStack stack, Direction direction){ return true; }
@@ -113,7 +113,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 			Iterator<PlayerEntity> playerIterator = playersInRange.iterator();
 			while (true)
 			{
-				Inventory inventory;
+				SidedInventory inventory;
 				do
 				{
 					PlayerEntity player;
