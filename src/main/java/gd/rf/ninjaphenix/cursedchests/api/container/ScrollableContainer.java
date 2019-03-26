@@ -16,6 +16,8 @@ public class ScrollableContainer extends Container
 	private final SidedInventory inventory;
 	private final int rows;
 	private final int realRows;
+	private String searchTerm;
+	private int offset;
 
 	public ScrollableContainer(int syncId, PlayerInventory playerInventory, SidedInventory inventory, TextComponent containerName)
 	{
@@ -24,6 +26,8 @@ public class ScrollableContainer extends Container
 		this.containerName = containerName;
 		realRows = inventory.getInvSize()/9;
 		rows = realRows > 6 ? 6 : realRows;
+		searchTerm = "";
+		offset = 0;
 		int int_3 = (rows - 4) * 18;
 		inventory.onInvOpen(playerInventory.player);
 		for(int y = 0; y < realRows; ++y)
@@ -42,14 +46,68 @@ public class ScrollableContainer extends Container
 	@Override public boolean canUse(PlayerEntity player){ return inventory.canPlayerUseInv(player); }
 	@Override public void close(PlayerEntity player){ super.close(player); inventory.onInvClose(player); }
 
+	public void setSearchTerm(String term)
+	{
+		searchTerm = term.toLowerCase();
+		if(searchTerm.equals(""))
+		{
+			offset = 0;
+			setSlotPositionsWithOffset();
+		}
+	}
+
 	public void updateSlotPositions(int offset)
+	{
+		this.offset = offset;
+		if(!searchTerm.equals(""))
+		{
+			int slotIndex = 0;
+			Slot slot;
+			ItemStack stack;
+			int newX, newY, xPos, yPos;
+			for (int y = 0; y < realRows; ++y)
+			{
+				for(int x = 0; x < 9; ++x)
+				{
+					slot = slotList.get(y*9 + x);
+					stack = slot.getStack();
+					if(!stack.isEmpty() && stack.getItem().getTranslatedNameTrimmed(stack).getString().toLowerCase().contains(searchTerm))
+					{
+						newX = (slotIndex % 9);
+						xPos = 8 + newX * 18;
+						newY = ((slotIndex / 9)-offset);
+						yPos = 18 + newY * 18;
+						if (newY >= rows || newY < 0) yPos = -2000;
+						slot.xPosition = xPos;
+						slot.yPosition = yPos;
+						slotIndex++;
+					}
+					else
+					{
+						slot.xPosition = 0;
+						slot.yPosition = -2000;
+					}
+				}
+			}
+			return;
+		}
+		setSlotPositionsWithOffset();
+	}
+
+	private void setSlotPositionsWithOffset()
 	{
 		for(int y = 0; y < realRows; ++y)
 		{
+			Slot slot;
 			int ny = y - offset;
 			int yPos = 18 + ny * 18;
 			if (ny >= rows || ny < 0) yPos = -2000;
-			for (int x = 0; x < 9; ++x) slotList.get(x + 9*y).yPosition = yPos;
+			for (int x = 0; x < 9; ++x)
+			{
+				slot = slotList.get(x + 9*y);
+				slot.xPosition = 8 + x * 18;
+				slot.yPosition = yPos;
+			}
 		}
 	}
 
@@ -67,5 +125,11 @@ public class ScrollableContainer extends Container
 			else slot.markDirty();
 		}
 		return stack;
+	}
+
+	@Override public void sendContentUpdates()
+	{
+		updateSlotPositions(offset);
+		super.sendContentUpdates();
 	}
 }

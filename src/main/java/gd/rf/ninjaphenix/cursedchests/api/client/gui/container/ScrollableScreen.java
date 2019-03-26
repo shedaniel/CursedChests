@@ -40,7 +40,6 @@ import net.minecraft.util.Identifier;
 		searchBox.setMaxLength(50);
 		searchBox.setHasBorder(false);
 		searchBox.setVisible(realRows > 6);
-		searchBox.setFocused(realRows > 6);
 		searchBox.method_1868(16777215);
 		children.add(searchBox);
 	}
@@ -126,13 +125,13 @@ import net.minecraft.util.Identifier;
 		if(keyCode == 256){ minecraft.player.closeGui(); return true;}
 		else if (searchBox.isFocused() && realRows > 6)
 		{
-			System.out.println("we pressed a key");
 			String originalText = searchBox.getText();
 			if (searchBox.keyPressed(keyCode, scanCode, modifiers))
 			{
 				if (!originalText.equals(searchBox.getText()))
 				{
-					// refresh container items here.
+					container.setSearchTerm(searchBox.getText());
+					container.updateSlotPositions(topRow);
 				}
 			}
 			return true;
@@ -147,7 +146,8 @@ import net.minecraft.util.Identifier;
 		{
 			if (!originalText.equals(searchBox.getText()))
 			{
-				// refresh container items here.
+				container.setSearchTerm(searchBox.getText());
+				container.updateSlotPositions(topRow);
 			}
 			return true;
 		}
