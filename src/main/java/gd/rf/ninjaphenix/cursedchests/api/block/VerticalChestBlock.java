@@ -119,16 +119,16 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		{
 			BlockState state = world.getBlockState(pos.offset(direction_2.getOpposite()));
 			Direction direction_3 = state.getBlock() == this && state.get(TYPE) == VerticalChestType.SINGLE ? state.get(FACING) : null;
-			if (direction_3 != null && direction_3.getAxis() != direction_2.getAxis()) chestType = direction_2 == Direction.UP ? VerticalChestType.TOP : VerticalChestType.BOTTOM;
+			if (direction_3 != null && direction_3.getAxis() != direction_2.getAxis() && direction_3 == direction_1) chestType = direction_2 == Direction.UP ? VerticalChestType.TOP : VerticalChestType.BOTTOM;
 		}
 		else if(!sneaking)
 		{
 			BlockState aboveBlockState = world.getBlockState(pos.offset(Direction.UP));
-			if (aboveBlockState.getBlock() == this && aboveBlockState.get(TYPE) == VerticalChestType.SINGLE) chestType = VerticalChestType.BOTTOM;
+			if (aboveBlockState.getBlock() == this && aboveBlockState.get(TYPE) == VerticalChestType.SINGLE && aboveBlockState.get(FACING) == direction_1) chestType = VerticalChestType.BOTTOM;
 			else
 			{
 				BlockState belowBlockState = world.getBlockState(pos.offset(Direction.DOWN));
-				if (belowBlockState.getBlock() == this && belowBlockState.get(TYPE) == VerticalChestType.SINGLE) chestType = VerticalChestType.TOP;
+				if (belowBlockState.getBlock() == this && belowBlockState.get(TYPE) == VerticalChestType.SINGLE && belowBlockState.get(FACING) == direction_1) chestType = VerticalChestType.TOP;
 			}
 		}
 		return getDefaultState().with(FACING, direction_1).with(TYPE, chestType).with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
@@ -136,7 +136,6 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 
 	@Override public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState otherState, IWorld world, BlockPos pos, BlockPos otherPos)
 	{
-
 		if (state.get(WATERLOGGED)) world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		if (state.get(TYPE) == VerticalChestType.TOP && world.getBlockState(pos.offset(Direction.DOWN)).getBlock() != this) return state.with(TYPE, VerticalChestType.SINGLE);
 		else if (state.get(TYPE) == VerticalChestType.BOTTOM && world.getBlockState(pos.offset(Direction.UP)).getBlock() != this) return state.with(TYPE, VerticalChestType.SINGLE);
@@ -177,6 +176,16 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Override public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
 		if (world.isClient) return true;
+		if (player.isSneaking() && hitResult.getSide().getAxis().isVertical() && state.get(TYPE) == VerticalChestType.SINGLE)
+		{
+			Direction direction = hitResult.getSide();
+			BlockState offsetState = world.getBlockState(pos.offset(direction));
+			if (offsetState.getBlock() == this && offsetState.get(TYPE) == VerticalChestType.SINGLE && state.get(FACING) == offsetState.get(FACING))
+			{
+				world.setBlockState(pos, state.with(TYPE, direction == Direction.UP ? VerticalChestType.BOTTOM : VerticalChestType.TOP));
+				return true;
+			}
+		}
 		TextComponent containerName = method_17459(state, world, pos, displayNameCombiner);
 		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 		{
