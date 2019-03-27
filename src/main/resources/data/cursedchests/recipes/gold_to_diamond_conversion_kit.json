@@ -2,21 +2,21 @@
 	"type": "crafting_shaped",
 	"pattern": [
 		"GGG",
-		"ICI",
+		"DID",
 		"GGG"
 	],
 	"key": {
 		"I": {
-			"item": "minecraft:diamond"
+			"item": "minecraft:gold_ingot"
 		},
-		"C": {
-			"item": "cursedchests:gold_chest"
+		"D": {
+			"item": "minecraft:diamond"
 		},
 		"G": {
 			"tag": "cursedchests:impermeable"
 		}
 	},
 	"result": {
-		"item": "cursedchests:diamond_chest"
+		"item": "cursedchests:gold_to_diamond_conversion_kit"
 	}
 }
