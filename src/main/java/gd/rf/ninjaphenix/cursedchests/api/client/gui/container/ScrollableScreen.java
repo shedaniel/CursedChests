@@ -7,6 +7,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.ContainerProvider;
 import net.minecraft.client.gui.ContainerScreen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.Identifier;
@@ -20,6 +21,7 @@ import net.minecraft.util.Identifier;
 	private final int realRows;
 	private double progress;
 	private boolean dragging;
+	private TextFieldWidget searchBox;
 
 	public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, TextComponent containerTitle)
 	{
@@ -31,7 +33,18 @@ import net.minecraft.util.Identifier;
 		progress = 0;
 	}
 
+	@Override public void init()
+	{
+		super.init();
+		searchBox = new TextFieldWidget(font, left + 82, top + 127, 80, 8);
+		searchBox.setMaxLength(50);
+		searchBox.setHasBorder(false);
+		searchBox.setVisible(realRows > 6);
+		searchBox.method_1868(16777215);
+		children.add(searchBox);
+	}
 	public static ScrollableScreen createScreen(ScrollableContainer container){ return new ScrollableScreen(container, MinecraftClient.getInstance().player.inventory, container.getDisplayName()); }
+	@Override public void tick(){ searchBox.tick(); }
 
 	@Override public void render(int mouseX, int mouseY, float float_1)
 	{
@@ -57,8 +70,10 @@ import net.minecraft.util.Identifier;
 		if (realRows > 6)
 		{
 			minecraft.getTextureManager().bindTexture(SCROLL_TEXTURE);
-			blit(int_3+172, int_4, 0, 0, 22, 132);
-			blit(int_3+174, (int) (int_4+18 + 91*progress), 22, 0, 12, 15);
+			blit(int_3 + 172, int_4, 0, 0, 22, 132);
+			blit(int_3 + 174, (int) (int_4+18 + 91*progress), 22, 0, 12, 15);
+			blit(int_3 + 79, int_4 + 126, 34, 0, 90, 11);
+			searchBox.render(int_1, int_2, float_1);
 		}
 	}
 
@@ -86,7 +101,7 @@ import net.minecraft.util.Identifier;
 			if(!dragging) dragging= true;
 			progress = (mouseY - top - 18)/105;
 			topRow = (int) (progress * (realRows-6));
-			container.updateSlotPositions(topRow);
+			container.updateSlotPositions(topRow, false);
 			return true;
 		}
 		return super.mouseDragged(mouseX, mouseY, mouseButton, deltaX, deltaY);
@@ -94,7 +109,7 @@ import net.minecraft.util.Identifier;
 
 	@Override public boolean mouseReleased(double double_1, double double_2, int int_1)
 	{
-		if(dragging) dragging= false;
+		if(dragging) dragging = false;
 		return super.mouseReleased(double_1, double_2, int_1);
 	}
 	private void setTopRow(int value)
@@ -103,7 +118,54 @@ import net.minecraft.util.Identifier;
 		if (topRow < 0) topRow = 0;
 		else if (topRow > realRows - 6) topRow = realRows - 6;
 		progress = ((double) topRow) / ((double) (realRows - 6));
-		container.updateSlotPositions(topRow);
+		container.updateSlotPositions(topRow, false);
+	}
+
+	@Override public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+	{
+		if (keyCode == 256){ minecraft.player.closeGui(); return true;}
+		else if (realRows > 6 && searchBox.isFocused())
+		{
+			String originalText = searchBox.getText();
+			if (searchBox.keyPressed(keyCode, scanCode, modifiers))
+			{
+				if (!originalText.equals(searchBox.getText()))
+				{
+					progress = 0;
+					topRow = 0;
+					container.setSearchTerm(searchBox.getText());
+				}
+			}
+			return true;
+		}
+		else if (minecraft.options.keyInventory.matchesKey(keyCode, scanCode)){ minecraft.player.closeGui(); return true; }
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
+	@Override public boolean charTyped(char character, int int_1)
+	{
+		if(!searchBox.isFocused() && minecraft.options.keyChat.getName().contains((String.valueOf(character)))){ searchBox.setFocused(true); return true;}
+		if(!searchBox.isFocused()) return false;
+		String originalText = searchBox.getText();
+		if (searchBox.charTyped(character, int_1))
+		{
+			if (!originalText.equals(searchBox.getText()))
+			{
+				progress = 0;
+				topRow = 0;
+				container.setSearchTerm(searchBox.getText());
+			}
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void resize(MinecraftClient client, int int_1, int int_2)
+	{
+		String text = searchBox.getText();
+		super.resize(client, int_1, int_2);
+		searchBox.setText(text);
 	}
 }
 

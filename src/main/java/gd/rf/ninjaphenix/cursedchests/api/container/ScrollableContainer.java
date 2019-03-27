@@ -10,12 +10,18 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.TextComponent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ScrollableContainer extends Container
 {
 	private final TextComponent containerName;
 	private final SidedInventory inventory;
 	private final int rows;
 	private final int realRows;
+	private String searchTerm = "";
+	private int offset = 0;
+	private List<Slot> sortedSlotList;
 
 	public ScrollableContainer(int syncId, PlayerInventory playerInventory, SidedInventory inventory, TextComponent containerName)
 	{
@@ -34,6 +40,7 @@ public class ScrollableContainer extends Container
 		}
 		for (int y = 0; y < 3; ++y) for (int x = 0; x < 9; ++x) addSlot(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 103 + y * 18 + int_3));
 		for (int x = 0; x < 9; ++x) addSlot(new Slot(playerInventory, x, 8 + x * 18, 161 + int_3));
+		updateSlotPositions(offset, true);
 	}
 
 	public SidedInventory getInventory(){ return inventory; }
@@ -42,14 +49,47 @@ public class ScrollableContainer extends Container
 	@Override public boolean canUse(PlayerEntity player){ return inventory.canPlayerUseInv(player); }
 	@Override public void close(PlayerEntity player){ super.close(player); inventory.onInvClose(player); }
 
-	public void updateSlotPositions(int offset)
+	public void setSearchTerm(String term)
 	{
-		for(int y = 0; y < realRows; ++y)
+		searchTerm = term.toLowerCase();
+		updateSlotPositions(offset, true);
+	}
+
+	public void updateSlotPositions(int offset, boolean termChanged)
+	{
+		this.offset = offset;
+		if(termChanged && !searchTerm.equals(""))
 		{
-			int ny = y - offset;
-			int yPos = 18 + ny * 18;
-			if (ny >= rows || ny < 0) yPos = -2000;
-			for (int x = 0; x < 9; ++x) slotList.get(x + 9*y).yPosition = yPos;
+			sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
+			sortedSlotList.sort((a, b) ->
+			{
+				ItemStack stack_a = a.getStack();
+				ItemStack stack_b = b.getStack();
+				if (stack_a.isEmpty() && !stack_b.isEmpty()) return 1;
+				else if (stack_b.isEmpty() && !stack_a.isEmpty()) return -1;
+				else if (stack_a.isEmpty() && stack_b.isEmpty()) return 0;
+				return stack_a.getItem().getTranslatedNameTrimmed(stack_a).getString().toLowerCase().contains(searchTerm) ? -1 :
+						stack_b.getItem().getTranslatedNameTrimmed(stack_b).getString().toLowerCase().contains(searchTerm) ? 1 : 0;
+			});
+		}
+		else if(termChanged)
+		{
+			sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
+		}
+		setSlotPositionsWithOffset();
+	}
+
+	private void setSlotPositionsWithOffset()
+	{
+		int index = 0;
+		for(Slot slot : sortedSlotList)
+		{
+			Slot real_slot = slotList.get(slot.id);
+			int x = index % 9;
+			int y = (index / 9) - offset;
+			real_slot.xPosition = 8 + 18 * x;
+			real_slot.yPosition = (y >= rows || y < 0) ? -2000 : 18 + 18 * y;
+			index++;
 		}
 	}
 

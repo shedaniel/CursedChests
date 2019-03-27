@@ -32,16 +32,14 @@ public class ChestConversionItem extends Item implements ChestModifier
 
 	public ChestConversionItem(Settings settings, Identifier from, Identifier to)
 	{
-		super(settings);
+		super(settings.stackSize(16));
 		this.from = from;
 		this.to = to;
 	}
 
 	public ChestConversionItem(Settings settings, VerticalChestBlock from, VerticalChestBlock to)
 	{
-		super(settings);
-		this.from = Registry.BLOCK.getId(from);
-		this.to = Registry.BLOCK.getId(to);
+		this(settings, Registry.BLOCK.getId(from), Registry.BLOCK.getId(to));
 	}
 
 	/**
@@ -66,6 +64,7 @@ public class ChestConversionItem extends Item implements ChestModifier
 		if (topBlockPos == null || handStack.getAmount() == 1)
 		{
 			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
+			handStack.subtractAmount(1);
 		}
 		else
 		{
@@ -74,7 +73,7 @@ public class ChestConversionItem extends Item implements ChestModifier
 			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
 			upgradeChest(world, topBlockPos, topBlockEntity, rotation);
 			world.setBlockState(topBlockPos, world.getBlockState(topBlockPos).with(VerticalChestBlock.TYPE, VerticalChestType.TOP));
-			handStack.setAmount(handStack.getAmount() - 2);
+			handStack.subtractAmount(2);
 		}
 		return ActionResult.FAIL;
 	}
