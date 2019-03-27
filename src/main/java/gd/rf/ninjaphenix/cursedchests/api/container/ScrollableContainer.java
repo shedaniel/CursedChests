@@ -31,7 +31,7 @@ public class ScrollableContainer extends Container
 		rows = realRows > 6 ? 6 : realRows;
 		int int_3 = (rows - 4) * 18;
 		inventory.onInvOpen(playerInventory.player);
-		for(int y = 0; y < realRows; ++y)
+		for (int y = 0; y < realRows; ++y)
 		{
 			int yPos = -2000;
 			if (y < rows) yPos = 18 + y * 18;
@@ -58,7 +58,7 @@ public class ScrollableContainer extends Container
 	{
 		this.offset = offset;
 		int index = 0;
-		if(termChanged && !searchTerm.equals(""))
+		if (termChanged && !searchTerm.equals(""))
 		{
 			sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
 			sortedSlotList.sort((a, b) ->
@@ -73,8 +73,8 @@ public class ScrollableContainer extends Container
 						stack_b.getItem().getTranslatedNameTrimmed(stack_b).getString().toLowerCase().contains(searchTerm) ? 1 : 0;
 			});
 		}
-		else if(termChanged) sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
-		for(Slot slot : sortedSlotList)
+		else if (termChanged) sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
+		for (Slot slot : sortedSlotList)
 		{
 			Slot real_slot = slotList.get(slot.id);
 			int y = (index / 9) - offset;
