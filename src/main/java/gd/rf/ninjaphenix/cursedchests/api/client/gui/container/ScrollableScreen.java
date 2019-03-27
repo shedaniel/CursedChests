@@ -44,6 +44,7 @@ import net.minecraft.util.Identifier;
 		children.add(searchBox);
 	}
 	public static ScrollableScreen createScreen(ScrollableContainer container){ return new ScrollableScreen(container, MinecraftClient.getInstance().player.inventory, container.getDisplayName()); }
+	@Override public void tick(){ searchBox.tick(); }
 
 	@Override public void render(int mouseX, int mouseY, float float_1)
 	{
@@ -159,9 +160,12 @@ import net.minecraft.util.Identifier;
 		return false;
 	}
 
-	@Override public void tick()
+	@Override
+	public void resize(MinecraftClient client, int int_1, int int_2)
 	{
-		searchBox.tick();
+		String text = searchBox.getText();
+		super.resize(client, int_1, int_2);
+		searchBox.setText(text);
 	}
 }
 

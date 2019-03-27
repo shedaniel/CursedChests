@@ -77,45 +77,6 @@ public class ScrollableContainer extends Container
 			sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
 		}
 		setSlotPositionsWithOffset();
-		//if(!searchTerm.equals(""))
-		//{
-		//	ArrayList<Slot> slots = new ArrayList<>();
-		//	int totalSorted = 0;
-		//	for (int y = 0; y < realRows; ++y)
-		//	{
-		//		for(int x = 0; x < 9; ++x)
-		//		{
-		//			Slot slot = slotList.get(y*9 + x);
-		//			ItemStack stack = slot.getStack();
-		//			if(!stack.isEmpty() && stack.getItem().getTranslatedNameTrimmed(stack).getString().toLowerCase().contains(searchTerm))
-		//			{
-		//				slots.add(0, slot);
-		//				totalSorted++;
-		//			}
-		//			else if(!stack.isEmpty())
-		//			{
-		//				slots.add(totalSorted, slot);
-		//			}
-		//			else
-		//			{
-		//				slots.add(slot);
-		//			}
-		//		}
-		//	}
-		//	for(int i = 0; i<slots.size(); i++)
-		//	{
-		//		Slot slot = slots.get(i);
-		//		int nx = (i % 9);
-		//		int ny = (i / 9) - offset;
-		//		int yPos = 18 + 18 * ny;
-		//		int xPos = 8 + 18 * nx;
-		//		if(ny >= rows || ny < 0) yPos = -2000;
-		//		slot.xPosition = xPos;
-		//		slot.yPosition = yPos;
-		//
-		//	}
-		//	return;
-		//}
 	}
 
 	private void setSlotPositionsWithOffset()
