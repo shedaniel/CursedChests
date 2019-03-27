@@ -186,14 +186,22 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 				return true;
 			}
 		}
+		openContainer(state, world, pos, player, hand, hitResult);
+		player.incrementStat(getOpenStat());
+		return true;
+	}
+
+	/*
+		This method must be overridden if you are not using cursed chests mod with this api.
+	*/
+	protected void openContainer(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
+	{
 		TextComponent containerName = method_17459(state, world, pos, displayNameCombiner);
 		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 		{
 			packetByteBuf.writeBlockPos(pos);
 			packetByteBuf.writeTextComponent(containerName);
 		}));
-		player.incrementStat(getOpenStat());
-		return true;
 	}
 
 	private static <T> T method_17459(BlockState state_1, IWorld world, BlockPos pos_1, someInterface<T> var_1)
