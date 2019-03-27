@@ -36,7 +36,7 @@ import net.minecraft.util.Identifier;
 	@Override public void init()
 	{
 		super.init();
-		searchBox = new TextFieldWidget(font, left + 82, top + 128, 80, 10);
+		searchBox = new TextFieldWidget(font, left + 82, top + 127, 80, 8);
 		searchBox.setMaxLength(50);
 		searchBox.setHasBorder(false);
 		searchBox.setVisible(realRows > 6);
@@ -71,7 +71,7 @@ import net.minecraft.util.Identifier;
 			minecraft.getTextureManager().bindTexture(SCROLL_TEXTURE);
 			blit(int_3 + 172, int_4, 0, 0, 22, 132);
 			blit(int_3 + 174, (int) (int_4+18 + 91*progress), 22, 0, 12, 15);
-			blit(int_3 + 79, int_4 + 126, 34, 0, 90, 12);
+			blit(int_3 + 79, int_4 + 126, 34, 0, 90, 11);
 			searchBox.render(int_1, int_2, float_1);
 		}
 	}
@@ -100,7 +100,7 @@ import net.minecraft.util.Identifier;
 			if(!dragging) dragging= true;
 			progress = (mouseY - top - 18)/105;
 			topRow = (int) (progress * (realRows-6));
-			container.updateSlotPositions(topRow);
+			container.updateSlotPositions(topRow, false);
 			return true;
 		}
 		return super.mouseDragged(mouseX, mouseY, mouseButton, deltaX, deltaY);
@@ -117,37 +117,42 @@ import net.minecraft.util.Identifier;
 		if (topRow < 0) topRow = 0;
 		else if (topRow > realRows - 6) topRow = realRows - 6;
 		progress = ((double) topRow) / ((double) (realRows - 6));
-		container.updateSlotPositions(topRow);
+		container.updateSlotPositions(topRow, false);
 	}
 
 	@Override public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
-		if(keyCode == 256){ minecraft.player.closeGui(); return true;}
-		else if (searchBox.isFocused() && realRows > 6)
+		if (keyCode == 256){ minecraft.player.closeGui(); return true;}
+		else if (realRows > 6 && searchBox.isFocused())
 		{
 			String originalText = searchBox.getText();
 			if (searchBox.keyPressed(keyCode, scanCode, modifiers))
 			{
 				if (!originalText.equals(searchBox.getText()))
 				{
+					progress = 0;
+					topRow = 0;
 					container.setSearchTerm(searchBox.getText());
-					container.updateSlotPositions(topRow);
 				}
 			}
 			return true;
 		}
+		else if (minecraft.options.keyInventory.matchesKey(keyCode, scanCode)){ minecraft.player.closeGui(); return true; }
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	@Override public boolean charTyped(char character, int int_1)
 	{
+		if(!searchBox.isFocused() && minecraft.options.keyChat.getName().contains((String.valueOf(character)))){ searchBox.setFocused(true); return true;}
+		if(!searchBox.isFocused()) return false;
 		String originalText = searchBox.getText();
 		if (searchBox.charTyped(character, int_1))
 		{
 			if (!originalText.equals(searchBox.getText()))
 			{
+				progress = 0;
+				topRow = 0;
 				container.setSearchTerm(searchBox.getText());
-				container.updateSlotPositions(topRow);
 			}
 			return true;
 		}
