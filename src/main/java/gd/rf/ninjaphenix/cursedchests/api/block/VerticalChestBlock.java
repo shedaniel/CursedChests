@@ -58,6 +58,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	private static final VoxelShape SINGLE_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 15);
 	private static final VoxelShape TOP_SHAPE = Block.createCuboidShape(1, -16, 1, 15, 14, 15);
 	private static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 30, 15);
+	protected static String DOUBLE_PREFIX = "container.cursedchests.generic_double";
 
 	private static final someInterface<SidedInventory> inventoryCombiner = new someInterface<SidedInventory>()
 	{
@@ -71,7 +72,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		{
 			if (bottomChestBlockEntity.hasCustomName()) return bottomChestBlockEntity.getDisplayName();
 			if (topChestBlockEntity.hasCustomName()) return topChestBlockEntity.getDisplayName();
-			return new TranslatableTextComponent("container.cursedchests.generic_double").append(bottomChestBlockEntity.getDisplayName());
+			return new TranslatableTextComponent(DOUBLE_PREFIX).append(bottomChestBlockEntity.getDisplayName());
 		}
 
 		@Override public TextComponent method_17464(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity.getDisplayName(); }
