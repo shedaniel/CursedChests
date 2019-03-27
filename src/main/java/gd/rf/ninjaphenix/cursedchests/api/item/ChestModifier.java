@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 public interface ChestModifier
 {
 	/**
-	 * This method is called automatically when an Item implementing this interface is used on a cursed chest.
+	 * This method is called automatically when an Item implementing this interface is used on a cursed chest. ( Requires the cursed chest mod to be installed )
 	 * Implementations of this method should:
 	 *  - check if the modifier can be applied
 	 *  - apply the modifier
@@ -38,7 +38,7 @@ public interface ChestModifier
 	default ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos topBlockPos){ return ActionResult.PASS; }
 
 	/**
-	 * This method is called automatically when an Item implementing this interface is used on an entity.
+	 * This method is called automatically when an Item implementing this interface is used on an entity. ( Requires the cursed chest mod to be installed )
 	 * Implementations of this method should:
 	 *  - check if the modifier can be applied
 	 *  - apply the modifier
