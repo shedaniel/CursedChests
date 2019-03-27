@@ -58,6 +58,7 @@ public class ScrollableContainer extends Container
 	public void updateSlotPositions(int offset, boolean termChanged)
 	{
 		this.offset = offset;
+		int index = 0;
 		if(termChanged && !searchTerm.equals(""))
 		{
 			sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
@@ -72,22 +73,12 @@ public class ScrollableContainer extends Container
 						stack_b.getItem().getTranslatedNameTrimmed(stack_b).getString().toLowerCase().contains(searchTerm) ? 1 : 0;
 			});
 		}
-		else if(termChanged)
-		{
-			sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
-		}
-		setSlotPositionsWithOffset();
-	}
-
-	private void setSlotPositionsWithOffset()
-	{
-		int index = 0;
+		else if(termChanged) sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
 		for(Slot slot : sortedSlotList)
 		{
 			Slot real_slot = slotList.get(slot.id);
-			int x = index % 9;
 			int y = (index / 9) - offset;
-			real_slot.xPosition = 8 + 18 * x;
+			real_slot.xPosition = 8 + 18 * (index % 9);
 			real_slot.yPosition = (y >= rows || y < 0) ? -2000 : 18 + 18 * y;
 			index++;
 		}
