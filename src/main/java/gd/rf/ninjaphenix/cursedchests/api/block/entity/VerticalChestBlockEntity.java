@@ -29,7 +29,6 @@ import net.minecraft.util.math.BoundingBox;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	@Environment(EnvType.CLIENT) @Override public float getAnimationProgress(float float_1){ return MathHelper.lerp(float_1, lastAnimationAngle, animationAngle); }
 	@Override protected Container createContainer(int int_1, PlayerInventory playerInventory){ return null; }
 	@Override public int[] getInvAvailableSlots(Direction direction){ return SLOTS; }
-	@Override public boolean canInsertInvStack(int slot, ItemStack stack, @Nullable Direction direction){ return this.isValidInvStack(slot, stack); }
+	@Override public boolean canInsertInvStack(int slot, ItemStack stack, Direction direction){ return this.isValidInvStack(slot, stack); }
 	@Override public boolean canExtractInvStack(int slot, ItemStack stack, Direction direction){ return true; }
 	public abstract Identifier getTexture(boolean isDouble);
 

@@ -4,7 +4,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
-import javax.annotation.Nullable;
 
 public class DoubleSidedInventory implements SidedInventory
 {
@@ -31,7 +30,7 @@ public class DoubleSidedInventory implements SidedInventory
 		return combined;
 	}
 
-	@Override public boolean canInsertInvStack(int slot, ItemStack stack, @Nullable Direction direction)
+	@Override public boolean canInsertInvStack(int slot, ItemStack stack, Direction direction)
 	{
 		if (slot >= first.getInvSize()) return second.canInsertInvStack(slot - first.getInvSize(), stack, direction);
 		return first.canInsertInvStack(slot, stack, direction);
