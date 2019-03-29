@@ -18,9 +18,9 @@ public class ScrollableContainer extends Container
 	private final SidedInventory inventory;
 	private final int rows;
 	private final int realRows;
-	private String searchTerm = "";
-	private int offset = 0;
-	private List<Slot> sortedSlotList;
+	@Environment(EnvType.CLIENT) private String searchTerm = "";
+	@Environment(EnvType.CLIENT) private int offset = 0;
+	@Environment(EnvType.CLIENT) private List<Slot> sortedSlotList;
 
 	public ScrollableContainer(int syncId, PlayerInventory playerInventory, SidedInventory inventory, TextComponent containerName)
 	{
@@ -39,7 +39,6 @@ public class ScrollableContainer extends Container
 		}
 		for (int y = 0; y < 3; ++y) for (int x = 0; x < 9; ++x) addSlot(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 103 + y * 18 + int_3));
 		for (int x = 0; x < 9; ++x) addSlot(new Slot(playerInventory, x, 8 + x * 18, 161 + int_3));
-		updateSlotPositions(offset, true);
 	}
 
 	public SidedInventory getInventory(){ return inventory; }
@@ -48,13 +47,13 @@ public class ScrollableContainer extends Container
 	@Override public boolean canUse(PlayerEntity player){ return inventory.canPlayerUseInv(player); }
 	@Override public void close(PlayerEntity player){ super.close(player); inventory.onInvClose(player); }
 
-	public void setSearchTerm(String term)
+	@Environment(EnvType.CLIENT) public void setSearchTerm(String term)
 	{
 		searchTerm = term.toLowerCase();
 		updateSlotPositions(offset, true);
 	}
 
-	public void updateSlotPositions(int offset, boolean termChanged)
+	@Environment(EnvType.CLIENT) public void updateSlotPositions(int offset, boolean termChanged)
 	{
 		this.offset = offset;
 		int index = 0;

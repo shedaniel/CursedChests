@@ -31,6 +31,7 @@ import net.minecraft.util.Identifier;
 		rows = realRows > 6 ? 6 : realRows;
 		containerHeight = 114 + rows * 18;
 		progress = 0;
+		container.setSearchTerm("");
 	}
 
 	@Override public void init()

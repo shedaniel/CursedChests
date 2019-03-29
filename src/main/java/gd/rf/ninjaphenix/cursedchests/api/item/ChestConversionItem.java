@@ -37,20 +37,8 @@ public class ChestConversionItem extends Item implements ChestModifier
 		this.to = to;
 	}
 
-	public ChestConversionItem(Settings settings, VerticalChestBlock from, VerticalChestBlock to)
-	{
-		this(settings, Registry.BLOCK.getId(from), Registry.BLOCK.getId(to));
-	}
+	public ChestConversionItem(Settings settings, VerticalChestBlock from, VerticalChestBlock to){ this(settings, Registry.BLOCK.getId(from), Registry.BLOCK.getId(to)); }
 
-	/**
-	 * Ignore this, this will be gone once this method is complete.
-	 * This method is called automatically when an Item implementing this interface is used on a cursed chest.
-	 * Implementations of this method should:
-	 *  - check if the modifier can be applied
-	 *  - apply the modifier
-	 *  - modify the player's inventory e.g. remove the modifier item(s)
-	 *  - return if the modifier was applied or not.
-	 */
 	@Override public ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos topBlockPos)
 	{
 		if (world.isClient) return player.isSneaking() ? ActionResult.SUCCESS : ActionResult.FAIL;
@@ -61,10 +49,10 @@ public class ChestConversionItem extends Item implements ChestModifier
 		BlockEntity mainBlockEntity = world.getBlockEntity(mainBlockPos);
 		if(mainBlockEntity == null) return ActionResult.FAIL;
 		Direction rotation = mainBlockState.get(Properties.FACING_HORIZONTAL);
-		if (topBlockPos == null || handStack.getAmount() == 1)
+		if (topBlockPos == null || (handStack.getAmount() == 1 && !player.isCreative()))
 		{
 			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
-			handStack.subtractAmount(1);
+			if(!player.isCreative()) handStack.subtractAmount(1);
 		}
 		else
 		{
@@ -73,7 +61,7 @@ public class ChestConversionItem extends Item implements ChestModifier
 			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
 			upgradeChest(world, topBlockPos, topBlockEntity, rotation);
 			world.setBlockState(topBlockPos, world.getBlockState(topBlockPos).with(VerticalChestBlock.TYPE, VerticalChestType.TOP));
-			handStack.subtractAmount(2);
+			if(!player.isCreative()) handStack.subtractAmount(2);
 		}
 		return ActionResult.FAIL;
 	}
