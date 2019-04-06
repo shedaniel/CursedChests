@@ -89,20 +89,19 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 
 	@Override public void tick()
 	{
-		viewerCount = recalculateViewerCountIfNecessary(world, this, ++ticksOpen, pos.getX(), pos.getY(), pos.getZ(), viewerCount);
+		viewerCount = recalculateViewCount(world, this, ++ticksOpen, pos.getX(), pos.getY(), pos.getZ(), viewerCount);
 		lastAnimationAngle = animationAngle;
 		if (viewerCount > 0 && animationAngle == 0.0F) playSound(SoundEvents.BLOCK_CHEST_OPEN);
 		if (viewerCount == 0 && animationAngle > 0.0F || viewerCount > 0 && animationAngle < 1.0F)
 		{
 			float float_2 = animationAngle;
 			if (viewerCount > 0) animationAngle += 0.1F; else animationAngle -= 0.1F;
-			if (animationAngle > 1.0F) animationAngle = 1.0F;
-			else if (animationAngle < 0.0F) animationAngle = 0.0F;
-			else if (animationAngle < 0.5F && float_2 >= 0.5F) playSound(SoundEvents.BLOCK_CHEST_CLOSE);
+			animationAngle = MathHelper.clamp(animationAngle, 0, 1);
+			if (animationAngle < 0.5F && float_2 >= 0.5F) playSound(SoundEvents.BLOCK_CHEST_CLOSE);
 		}
 	}
 
-	private static int recalculateViewerCountIfNecessary(World world, VerticalChestBlockEntity instance, int ticksOpen, int x, int y, int z, int viewerCount)
+	private static int recalculateViewCount(World world, VerticalChestBlockEntity instance, int ticksOpen, int x, int y, int z, int viewerCount)
 	{
 		if (!world.isClient && viewerCount != 0 && (ticksOpen + x + y + z) % 200 == 0)
 		{
@@ -142,7 +141,6 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	@Override public void onInvOpen(PlayerEntity player)
 	{
 		if (player.isSpectator()) return;
-		if (viewerCount < 0) viewerCount = 0;
 		++viewerCount;
 		onInvOpenOrClose();
 	}
@@ -151,6 +149,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	{
 		if (player.isSpectator()) return;
 		--viewerCount;
+		if (viewerCount < 0) viewerCount = 0;
 		onInvOpenOrClose();
 	}
 

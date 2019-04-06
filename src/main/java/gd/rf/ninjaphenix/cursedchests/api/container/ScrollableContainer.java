@@ -62,12 +62,12 @@ public class ScrollableContainer extends Container
 			sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
 			sortedSlotList.sort((a, b) ->
 			{
-				if(a == null || b == null) return 0;
+				if (a == null || b == null) return 0;
 				ItemStack stack_a = a.getStack();
 				ItemStack stack_b = b.getStack();
 				if (stack_a.isEmpty() && !stack_b.isEmpty()) return 1;
-				else if (stack_b.isEmpty() && !stack_a.isEmpty()) return -1;
-				else if (stack_a.isEmpty() && stack_b.isEmpty()) return 0;
+				if (stack_b.isEmpty() && !stack_a.isEmpty()) return -1;
+				if (stack_a.isEmpty() && stack_b.isEmpty()) return 0;
 				return stack_a.getItem().getTranslatedNameTrimmed(stack_a).getString().toLowerCase().contains(searchTerm) ? -1 :
 						stack_b.getItem().getTranslatedNameTrimmed(stack_b).getString().toLowerCase().contains(searchTerm) ? 1 : 0;
 			});

@@ -99,7 +99,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 
 	@Override public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, VerticalEntityPosition verticalEntityPosition)
 	{
-		switch(state.get(TYPE))
+		switch (state.get(TYPE))
 		{
 			case TOP: return TOP_SHAPE;
 			case BOTTOM: return BOTTOM_SHAPE;
@@ -121,7 +121,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 			Direction direction_3 = state.getBlock() == this && state.get(TYPE) == VerticalChestType.SINGLE ? state.get(FACING) : null;
 			if (direction_3 != null && direction_3.getAxis() != direction_2.getAxis() && direction_3 == direction_1) chestType = direction_2 == Direction.UP ? VerticalChestType.TOP : VerticalChestType.BOTTOM;
 		}
-		else if(!sneaking)
+		else if (!sneaking)
 		{
 			BlockState aboveBlockState = world.getBlockState(pos.offset(Direction.UP));
 			if (aboveBlockState.getBlock() == this && aboveBlockState.get(TYPE) == VerticalChestType.SINGLE && aboveBlockState.get(FACING) == direction_1) chestType = VerticalChestType.BOTTOM;
@@ -197,7 +197,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	protected void openContainer(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
 		TextComponent containerName = retrieve(state, world, pos, NAME_RETRIEVER);
-		if(containerName == null) return;
+		if (containerName == null) return;
 		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 		{
 			packetByteBuf.writeBlockPos(pos);
@@ -240,9 +240,10 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		return view.getBlockState(blockPos_2).isSimpleFullBlock(view, blockPos_2);
 	}
 
-	private static boolean hasOcelotOnTop(IWorld world, BlockPos pos){
+	private static boolean hasOcelotOnTop(IWorld world, BlockPos pos)
+	{
 		List<CatEntity> cats = world.getEntities(CatEntity.class, new BoundingBox(pos.getX(),pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
-		if (!cats.isEmpty()) for (CatEntity catEntity_1 : cats) if (catEntity_1.isSitting()) return true;
+		for (CatEntity catEntity_1 : cats) if (catEntity_1.isSitting()) return true;
 		return false;
 	}
 }
