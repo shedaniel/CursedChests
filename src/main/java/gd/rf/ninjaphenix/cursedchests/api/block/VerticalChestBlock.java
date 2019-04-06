@@ -45,10 +45,10 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public abstract class VerticalChestBlock extends BlockWithEntity implements Waterloggable, InventoryProvider
 {
-	interface someInterface<T>
+	interface PropertyRetriever<T>
 	{
-		T method_17465(VerticalChestBlockEntity var1, VerticalChestBlockEntity var2);
-		T method_17464(VerticalChestBlockEntity var1);
+		T getFromDoubleChest(VerticalChestBlockEntity var1, VerticalChestBlockEntity var2);
+		T getFromSingleChest(VerticalChestBlockEntity var1);
 	}
 
 	private static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
@@ -59,22 +59,22 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	private static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 30, 15);
 	protected static String DOUBLE_PREFIX = "container.cursedchests.generic_double";
 
-	private static final someInterface<SidedInventory> inventoryCombiner = new someInterface<SidedInventory>()
+	private static final PropertyRetriever<SidedInventory> INVENTORY_RETRIEVER = new PropertyRetriever<SidedInventory>()
 	{
-		@Override public SidedInventory method_17465(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity){ return new DoubleSidedInventory(bottomChestBlockEntity, topChestBlockEntity); }
-		@Override public SidedInventory method_17464(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity; }
+		@Override public SidedInventory getFromDoubleChest(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity){ return new DoubleSidedInventory(bottomChestBlockEntity, topChestBlockEntity); }
+		@Override public SidedInventory getFromSingleChest(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity; }
 	};
 
-	private static final someInterface<TextComponent> displayNameCombiner = new someInterface<TextComponent>()
+	private static final PropertyRetriever<TextComponent> NAME_RETRIEVER = new PropertyRetriever<TextComponent>()
 	{
-		@Override public TextComponent method_17465(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity)
+		@Override public TextComponent getFromDoubleChest(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity)
 		{
 			if (bottomChestBlockEntity.hasCustomName()) return bottomChestBlockEntity.getDisplayName();
 			if (topChestBlockEntity.hasCustomName()) return topChestBlockEntity.getDisplayName();
 			return new TranslatableTextComponent(DOUBLE_PREFIX).append(bottomChestBlockEntity.getDisplayName());
 		}
 
-		@Override public TextComponent method_17464(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity.getDisplayName(); }
+		@Override public TextComponent getFromSingleChest(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity.getDisplayName(); }
 	};
 
 	public VerticalChestBlock(Settings settings)
@@ -91,10 +91,10 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Override public int getComparatorOutput(BlockState state, World world, BlockPos pos){ return Container.calculateComparatorOutput(getInventory(state, world, pos)); }
 	@Override public BlockState rotate(BlockState state, Rotation rotation){ return state.with(FACING, rotation.rotate(state.get(FACING))); }
 	@Override public BlockState mirror(BlockState state, Mirror mirror){ return state.rotate(mirror.getRotation(state.get(FACING))); }
-	@Override public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos){ return method_17459(state, world, pos, inventoryCombiner); }
+	@Override public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos){ return retrieve(state, world, pos, INVENTORY_RETRIEVER); }
 	private static boolean isChestBlocked(IWorld world, BlockPos pos){ return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos); }
 	private Stat<Identifier> getOpenStat(){ return Stats.CUSTOM.getOrCreateStat(Stats.OPEN_CHEST); }
-	public static SidedInventory getInventoryStatic(BlockState state, IWorld world, BlockPos pos){ return method_17459(state, world, pos, inventoryCombiner); }
+	public static SidedInventory getInventoryStatic(BlockState state, IWorld world, BlockPos pos){ return retrieve(state, world, pos, INVENTORY_RETRIEVER); }
 	public abstract String getName();
 
 	@Override public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, VerticalEntityPosition verticalEntityPosition)
@@ -138,14 +138,14 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	{
 		if (state.get(WATERLOGGED)) world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		if (state.get(TYPE) == VerticalChestType.TOP && world.getBlockState(pos.offset(Direction.DOWN)).getBlock() != this) return state.with(TYPE, VerticalChestType.SINGLE);
-		else if (state.get(TYPE) == VerticalChestType.BOTTOM && world.getBlockState(pos.offset(Direction.UP)).getBlock() != this) return state.with(TYPE, VerticalChestType.SINGLE);
-		else if (state.get(TYPE) == VerticalChestType.SINGLE && direction.getAxis().isVertical())
+		if (state.get(TYPE) == VerticalChestType.BOTTOM && world.getBlockState(pos.offset(Direction.UP)).getBlock() != this) return state.with(TYPE, VerticalChestType.SINGLE);
+		if (state.get(TYPE) == VerticalChestType.SINGLE && direction.getAxis().isVertical())
 		{
 			BlockState realOtherState = world.getBlockState(pos.offset(direction));
 			if (!realOtherState.contains(TYPE)) return state.with(TYPE, VerticalChestType.SINGLE);
-			else if (direction == Direction.UP && realOtherState.get(TYPE) == VerticalChestType.TOP) return state.with(TYPE, VerticalChestType.BOTTOM);
-			else if (direction == Direction.DOWN && realOtherState.get(TYPE) == VerticalChestType.BOTTOM) return state.with(TYPE, VerticalChestType.TOP);
-			else return state.with(TYPE, VerticalChestType.SINGLE);
+			if (direction == Direction.UP && realOtherState.get(TYPE) == VerticalChestType.TOP) return state.with(TYPE, VerticalChestType.BOTTOM);
+			if (direction == Direction.DOWN && realOtherState.get(TYPE) == VerticalChestType.BOTTOM) return state.with(TYPE, VerticalChestType.TOP);
+			return state.with(TYPE, VerticalChestType.SINGLE);
 		}
 		return super.getStateForNeighborUpdate(state, direction, otherState, world, pos, otherPos);
 	}
@@ -196,7 +196,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	*/
 	protected void openContainer(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
-		TextComponent containerName = method_17459(state, world, pos, displayNameCombiner);
+		TextComponent containerName = retrieve(state, world, pos, NAME_RETRIEVER);
 		if(containerName == null) return;
 		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 		{
@@ -205,40 +205,33 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		}));
 	}
 
-	private static <T> T method_17459(BlockState state_1, IWorld world, BlockPos pos_1, someInterface<T> var_1)
+	private static <T> T retrieve(BlockState state_1, IWorld world, BlockPos pos_1, PropertyRetriever<T> var_1)
 	{
 		BlockEntity blockEntity_1 = world.getBlockEntity(pos_1);
-		if (!(blockEntity_1 instanceof VerticalChestBlockEntity)) return null;
-		else if (isChestBlocked(world, pos_1)) return null;
-		else
+		if (!(blockEntity_1 instanceof VerticalChestBlockEntity) || isChestBlocked(world, pos_1)) return null;
+		VerticalChestBlockEntity chestBlockEntity1 = (VerticalChestBlockEntity) blockEntity_1;
+		VerticalChestType chestType_1 = state_1.get(TYPE);
+		if (chestType_1 == VerticalChestType.SINGLE) return var_1.getFromSingleChest(chestBlockEntity1);
+		BlockPos pos_2;
+		if (chestType_1 == VerticalChestType.TOP) pos_2 = pos_1.offset(Direction.DOWN);
+		else pos_2 = pos_1.offset(Direction.UP);
+		BlockState state_2 = world.getBlockState(pos_2);
+		if (state_2.getBlock() == state_1.getBlock())
 		{
-			VerticalChestBlockEntity chestBlockEntity1 = (VerticalChestBlockEntity) blockEntity_1;
-			VerticalChestType chestType_1 = state_1.get(TYPE);
-			if (chestType_1 == VerticalChestType.SINGLE) return var_1.method_17464(chestBlockEntity1);
-			else
+			VerticalChestType chestType_2 = state_2.get(TYPE);
+			if (chestType_2 != VerticalChestType.SINGLE && chestType_1 != chestType_2 && state_2.get(FACING) == state_1.get(FACING))
 			{
-				BlockPos pos_2;
-				if (chestType_1 == VerticalChestType.TOP) pos_2 = pos_1.offset(Direction.DOWN);
-				else pos_2 = pos_1.offset(Direction.UP);
-				BlockState state_2 = world.getBlockState(pos_2);
-				if (state_2.getBlock() == state_1.getBlock())
+				if (isChestBlocked(world, pos_2)) return null;
+				BlockEntity blockEntity_2 = world.getBlockEntity(pos_2);
+				if (blockEntity_2 instanceof VerticalChestBlockEntity)
 				{
-					VerticalChestType chestType_2 = state_2.get(TYPE);
-					if (chestType_2 != VerticalChestType.SINGLE && chestType_1 != chestType_2 && state_2.get(FACING) == state_1.get(FACING))
-					{
-						if (isChestBlocked(world, pos_2)) return null;
-						BlockEntity blockEntity_2 = world.getBlockEntity(pos_2);
-						if (blockEntity_2 instanceof VerticalChestBlockEntity)
-						{
-							VerticalChestBlockEntity chestBlockEntity_2 = chestType_1 == VerticalChestType.TOP ? chestBlockEntity1 : (VerticalChestBlockEntity)blockEntity_2;
-							VerticalChestBlockEntity chestBlockEntity_3 = chestType_1 == VerticalChestType.TOP ? (VerticalChestBlockEntity)blockEntity_2 : chestBlockEntity1;
-							return var_1.method_17465(chestBlockEntity_2, chestBlockEntity_3);
-						}
-					}
+					VerticalChestBlockEntity chestBlockEntity_2 = chestType_1 == VerticalChestType.TOP ? chestBlockEntity1 : (VerticalChestBlockEntity)blockEntity_2;
+					VerticalChestBlockEntity chestBlockEntity_3 = chestType_1 == VerticalChestType.TOP ? (VerticalChestBlockEntity)blockEntity_2 : chestBlockEntity1;
+					return var_1.getFromDoubleChest(chestBlockEntity_2, chestBlockEntity_3);
 				}
-				return var_1.method_17464(chestBlockEntity1);
 			}
 		}
+		return var_1.getFromSingleChest(chestBlockEntity1);
 	}
 
 	private static boolean hasBlockOnTop(BlockView view, BlockPos pos)
