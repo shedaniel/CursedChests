@@ -107,7 +107,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 		if (!world.isClient && viewerCount != 0 && (ticksOpen + x + y + z) % 200 == 0)
 		{
 			viewerCount = 0;
-			List<PlayerEntity> playersInRange = world.method_18467(PlayerEntity.class, new BoundingBox(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6));
+			List<PlayerEntity> playersInRange = world.getEntities(PlayerEntity.class, new BoundingBox(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6));
 			Iterator<PlayerEntity> playerIterator = playersInRange.iterator();
 			while (true)
 			{

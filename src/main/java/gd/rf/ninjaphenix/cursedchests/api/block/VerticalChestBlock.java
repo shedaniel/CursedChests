@@ -197,6 +197,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	protected void openContainer(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
 		TextComponent containerName = method_17459(state, world, pos, displayNameCombiner);
+		if(containerName == null) return;
 		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 		{
 			packetByteBuf.writeBlockPos(pos);
@@ -247,7 +248,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	}
 
 	private static boolean hasOcelotOnTop(IWorld world, BlockPos pos){
-		List<CatEntity> cats = world.method_18467(CatEntity.class, new BoundingBox(pos.getX(),pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
+		List<CatEntity> cats = world.getEntities(CatEntity.class, new BoundingBox(pos.getX(),pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
 		if (!cats.isEmpty()) for (CatEntity catEntity_1 : cats) if (catEntity_1.isSitting()) return true;
 		return false;
 	}
