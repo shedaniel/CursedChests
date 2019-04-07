@@ -2,12 +2,17 @@ package gd.rf.ninjaphenix.cursedchests;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
+import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.api.client.gui.container.ScrollableScreen;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import gd.rf.ninjaphenix.cursedchests.api.item.ChestModifier;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import gd.rf.ninjaphenix.cursedchests.block.entity.*;
+import gd.rf.ninjaphenix.cursedchests.client.render.block.entity.VerticalChestBlockEntityRenderer;
 import gd.rf.ninjaphenix.cursedchests.item.ModItems;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.*;
+import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
@@ -22,7 +27,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
-public class CursedChests implements ModInitializer
+@EnvironmentInterface(itf=ClientModInitializer.class, value=EnvType.CLIENT)
+public class CursedChests implements ModInitializer, ClientModInitializer
 {
 	public static final BlockEntityType<WoodVerticalChestBlockEntity> WOOD_VERTICAL_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "wood_vertical_chest"),
 			BlockEntityType.Builder.create(WoodVerticalChestBlockEntity::new).build(null));
@@ -72,5 +78,11 @@ public class CursedChests implements ModInitializer
 			}
 			return ActionResult.PASS;
 		});
+	}
+
+	@Environment(EnvType.CLIENT) @Override public void onInitializeClient()
+	{
+		BlockEntityRendererRegistry.INSTANCE.register(VerticalChestBlockEntity.class, new VerticalChestBlockEntityRenderer());
+		ScreenProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ScrollableScreen::createScreen);
 	}
 }
