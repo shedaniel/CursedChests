@@ -13,7 +13,8 @@
 	"icon": "assets/cursedchests/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": ["gd.rf.ninjaphenix.cursedchests.CursedChests"]
+		"main": ["gd.rf.ninjaphenix.cursedchests.CursedChests"],
+		"client": ["gd.rf.ninjaphenix.cursedchests.CursedChests"]
 	},
 	"mixins": [
 		{
