@@ -1,17 +1,29 @@
 {
+	"schemaVersion": 1,
 	"id": "cursedchests",
+	"version": "${version}",
 	"name": "CursedChests",
 	"description": "Adds cursed chests to minecraft.",
-	"version": "${version}",
-	"side": "universal",
-	"initializers": [
-		"gd.rf.ninjaphenix.cursedchests.CursedChests",
-		"gd.rf.ninjaphenix.cursedchests.CursedChestClient"
+	"authors": ["NinjaPhenix1"],
+	"contact": {
+		"homepage": "https://minecraft.curseforge.com/projects/cursed-chests",
+		"sources": "https://github.com/NinjaPhenix/CursedChests"
+	},
+	"license": "GPL-3.0",
+	"icon": "assets/cursedchests/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["gd.rf.ninjaphenix.cursedchests.CursedChests"],
+		"client": ["gd.rf.ninjaphenix.cursedchests.CursedChests"]
+	},
+	"mixins": [
+		{
+			"config": "gd.rf.ninjaphenix.cursedchests.mixins.client.json",
+			"environment": "client"
+		}
 	],
 	"requires": {
+		"fabricloader": ">=0.4.0",
 		"fabric": "*"
-	},
-	"mixins": {
-		"client": "gd.rf.ninjaphenix.cursedchests.mixins.client.json"
 	}
 }

@@ -47,21 +47,21 @@ public class ChestConversionItem extends Item implements ChestModifier
 		if (Registry.BLOCK.getId(mainBlock) != from) return ActionResult.FAIL;
 		ItemStack handStack = player.getStackInHand(hand);
 		BlockEntity mainBlockEntity = world.getBlockEntity(mainBlockPos);
-		if(mainBlockEntity == null) return ActionResult.FAIL;
+		if (mainBlockEntity == null) return ActionResult.FAIL;
 		Direction rotation = mainBlockState.get(Properties.FACING_HORIZONTAL);
 		if (topBlockPos == null || (handStack.getAmount() == 1 && !player.isCreative()))
 		{
 			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
-			if(!player.isCreative()) handStack.subtractAmount(1);
+			if (!player.isCreative()) handStack.subtractAmount(1);
 		}
 		else
 		{
 			BlockEntity topBlockEntity = world.getBlockEntity(topBlockPos);
-			if(topBlockEntity == null) return ActionResult.FAIL;
+			if (topBlockEntity == null) return ActionResult.FAIL;
 			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
 			upgradeChest(world, topBlockPos, topBlockEntity, rotation);
 			world.setBlockState(topBlockPos, world.getBlockState(topBlockPos).with(VerticalChestBlock.TYPE, VerticalChestType.TOP));
-			if(!player.isCreative()) handStack.subtractAmount(2);
+			if (!player.isCreative()) handStack.subtractAmount(2);
 		}
 		return ActionResult.FAIL;
 	}

@@ -96,10 +96,10 @@ import net.minecraft.util.Identifier;
 	{
 		boolean inYRange = mouseY > top + 18 && mouseY < top + 124;
 		boolean condition = dragging&& inYRange;
-		if(!condition) condition = playerInventory.getCursorStack().isEmpty() && mouseX > left + 172 && mouseX < left + 184 && inYRange;
+		if (!condition) condition = playerInventory.getCursorStack().isEmpty() && mouseX > left + 172 && mouseX < left + 184 && inYRange;
 		if (condition)
 		{
-			if(!dragging) dragging= true;
+			if (!dragging) dragging = true;
 			progress = (mouseY - top - 18)/105;
 			topRow = (int) (progress * (realRows-6));
 			container.updateSlotPositions(topRow, false);
@@ -110,7 +110,7 @@ import net.minecraft.util.Identifier;
 
 	@Override public boolean mouseReleased(double double_1, double double_2, int int_1)
 	{
-		if(dragging) dragging = false;
+		if (dragging) dragging = false;
 		return super.mouseReleased(double_1, double_2, int_1);
 	}
 	private void setTopRow(int value)
@@ -125,7 +125,7 @@ import net.minecraft.util.Identifier;
 	@Override public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
 		if (keyCode == 256){ minecraft.player.closeGui(); return true;}
-		else if (realRows > 6 && searchBox.isFocused())
+		if (realRows > 6 && searchBox.isFocused())
 		{
 			String originalText = searchBox.getText();
 			if (searchBox.keyPressed(keyCode, scanCode, modifiers))
@@ -139,14 +139,14 @@ import net.minecraft.util.Identifier;
 			}
 			return true;
 		}
-		else if (minecraft.options.keyInventory.matchesKey(keyCode, scanCode)){ minecraft.player.closeGui(); return true; }
+		if (minecraft.options.keyInventory.matchesKey(keyCode, scanCode)){ minecraft.player.closeGui(); return true; }
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	@Override public boolean charTyped(char character, int int_1)
 	{
-		if(!searchBox.isFocused() && minecraft.options.keyChat.getName().contains((String.valueOf(character)))){ searchBox.setFocused(true); return true;}
-		if(!searchBox.isFocused()) return false;
+		if (!searchBox.isFocused() && minecraft.options.keyChat.getName().contains((String.valueOf(character)))){ searchBox.setFocused(true); return true;}
+		if (!searchBox.isFocused()) return false;
 		String originalText = searchBox.getText();
 		if (searchBox.charTyped(character, int_1))
 		{
