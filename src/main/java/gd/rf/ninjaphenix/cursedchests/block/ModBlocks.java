@@ -2,9 +2,9 @@ package gd.rf.ninjaphenix.cursedchests.block;
 
 import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.block.BlockItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
