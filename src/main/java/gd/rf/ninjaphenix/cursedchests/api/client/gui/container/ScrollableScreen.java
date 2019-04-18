@@ -145,7 +145,7 @@ import net.minecraft.util.Identifier;
 
 	@Override public boolean charTyped(char character, int int_1)
 	{
-		if (!searchBox.isFocused() && minecraft.options.keyChat.getName().contains((String.valueOf(character)))){ searchBox.setFocused(true); return true;}
+		if (!searchBox.isFocused() && minecraft.options.keyChat.getName().contains((String.valueOf(character)))){ searchBox.changeFocus(true); return true;}
 		if (!searchBox.isFocused()) return false;
 		String originalText = searchBox.getText();
 		if (searchBox.charTyped(character, int_1))

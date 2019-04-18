@@ -81,7 +81,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 
 	@Environment(EnvType.CLIENT) @Override public boolean hasBlockEntityBreakingRender(BlockState state){ return true; }
 	@Override public BlockRenderType getRenderType(BlockState state){ return BlockRenderType.ENTITYBLOCK_ANIMATED; }
-	@Override public FluidState getFluidState(BlockState state){ return state.get(WATERLOGGED) ? Fluids.WATER.getState(false) : super.getFluidState(state); }
+	@Override public FluidState getFluidState(BlockState state){ return state.get(WATERLOGGED) ? Fluids.WATER.getDefaultState() : super.getFluidState(state); }
 	@Override protected void appendProperties(StateFactory.Builder<Block, BlockState> stateBuilder){ stateBuilder.with(FACING, TYPE, WATERLOGGED); }
 	@Override public boolean hasComparatorOutput(BlockState state){ return true; }
 	@Override public int getComparatorOutput(BlockState state, World world, BlockPos pos){ return Container.calculateComparatorOutput(getInventory(state, world, pos)); }
