@@ -113,6 +113,7 @@ import net.minecraft.util.Identifier;
 		if (dragging) dragging = false;
 		return super.mouseReleased(double_1, double_2, int_1);
 	}
+
 	private void setTopRow(int value)
 	{
 		topRow = value;

@@ -153,7 +153,6 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	{
 		if (player.isSpectator()) return;
 		--viewerCount;
-		System.out.println(player.getDisplayName().getString() + ": " + player.container);
 		onInvOpenOrClose();
 	}
 

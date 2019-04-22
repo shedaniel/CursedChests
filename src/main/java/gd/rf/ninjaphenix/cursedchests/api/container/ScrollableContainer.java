@@ -50,7 +50,7 @@ public class ScrollableContainer extends Container
 	@Environment(EnvType.CLIENT) public void setSearchTerm(String term)
 	{
 		searchTerm = term.toLowerCase();
-		updateSlotPositions(offset, true);
+		updateSlotPositions(0, true);
 	}
 
 	@Environment(EnvType.CLIENT) public void updateSlotPositions(int offset, boolean termChanged)
