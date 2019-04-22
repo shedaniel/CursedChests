@@ -124,7 +124,7 @@ import net.minecraft.util.Identifier;
 
 	@Override public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
-		if (keyCode == 256){ minecraft.player.closeScreen(); return true;}
+		if (keyCode == 256){ minecraft.player.closeContainer(); return true;}
 		if (realRows > 6 && searchBox.isFocused())
 		{
 			String originalText = searchBox.getText();
@@ -139,7 +139,7 @@ import net.minecraft.util.Identifier;
 			}
 			return true;
 		}
-		if (minecraft.options.keyInventory.matchesKey(keyCode, scanCode)){ minecraft.player.closeScreen(); return true; }
+		if (minecraft.options.keyInventory.matchesKey(keyCode, scanCode)){ minecraft.player.closeContainer(); return true; }
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 

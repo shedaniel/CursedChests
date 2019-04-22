@@ -89,7 +89,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 
 	@Override public void tick()
 	{
-		viewerCount = recalculateViewCount(world, this, ++ticksOpen, pos.getX(), pos.getY(), pos.getZ(), viewerCount);
+		viewerCount = tickViewerCount(world, this, ++ticksOpen, pos.getX(), pos.getY(), pos.getZ(), viewerCount);
 		lastAnimationAngle = animationAngle;
 		if (viewerCount > 0 && animationAngle == 0.0F) playSound(SoundEvents.BLOCK_CHEST_OPEN);
 		if (viewerCount == 0 && animationAngle > 0.0F || viewerCount > 0 && animationAngle < 1.0F)
@@ -101,32 +101,35 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 		}
 	}
 
-	private static int recalculateViewCount(World world, VerticalChestBlockEntity instance, int ticksOpen, int x, int y, int z, int viewerCount)
+	private static int tickViewerCount(World world, VerticalChestBlockEntity instance, int ticksOpen, int x, int y, int z, int viewCount)
 	{
-		if (!world.isClient && viewerCount != 0 && (ticksOpen + x + y + z) % 200 == 0)
+		if (!world.isClient && viewCount != 0 && (ticksOpen + x + y + z) % 200 == 0) { return countViewers(world, instance, x, y, z); }
+		return viewCount;
+	}
+
+	private static int countViewers(World world, VerticalChestBlockEntity instance, int x, int y, int z)
+	{
+		int viewers = 0;
+		List<PlayerEntity> playersInRange = world.getEntities(PlayerEntity.class, new BoundingBox(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6));
+		Iterator<PlayerEntity> playerIterator = playersInRange.iterator();
+
+		while(true)
 		{
-			viewerCount = 0;
-			List<PlayerEntity> playersInRange = world.getEntities(PlayerEntity.class, new BoundingBox(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6));
-			Iterator<PlayerEntity> playerIterator = playersInRange.iterator();
-			while (true)
+			SidedInventory inventory;
+			do
 			{
-				SidedInventory inventory;
+				PlayerEntity player;
 				do
 				{
-					PlayerEntity player;
-					do
-					{
-						if (!playerIterator.hasNext()) return viewerCount;
-						player = playerIterator.next();
-					}
-					while (!(player.container instanceof ScrollableContainer));
-					inventory = ((ScrollableContainer) player.container).getInventory();
+					if (!playerIterator.hasNext()) { return viewers; }
+					player = playerIterator.next();
 				}
-				while (inventory != instance && (!(inventory instanceof DoubleSidedInventory) || !((DoubleSidedInventory) inventory).isPart(instance)));
-				viewerCount++;
+				while(!(player.container instanceof ScrollableContainer));
+				inventory = ((ScrollableContainer) player.container).getInventory();
 			}
+			while(inventory != instance && (!(inventory instanceof DoubleSidedInventory) || !((DoubleSidedInventory) inventory).isPart(instance)));
+			viewers++;
 		}
-		else return viewerCount;
 	}
 
 	private void playSound(SoundEvent soundEvent)
@@ -141,6 +144,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	@Override public void onInvOpen(PlayerEntity player)
 	{
 		if (player.isSpectator()) return;
+		if (viewerCount < 0) viewerCount = 0;
 		++viewerCount;
 		onInvOpenOrClose();
 	}
@@ -149,7 +153,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	{
 		if (player.isSpectator()) return;
 		--viewerCount;
-		if (viewerCount < 0) viewerCount = 0;
+		System.out.println(player.getDisplayName().getString() + ": " + player.container);
 		onInvOpenOrClose();
 	}
 
