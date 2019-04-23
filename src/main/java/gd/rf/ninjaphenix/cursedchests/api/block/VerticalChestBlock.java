@@ -221,8 +221,8 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 				BlockEntity blockEntity_2 = world.getBlockEntity(pos_2);
 				if (blockEntity_2 instanceof VerticalChestBlockEntity)
 				{
-					VerticalChestBlockEntity chestBlockEntity_2 = chestType_1 == VerticalChestType.TOP ? chestBlockEntity1 : (VerticalChestBlockEntity)blockEntity_2;
-					VerticalChestBlockEntity chestBlockEntity_3 = chestType_1 == VerticalChestType.TOP ? (VerticalChestBlockEntity)blockEntity_2 : chestBlockEntity1;
+					VerticalChestBlockEntity chestBlockEntity_2 = chestType_1 == VerticalChestType.TOP ? chestBlockEntity1 : (VerticalChestBlockEntity) blockEntity_2;
+					VerticalChestBlockEntity chestBlockEntity_3 = chestType_1 == VerticalChestType.TOP ? (VerticalChestBlockEntity) blockEntity_2 : chestBlockEntity1;
 					return var_1.getFromDoubleChest(chestBlockEntity_2, chestBlockEntity_3);
 				}
 			}
