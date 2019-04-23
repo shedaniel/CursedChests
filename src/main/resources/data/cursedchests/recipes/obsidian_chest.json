@@ -1,19 +1,9 @@
 {
   "type": "crafting_shaped",
-  "pattern": [
-    "OOO",
-    "OCO",
-    "OOO"
-  ],
+  "pattern": ["OOO", "OCO", "OOO"],
   "key": {
-    "O": {
-      "item": "minecraft:obsidian"
-    },
-    "C": {
-      "item": "cursedchests:diamond_chest"
-    }
+    "O": {"item": "minecraft:obsidian"},
+    "C": {"item": "cursedchests:diamond_chest"}
   },
-  "result": {
-    "item": "cursedchests:obsidian_chest"
-  }
+  "result": {"item": "cursedchests:obsidian_chest"}
 }

@@ -1,6 +1,1 @@
-{
-  "textures": {
-    "particle": "block/iron_block"
-  }
-}
-
+{"textures":{"particle":"block/iron_block"}}

@@ -1,5 +1,1 @@
-{
-  "variants": {
-    "": { "model": "cursedchests:block/diamond_chest" }
-  }
-}
+{"variants":{"":{"model":"cursedchests:block/diamond_chest"}}}

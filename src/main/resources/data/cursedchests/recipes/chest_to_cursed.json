@@ -1,11 +1,5 @@
 {
   "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "minecraft:chest"
-    }
-  ],
-  "result": {
-    "item": "cursedchests:wood_chest"
-  }
+  "ingredients": [{"item": "minecraft:chest"}],
+  "result": {"item": "cursedchests:wood_chest"}
 }
