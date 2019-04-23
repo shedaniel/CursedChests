@@ -85,8 +85,8 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Override protected void appendProperties(StateFactory.Builder<Block, BlockState> stateBuilder){ stateBuilder.with(FACING, TYPE, WATERLOGGED); }
 	@Override public boolean hasComparatorOutput(BlockState state){ return true; }
 	@Override public int getComparatorOutput(BlockState state, World world, BlockPos pos){ return Container.calculateComparatorOutput(getInventory(state, world, pos)); }
-	@Override public BlockState rotate(BlockState state, Rotation rotation){ return state.with(FACING, rotation.rotate(state.get(FACING))); }
-	@Override public BlockState mirror(BlockState state, Mirror mirror){ return state.rotate(mirror.getRotation(state.get(FACING))); }
+	@Override public BlockState rotate(BlockState state, BlockRotation rotation){ return state.with(FACING, rotation.rotate(state.get(FACING))); }
+	@Override public BlockState mirror(BlockState state, BlockMirror mirror){ return state.rotate(mirror.getRotation(state.get(FACING))); }
 	@Override public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos){ return retrieve(state, world, pos, INVENTORY_RETRIEVER); }
 	private static boolean isChestBlocked(IWorld world, BlockPos pos){ return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos); }
 	private Stat<Identifier> getOpenStat(){ return Stats.CUSTOM.getOrCreateStat(Stats.OPEN_CHEST); }
