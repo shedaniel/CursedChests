@@ -49,6 +49,7 @@ import net.minecraft.util.Identifier;
 
 	@Override public void render(int mouseX, int mouseY, float float_1)
 	{
+		renderBackground();
 		drawBackground(float_1, mouseX, mouseY);
 		super.render(mouseX, mouseY, float_1);
 		drawMouseoverTooltip(mouseX, mouseY);
