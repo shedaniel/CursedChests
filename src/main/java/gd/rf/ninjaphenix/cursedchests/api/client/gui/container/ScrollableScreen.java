@@ -29,6 +29,7 @@ import net.minecraft.util.Identifier;
 		realRows = container.getRows();
 		topRow = 0;
 		rows = realRows > 6 ? 6 : realRows;
+		if (realRows > 6) this.containerWidth += 22;
 		containerHeight = 114 + rows * 18;
 		progress = 0;
 		container.setSearchTerm("");
@@ -37,12 +38,11 @@ import net.minecraft.util.Identifier;
 	@Override public void init()
 	{
 		super.init();
-		searchBox = new TextFieldWidget(font, left + 82, top + 127, 80, 8, "");
+		searchBox = addButton(new TextFieldWidget(font, left + 82, top + 127, 80, 8, ""));
 		searchBox.setMaxLength(50);
 		searchBox.setHasBorder(false);
 		searchBox.setVisible(realRows > 6);
 		searchBox.method_1868(16777215);
-		children.add(searchBox);
 	}
 	public static ScrollableScreen createScreen(ScrollableContainer container){ return new ScrollableScreen(container, MinecraftClient.getInstance().player.inventory, container.getDisplayName()); }
 	@Override public void tick(){ searchBox.tick(); }
@@ -96,7 +96,7 @@ import net.minecraft.util.Identifier;
 	@Override public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double deltaX, double deltaY)
 	{
 		boolean inYRange = mouseY > top + 18 && mouseY < top + 124;
-		boolean condition = dragging&& inYRange;
+		boolean condition = dragging && inYRange;
 		if (!condition) condition = playerInventory.getCursorStack().isEmpty() && mouseX > left + 172 && mouseX < left + 184 && inYRange;
 		if (condition)
 		{
@@ -127,7 +127,7 @@ import net.minecraft.util.Identifier;
 	@Override public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
 		if (keyCode == 256){ minecraft.player.closeContainer(); return true;}
-		if (realRows > 6 && searchBox.isFocused())
+		if (searchBox.isFocused())
 		{
 			String originalText = searchBox.getText();
 			if (searchBox.keyPressed(keyCode, scanCode, modifiers))
@@ -141,7 +141,6 @@ import net.minecraft.util.Identifier;
 			}
 			return true;
 		}
-		if (minecraft.options.keyInventory.matchesKey(keyCode, scanCode)){ minecraft.player.closeContainer(); return true; }
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
