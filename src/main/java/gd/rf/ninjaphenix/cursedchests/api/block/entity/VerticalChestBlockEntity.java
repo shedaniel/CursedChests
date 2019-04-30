@@ -138,6 +138,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 		VerticalChestType chestType = getCachedState().get(VerticalChestBlock.TYPE);
 		if (chestType == VerticalChestType.SINGLE) z += 0.5D;
 		else if (chestType == VerticalChestType.BOTTOM) z += 1.0D;
+		else return;
 		world.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, z, soundEvent, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
 	}
 
