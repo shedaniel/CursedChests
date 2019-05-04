@@ -36,11 +36,10 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import virtuoel.towelette.api.Fluidloggable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public abstract class VerticalChestBlock extends BlockWithEntity implements Waterloggable, InventoryProvider, Fluidloggable
+public abstract class VerticalChestBlock extends BlockWithEntity implements Waterloggable, InventoryProvider
 {
 	interface PropertyRetriever<T>
 	{
