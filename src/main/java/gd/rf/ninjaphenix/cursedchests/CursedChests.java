@@ -8,6 +8,7 @@ import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import gd.rf.ninjaphenix.cursedchests.api.item.ChestModifier;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import gd.rf.ninjaphenix.cursedchests.block.entity.*;
+import gd.rf.ninjaphenix.cursedchests.client.render.CursedChestREIPlugin;
 import gd.rf.ninjaphenix.cursedchests.client.render.block.entity.VerticalChestBlockEntityRenderer;
 import gd.rf.ninjaphenix.cursedchests.item.ModItems;
 import net.fabricmc.api.*;
@@ -16,6 +17,7 @@ import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.Item;
@@ -84,5 +86,10 @@ public class CursedChests implements ModInitializer, ClientModInitializer
 	{
 		BlockEntityRendererRegistry.INSTANCE.register(VerticalChestBlockEntity.class, new VerticalChestBlockEntityRenderer());
 		ScreenProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ScrollableScreen::createScreen);
+
+		if(FabricLoader.getInstance().isModLoaded("roughlyenoughitems"))
+		{
+			CursedChestREIPlugin.registerPlugin();
+		}
 	}
 }

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.ContainerProvider;
 import net.minecraft.client.gui.ContainerScreen;
@@ -29,7 +30,8 @@ import net.minecraft.util.Identifier;
 		realRows = container.getRows();
 		topRow = 0;
 		rows = realRows > 6 ? 6 : realRows;
-		if (realRows > 6) this.containerWidth += 22;
+		if (realRows > 6 && !FabricLoader.getInstance().isModLoaded("roughlyenoughitems"))
+			containerWidth += 22;
 		containerHeight = 114 + rows * 18;
 		progress = 0;
 		container.setSearchTerm("");
@@ -169,5 +171,8 @@ import net.minecraft.util.Identifier;
 		super.resize(client, int_1, int_2);
 		searchBox.setText(text);
 	}
+
+	public int getTop(){return this.top;}
+	public int getLeft(){return this.left;}
 }
 
