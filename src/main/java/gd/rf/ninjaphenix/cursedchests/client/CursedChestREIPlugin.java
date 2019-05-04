@@ -1,10 +1,9 @@
-package gd.rf.ninjaphenix.cursedchests.client.render;
+package gd.rf.ninjaphenix.cursedchests.client;
 
 import gd.rf.ninjaphenix.cursedchests.api.client.gui.container.ScrollableScreen;
-import me.shedaniel.rei.RoughlyEnoughItemsCore;
 import me.shedaniel.rei.api.BaseBoundsHandler;
 import me.shedaniel.rei.api.DisplayHelper;
-import me.shedaniel.rei.api.REIPlugin;
+import me.shedaniel.rei.api.REIPluginEntry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
@@ -12,11 +11,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CursedChestREIPlugin implements REIPlugin
+public class CursedChestREIPlugin implements REIPluginEntry
 {
-	public void registerBounds(DisplayHelper displayHelper)
+	@Override public void registerBounds(DisplayHelper displayHelper)
 	{
-		System.out.println("Registering the bounds!");
 		BaseBoundsHandler handler = displayHelper.getBaseBoundsHandler();
 		handler.registerExclusionZones(ScrollableScreen.class, new BaseBoundsHandler.ExclusionZoneSupplier()
 		{
@@ -33,8 +31,5 @@ public class CursedChestREIPlugin implements REIPlugin
 
 	}
 
-	public static void registerPlugin()
-	{
-		RoughlyEnoughItemsCore.registerPlugin(new Identifier("cursedchests", "screenplugin"), new CursedChestREIPlugin());
-	}
+	@Override public Identifier getPluginIdentifier(){ return new Identifier("cursedchests", "reiplugin"); }
 }
