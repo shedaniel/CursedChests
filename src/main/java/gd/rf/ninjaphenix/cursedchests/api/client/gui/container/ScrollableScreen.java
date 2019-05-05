@@ -49,7 +49,7 @@ import net.minecraft.util.math.MathHelper;
 		searchBox.setVisible(realRows > 6);
 		searchBox.method_1868(16777215);
 		searchBox.setChangedListener(str -> {
-			if(str.equals(searchBoxOldText)) return;
+			if (str.equals(searchBoxOldText)) return;
 			container.setSearchTerm(str);
 			progress = 0;
 			topRow = 0;
@@ -178,7 +178,7 @@ import net.minecraft.util.math.MathHelper;
 		boolean focused = searchBox.isFocused();
 		super.resize(client, int_1, int_2);
 		searchBox.setText(text);
-		if(focused)
+		if (focused)
 		{
 			searchBox.changeFocus(true);
 			setFocused(searchBox);
