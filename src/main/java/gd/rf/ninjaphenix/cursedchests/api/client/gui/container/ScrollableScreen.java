@@ -12,6 +12,7 @@ import net.minecraft.client.gui.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT) public class ScrollableScreen extends ContainerScreen<ScrollableContainer> implements ContainerProvider<ScrollableContainer>
 {
@@ -92,7 +93,12 @@ import net.minecraft.util.Identifier;
 
 	@Override public boolean mouseScrolled(double mouseX, double mouseY, double scrollDelta)
 	{
-		if (realRows > 6){ setTopRow(topRow - (int) scrollDelta); return true; }
+		if (realRows > 6)
+		{
+			setTopRow(topRow - (int) scrollDelta);
+			progress = ((double) topRow) / ((double) (realRows - 6));
+			return true;
+		}
 		return false;
 	}
 
@@ -104,26 +110,34 @@ import net.minecraft.util.Identifier;
 		return left_up_down || right;
 	}
 
-	@Override public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double deltaX, double deltaY)
+	@Override public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
 	{
-		boolean inYRange = mouseY > top + 18 && mouseY < top + 124;
-		boolean condition = dragging && inYRange;
-		if (!condition) condition = playerInventory.getCursorStack().isEmpty() && mouseX > left + 172 && mouseX < left + 184 && inYRange;
-		if (condition)
-		{
-			if (!dragging) dragging = true;
-			progress = (mouseY - top - 18)/105;
-			topRow = (int) (progress * (realRows-6));
-			container.updateSlotPositions(topRow, false);
-			return true;
-		}
-		return super.mouseDragged(mouseX, mouseY, mouseButton, deltaX, deltaY);
+		if (!dragging) return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+		progress = MathHelper.clamp((mouseY - top - 25.5) / 90, 0, 1);
+		setTopRow((int) (progress * (realRows - 6)));
+		return true;
+
 	}
 
-	@Override public boolean mouseReleased(double double_1, double double_2, int int_1)
+	@Override public boolean mouseClicked(double mouseX, double mouseY, int button)
 	{
-		if (dragging) dragging = false;
-		return super.mouseReleased(double_1, double_2, int_1);
+		if (searchBox.isFocused() && !searchBox.mouseInBounds(mouseX, mouseY) && button == 0)
+		{
+			searchBox.changeFocus(true);
+			this.setFocused(null);
+		}
+		if(button == 0 && left + 172 < mouseX && mouseX < left + 184 && top + 18 < mouseY && mouseY < top + 123)
+		{
+			dragging = true;
+			return true;
+		}
+		return super.mouseClicked(mouseX, mouseY, button);
+	}
+
+	@Override public boolean mouseReleased(double mouseX, double mouseY, int button)
+	{
+		if (dragging && button == 0) dragging = false;
+		return super.mouseReleased(mouseX, mouseY, button);
 	}
 
 	private void setTopRow(int value)
@@ -131,7 +145,6 @@ import net.minecraft.util.Identifier;
 		topRow = value;
 		if (topRow < 0) topRow = 0;
 		else if (topRow > realRows - 6) topRow = realRows - 6;
-		progress = ((double) topRow) / ((double) (realRows - 6));
 		container.updateSlotPositions(topRow, false);
 	}
 
@@ -143,6 +156,7 @@ import net.minecraft.util.Identifier;
 			if (minecraft.options.keyChat.matchesKey(keyCode, scanCode))
 			{
 				searchBox.changeFocus(true);
+				this.setFocused(searchBox);
 				searchBox.ignoreNextChar();
 				return true;
 			}

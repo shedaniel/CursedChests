@@ -24,8 +24,7 @@ public class SearchTextFieldWidget extends TextFieldWidget
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	@Override
-	public boolean charTyped(char char_1, int int_1)
+	@Override public boolean charTyped(char char_1, int int_1)
 	{
 		if (ignoreNextChar)
 		{
@@ -33,6 +32,11 @@ public class SearchTextFieldWidget extends TextFieldWidget
 			return false;
 		}
 		return super.charTyped(char_1, int_1);
+	}
+
+	public boolean mouseInBounds(double mouseX, double mouseY)
+	{
+		return this.clicked(mouseX, mouseY);
 	}
 
 	public void ignoreNextChar()
