@@ -1,6 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests.api.client.gui.container;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import gd.rf.ninjaphenix.cursedchests.api.client.gui.SearchTextFieldWidget;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -8,7 +9,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.ContainerProvider;
 import net.minecraft.client.gui.ContainerScreen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.Identifier;
@@ -22,7 +22,8 @@ import net.minecraft.util.Identifier;
 	private final int realRows;
 	private double progress;
 	private boolean dragging;
-	private TextFieldWidget searchBox;
+	private SearchTextFieldWidget searchBox;
+	private String searchBoxOldText;
 
 	public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, TextComponent containerTitle)
 	{
@@ -35,16 +36,24 @@ import net.minecraft.util.Identifier;
 		containerHeight = 114 + rows * 18;
 		progress = 0;
 		container.setSearchTerm("");
+		searchBoxOldText = "";
 	}
 
 	@Override public void init()
 	{
 		super.init();
-		searchBox = addButton(new TextFieldWidget(font, left + 82, top + 127, 80, 8, ""));
+		searchBox = addButton(new SearchTextFieldWidget(font, left + 82, top + 127, 80, 8, ""));
 		searchBox.setMaxLength(50);
 		searchBox.setHasBorder(false);
 		searchBox.setVisible(realRows > 6);
 		searchBox.method_1868(16777215);
+		searchBox.setChangedListener(str -> {
+			if(str.equals(searchBoxOldText)) return;
+			container.setSearchTerm(str);
+			progress = 0;
+			topRow = 0;
+			searchBoxOldText = str;
+		});
 	}
 	public static ScrollableScreen createScreen(ScrollableContainer container){ return new ScrollableScreen(container, MinecraftClient.getInstance().player.inventory, container.getDisplayName()); }
 	@Override public void tick(){ searchBox.tick(); }
@@ -128,40 +137,24 @@ import net.minecraft.util.Identifier;
 
 	@Override public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
-		if (keyCode == 256){ minecraft.player.closeContainer(); return true;}
-		if (searchBox.isFocused())
+		if (keyCode == 256) { minecraft.player.closeContainer(); return true; }
+		if (!searchBox.isFocused())
 		{
-			String originalText = searchBox.getText();
-			if (searchBox.keyPressed(keyCode, scanCode, modifiers))
+			if (minecraft.options.keyChat.matchesKey(keyCode, scanCode))
 			{
-				if (!originalText.equals(searchBox.getText()))
-				{
-					progress = 0;
-					topRow = 0;
-					container.setSearchTerm(searchBox.getText());
-				}
+				searchBox.changeFocus(true);
+				searchBox.ignoreNextChar();
+				return true;
 			}
-			return true;
+			return super.keyPressed(keyCode, scanCode, modifiers);
 		}
-		return super.keyPressed(keyCode, scanCode, modifiers);
+		return searchBox.keyPressed(keyCode, scanCode, modifiers);
 	}
 
-	@Override public boolean charTyped(char character, int int_1)
+	@Override public boolean charTyped(char char_1, int int_1)
 	{
-		if (!searchBox.isFocused() && minecraft.options.keyChat.getName().contains((String.valueOf(character)))){ searchBox.changeFocus(true); return true;}
-		if (!searchBox.isFocused()) return false;
-		String originalText = searchBox.getText();
-		if (searchBox.charTyped(character, int_1))
-		{
-			if (!originalText.equals(searchBox.getText()))
-			{
-				progress = 0;
-				topRow = 0;
-				container.setSearchTerm(searchBox.getText());
-			}
-			return true;
-		}
-		return false;
+		if (searchBox.isFocused()) return searchBox.charTyped(char_1, int_1);
+		return super.charTyped(char_1, int_1);
 	}
 
 	@Override

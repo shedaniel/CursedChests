@@ -19,7 +19,6 @@ public class ScrollableContainer extends Container
 	private final int rows;
 	private final int realRows;
 	@Environment(EnvType.CLIENT) private String searchTerm = "";
-	@Environment(EnvType.CLIENT) private int offset = 0;
 	@Environment(EnvType.CLIENT) private List<Slot> sortedSlotList;
 
 	public ScrollableContainer(int syncId, PlayerInventory playerInventory, SidedInventory inventory, TextComponent containerName)
@@ -55,7 +54,6 @@ public class ScrollableContainer extends Container
 
 	@Environment(EnvType.CLIENT) public void updateSlotPositions(int offset, boolean termChanged)
 	{
-		this.offset = offset;
 		int index = 0;
 		if (termChanged && !searchTerm.equals(""))
 		{
