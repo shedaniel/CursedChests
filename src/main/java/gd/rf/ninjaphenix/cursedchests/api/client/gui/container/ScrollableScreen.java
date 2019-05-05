@@ -126,7 +126,7 @@ import net.minecraft.util.math.MathHelper;
 			searchBox.changeFocus(true);
 			this.setFocused(null);
 		}
-		if(button == 0 && left + 172 < mouseX && mouseX < left + 184 && top + 18 < mouseY && mouseY < top + 123)
+		if (button == 0 && left + 172 < mouseX && mouseX < left + 184 && top + 18 < mouseY && mouseY < top + 123)
 		{
 			dragging = true;
 			return true;
@@ -175,8 +175,14 @@ import net.minecraft.util.math.MathHelper;
 	public void resize(MinecraftClient client, int int_1, int int_2)
 	{
 		String text = searchBox.getText();
+		boolean focused = searchBox.isFocused();
 		super.resize(client, int_1, int_2);
 		searchBox.setText(text);
+		if(focused)
+		{
+			searchBox.changeFocus(true);
+			setFocused(searchBox);
+		}
 	}
 
 	public int getTop(){return this.top;}
