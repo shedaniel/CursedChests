@@ -19,7 +19,7 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.Item;
-import net.minecraft.text.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -49,7 +49,7 @@ public class CursedChests implements ModInitializer, ClientModInitializer
 		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->
 		{
 			BlockPos pos = buf.readBlockPos();
-			TextComponent containerName = buf.readTextComponent();
+			Component containerName = buf.readTextComponent();
 			World world = player.getEntityWorld();
 			return new ScrollableContainer(syncId, player.inventory, VerticalChestBlock.getInventoryStatic(world.getBlockState(pos), world, pos), containerName);
 		}));

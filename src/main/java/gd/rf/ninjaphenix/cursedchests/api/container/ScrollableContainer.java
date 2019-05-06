@@ -8,20 +8,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.TextComponent;
+import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ScrollableContainer extends Container
 {
-	private final TextComponent containerName;
+	private final Component containerName;
 	private final SidedInventory inventory;
 	private final int rows;
 	private final int realRows;
 	@Environment(EnvType.CLIENT) private String searchTerm = "";
+	// todo: instead of storing a sorted list of slot, store a sorted map <int unsorted>, <int sorted>
 	@Environment(EnvType.CLIENT) private List<Slot> sortedSlotList;
 
-	public ScrollableContainer(int syncId, PlayerInventory playerInventory, SidedInventory inventory, TextComponent containerName)
+	public ScrollableContainer(int syncId, PlayerInventory playerInventory, SidedInventory inventory, Component containerName)
 	{
 		super(null, syncId);
 		this.inventory = inventory;
@@ -42,7 +43,7 @@ public class ScrollableContainer extends Container
 
 	public SidedInventory getInventory(){ return inventory; }
 	@Environment(EnvType.CLIENT) public int getRows(){ return realRows; }
-	@Environment(EnvType.CLIENT) public TextComponent getDisplayName(){ return containerName; }
+	@Environment(EnvType.CLIENT) public Component getDisplayName(){ return containerName; }
 	@Override public boolean canUse(PlayerEntity player){ return inventory.canPlayerUseInv(player); }
 	@Override public void close(PlayerEntity player){ super.close(player); inventory.onInvClose(player); }
 

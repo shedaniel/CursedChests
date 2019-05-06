@@ -9,7 +9,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.ContainerProvider;
 import net.minecraft.client.gui.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -25,7 +25,7 @@ import net.minecraft.util.math.MathHelper;
 	private SearchTextFieldWidget searchBox;
 	private String searchBoxOldText;
 
-	public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, TextComponent containerTitle)
+	public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, Component containerTitle)
 	{
 		super(container, playerInventory, containerTitle);
 		realRows = container.getRows();

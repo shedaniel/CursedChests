@@ -8,8 +8,8 @@ import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.container.Container;
+import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.VerticalEntityPosition;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -18,6 +18,8 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.StateFactory;
@@ -25,8 +27,6 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.TextComponent;
-import net.minecraft.text.TranslatableTextComponent;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -61,16 +61,16 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		@Override public SidedInventory getFromSingleChest(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity; }
 	};
 
-	private static final PropertyRetriever<TextComponent> NAME_RETRIEVER = new PropertyRetriever<TextComponent>()
+	private static final PropertyRetriever<Component> NAME_RETRIEVER = new PropertyRetriever<Component>()
 	{
-		@Override public TextComponent getFromDoubleChest(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity)
+		@Override public Component getFromDoubleChest(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity)
 		{
 			if (bottomChestBlockEntity.hasCustomName()) return bottomChestBlockEntity.getDisplayName();
 			if (topChestBlockEntity.hasCustomName()) return topChestBlockEntity.getDisplayName();
-			return new TranslatableTextComponent(DOUBLE_PREFIX).append(bottomChestBlockEntity.getDisplayName());
+			return new TranslatableComponent(DOUBLE_PREFIX).append(bottomChestBlockEntity.getDisplayName());
 		}
 
-		@Override public TextComponent getFromSingleChest(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity.getDisplayName(); }
+		@Override public Component getFromSingleChest(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity.getDisplayName(); }
 	};
 
 	public VerticalChestBlock(Settings settings)
@@ -82,7 +82,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	@Environment(EnvType.CLIENT) @Override public boolean hasBlockEntityBreakingRender(BlockState state){ return true; }
 	@Override public BlockRenderType getRenderType(BlockState state){ return BlockRenderType.ENTITYBLOCK_ANIMATED; }
 	@Override public FluidState getFluidState(BlockState state){ return state.get(WATERLOGGED) ? Fluids.WATER.getDefaultState() : super.getFluidState(state); }
-	@Override protected void appendProperties(StateFactory.Builder<Block, BlockState> stateBuilder){ stateBuilder.with(FACING, TYPE, WATERLOGGED); }
+	@Override protected void appendProperties(StateFactory.Builder<Block, BlockState> stateBuilder){ stateBuilder.add(FACING, TYPE, WATERLOGGED); }
 	@Override public boolean hasComparatorOutput(BlockState state){ return true; }
 	@Override public int getComparatorOutput(BlockState state, World world, BlockPos pos){ return Container.calculateComparatorOutput(getInventory(state, world, pos)); }
 	@Override public BlockState rotate(BlockState state, BlockRotation rotation){ return state.with(FACING, rotation.rotate(state.get(FACING))); }
@@ -93,7 +93,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	public static SidedInventory getInventoryStatic(BlockState state, IWorld world, BlockPos pos){ return retrieve(state, world, pos, INVENTORY_RETRIEVER); }
 	public abstract String getName();
 
-	@Override public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, VerticalEntityPosition verticalEntityPosition)
+	@Override public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext verticalEntityPosition)
 	{
 		switch (state.get(TYPE))
 		{
@@ -192,7 +192,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	*/
 	protected void openContainer(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
-		TextComponent containerName = retrieve(state, world, pos, NAME_RETRIEVER);
+		Component containerName = retrieve(state, world, pos, NAME_RETRIEVER);
 		if (containerName == null) return;
 		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 		{
