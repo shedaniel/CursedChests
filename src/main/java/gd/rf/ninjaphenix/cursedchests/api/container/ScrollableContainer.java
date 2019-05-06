@@ -2,6 +2,7 @@ package gd.rf.ninjaphenix.cursedchests.api.container;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.container.Container;
 import net.minecraft.container.Slot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,8 +10,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.chat.Component;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class ScrollableContainer extends Container
 {
@@ -19,8 +19,7 @@ public class ScrollableContainer extends Container
 	private final int rows;
 	private final int realRows;
 	@Environment(EnvType.CLIENT) private String searchTerm = "";
-	// todo: instead of storing a sorted list of slot, store a sorted map <int unsorted>, <int sorted>
-	@Environment(EnvType.CLIENT) private List<Slot> sortedSlotList;
+	@Environment(EnvType.CLIENT) private Integer[] unsortedToSortedSlotMap;
 
 	public ScrollableContainer(int syncId, PlayerInventory playerInventory, SidedInventory inventory, Component containerName)
 	{
@@ -29,13 +28,19 @@ public class ScrollableContainer extends Container
 		this.containerName = containerName;
 		realRows = inventory.getInvSize()/9;
 		rows = realRows > 6 ? 6 : realRows;
+		if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) unsortedToSortedSlotMap = new Integer[realRows*9];
 		int int_3 = (rows - 4) * 18;
 		inventory.onInvOpen(playerInventory.player);
 		for (int y = 0; y < realRows; ++y)
 		{
 			int yPos = -2000;
 			if (y < rows) yPos = 18 + y * 18;
-			for (int x = 0; x < 9; ++x) addSlot(new Slot(inventory, x + y * 9, 8 + x * 18, yPos));
+			for (int x = 0; x < 9; ++x)
+			{
+				int slot = x + 9*y;
+				if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) unsortedToSortedSlotMap[slot] = slot;
+				addSlot(new Slot(inventory, slot, 8 + x * 18, yPos));
+			}
 		}
 		for (int y = 0; y < 3; ++y) for (int x = 0; x < 9; ++x) addSlot(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 103 + y * 18 + int_3));
 		for (int x = 0; x < 9; ++x) addSlot(new Slot(playerInventory, x, 8 + x * 18, 161 + int_3));
@@ -56,30 +61,28 @@ public class ScrollableContainer extends Container
 	@Environment(EnvType.CLIENT) public void updateSlotPositions(int offset, boolean termChanged)
 	{
 		int index = 0;
-		if (termChanged && !searchTerm.equals(""))
+		if (termChanged && !searchTerm.equals("")) Arrays.sort(unsortedToSortedSlotMap, this::compare);
+		else if (termChanged) Arrays.sort(unsortedToSortedSlotMap);
+		for (Integer slotID : unsortedToSortedSlotMap)
 		{
-			sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
-			sortedSlotList.sort((a, b) ->
-			{
-				if (a == null || b == null) return 0;
-				ItemStack stack_a = a.getStack();
-				ItemStack stack_b = b.getStack();
-				if (stack_a.isEmpty() && !stack_b.isEmpty()) return 1;
-				if (stack_b.isEmpty() && !stack_a.isEmpty()) return -1;
-				if (stack_a.isEmpty() && stack_b.isEmpty()) return 0;
-				return stack_a.getItem().getTranslatedNameTrimmed(stack_a).getString().toLowerCase().contains(searchTerm) ? -1 :
-						stack_b.getItem().getTranslatedNameTrimmed(stack_b).getString().toLowerCase().contains(searchTerm) ? 1 : 0;
-			});
-		}
-		else if (termChanged) sortedSlotList = new ArrayList<>(slotList.subList(0, realRows*9));
-		for (Slot slot : sortedSlotList)
-		{
-			Slot real_slot = slotList.get(slot.id);
+			Slot slot = slotList.get(slotID);
 			int y = (index / 9) - offset;
-			real_slot.xPosition = 8 + 18 * (index % 9);
-			real_slot.yPosition = (y >= rows || y < 0) ? -2000 : 18 + 18 * y;
+			slot.xPosition = 8 + 18 * (index % 9);
+			slot.yPosition = (y >= rows || y < 0) ? -2000 : 18 + 18 * y;
 			index++;
 		}
+	}
+
+	private int compare(Integer a, Integer b)
+	{
+		if (a == null || b == null) return 0;
+		ItemStack stack_a = slotList.get(a).getStack();
+		ItemStack stack_b = slotList.get(b).getStack();
+		if (stack_a.isEmpty() && !stack_b.isEmpty()) return 1;
+		if (!stack_a.isEmpty() && stack_b.isEmpty()) return -1;
+		if (stack_a.isEmpty() && stack_b.isEmpty()) return 0;
+		return stack_a.getDisplayName().getString().toLowerCase().contains(searchTerm) ? -1 :
+				stack_b.getDisplayName().getString().toLowerCase().contains(searchTerm) ? 1 : 0;
 	}
 
 	@Override public ItemStack transferSlot(PlayerEntity player, int slotIndex)
