@@ -5,6 +5,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 
@@ -41,4 +44,21 @@ public class CursedChestRegistry
 	 * @since 1.0.5
 	 */
 	@Environment(EnvType.CLIENT) public static BlockEntity getChestBlockEntity(VerticalChestBlock block){ return block2blockEntityMap.get(block); }
+
+	private class CursedChest
+	{
+		public final VerticalChestBlock block;
+		public final int slots;
+		public final Identifier singleTexture;
+		public final Identifier tallTexture;
+		public final Component defaultContainerName;
+		public CursedChest(VerticalChestBlock block, int slots, Identifier singleTexture, Identifier tallTexture, TranslatableComponent containerName)
+		{
+			this.block = block;
+			this.slots = slots;
+			this.singleTexture = singleTexture;
+			this.tallTexture = tallTexture;
+			this.defaultContainerName = containerName;
+		}
+	}
 }
