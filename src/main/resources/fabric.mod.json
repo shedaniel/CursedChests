@@ -28,6 +28,6 @@
     "fabric": "*"
   },
   "recommends": {
-    "roughlyenoughitems": ">=2.8.2.104"
+    "roughlyenoughitems": ">=2.8.2+build.104"
   }
 }
