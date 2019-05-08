@@ -1,8 +1,8 @@
 package gd.rf.ninjaphenix.cursedchests.api.block;
 
-import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.StringIdentifiable;
 
-public enum VerticalChestType implements StringRepresentable
+public enum VerticalChestType implements StringIdentifiable
 {
 	SINGLE("single"),
 	TOP("top"),

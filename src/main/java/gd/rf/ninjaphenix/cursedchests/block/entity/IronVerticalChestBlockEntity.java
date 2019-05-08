@@ -1,14 +1,14 @@
 package gd.rf.ninjaphenix.cursedchests.block.entity;
 
-import gd.rf.ninjaphenix.cursedchests.CursedChests;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Identifier;
 
 public class IronVerticalChestBlockEntity extends VerticalChestBlockEntity
 {
-	public IronVerticalChestBlockEntity(){ super(CursedChests.IRON_VERTICAL_CHEST); }
+	public IronVerticalChestBlockEntity(){ super(ModBlocks.IRON_VERTICAL_CHEST); }
 
 	@Override protected Component getContainerName(){ return new TranslatableComponent("container.cursedchests.iron_chest"); }
 	@Override public int getInvSize(){ return 54; }
