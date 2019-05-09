@@ -23,9 +23,11 @@ def main(args: dict) -> str:
         for line in f:
             if " = " in line:
                 key, value = line.split(" = ", 1)
-                new_value = format_args[key]
-                output.append(f"{key} = {new_value}\n")
-                if new_value not in value: print(f"Updated {key} from {value[0:-1]} to {new_value}"); not_changed = False
+                if key in format_args:
+                    new_value = format_args[key]
+                    output.append(f"{key} = {new_value}\n")
+                    if new_value not in value: print(f"Updated {key} from {value[0:-1]} to {new_value}"); not_changed = False
+                else: output.append(line)
             else: output.append(line)
     if not_changed:
         print("Already up to date. ", end="")
