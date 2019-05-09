@@ -67,7 +67,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 		{
 			if (bottomChestBlockEntity.hasCustomName()) return bottomChestBlockEntity.getDisplayName();
 			if (topChestBlockEntity.hasCustomName()) return topChestBlockEntity.getDisplayName();
-			return new TranslatableComponent(DOUBLE_PREFIX).append(bottomChestBlockEntity.getDisplayName());
+			return new TranslatableComponent(DOUBLE_PREFIX, bottomChestBlockEntity.getDisplayName());
 		}
 
 		@Override public Component getFromSingleChest(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity.getDisplayName(); }

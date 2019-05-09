@@ -4,7 +4,7 @@
   "container.cursedchests.gold_chest": "金箱子",
   "container.cursedchests.diamond_chest": "钻石箱子",
   "container.cursedchests.obsidian_chest": "黑曜石箱子",
-  "container.cursedchests.generic_double": "大 ",
+  "container.cursedchests.generic_double": "大 %s",
   "block.cursedchests.wood_chest": "箱子",
   "block.cursedchests.iron_chest": "铁箱子",
   "block.cursedchests.gold_chest": "金箱子",

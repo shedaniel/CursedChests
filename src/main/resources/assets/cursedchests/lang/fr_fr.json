@@ -4,7 +4,7 @@
   "container.cursedchests.gold_chest": "Coffre en or",
   "container.cursedchests.diamond_chest": "Coffre en diamant",
   "container.cursedchests.obsidian_chest": "Coffre en obsidienne",
-  "container.cursedchests.generic_double": "Grand ",
+  "container.cursedchests.generic_double": "Grand %s",
   "block.cursedchests.wood_chest": "Coffre",
   "block.cursedchests.iron_chest": "Coffre en fer",
   "block.cursedchests.gold_chest": "Coffre en or",
