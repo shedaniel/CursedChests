@@ -1,8 +1,8 @@
 package gd.rf.ninjaphenix.cursedchests.api.block;
 
-import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.SnakeCaseIdentifiable;
 
-public enum VerticalChestType implements StringRepresentable
+public enum VerticalChestType implements SnakeCaseIdentifiable
 {
 	SINGLE("single"),
 	TOP("top"),
@@ -12,5 +12,5 @@ public enum VerticalChestType implements StringRepresentable
 
 	VerticalChestType(String string){ name = string; }
 
-	public String asString(){ return name; }
+	public String toSnakeCase(){ return name; }
 }
