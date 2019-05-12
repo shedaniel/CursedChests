@@ -43,13 +43,37 @@ public class DoubleSidedInventory implements SidedInventory
 	}
 
 	@Override public int getInvSize(){ return first.getInvSize() + second.getInvSize(); }
+
 	@Override public boolean isInvEmpty(){ return first.isInvEmpty() && second.isInvEmpty(); }
+
 	@Override public boolean canPlayerUseInv(PlayerEntity player){ return first.canPlayerUseInv(player) && second.canPlayerUseInv(player); }
-	@Override public void clear(){ first.clear(); second.clear(); }
-	@Override public void markDirty(){ first.markDirty(); second.markDirty(); }
-	@Override public void onInvOpen(PlayerEntity player){ first.onInvOpen(player); second.onInvOpen(player); }
-	@Override public void onInvClose(PlayerEntity player){ first.onInvClose(player); second.onInvClose(player); }
+
+	@Override public void clear()
+	{
+		first.clear();
+		second.clear();
+	}
+
+	@Override public void markDirty()
+	{
+		first.markDirty();
+		second.markDirty();
+	}
+
+	@Override public void onInvOpen(PlayerEntity player)
+	{
+		first.onInvOpen(player);
+		second.onInvOpen(player);
+	}
+
+	@Override public void onInvClose(PlayerEntity player)
+	{
+		first.onInvClose(player);
+		second.onInvClose(player);
+	}
+
 	public boolean isPart(SidedInventory inventory){ return first == inventory || second == inventory; }
+
 	public int getInvMaxStackAmount(){ return first.getInvMaxStackAmount(); }
 
 	@Override public ItemStack getInvStack(int slot)

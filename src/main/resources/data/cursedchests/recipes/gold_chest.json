@@ -1,9 +1,19 @@
 {
   "type": "crafting_shaped",
-  "pattern": ["III", "ICI", "III"],
+  "pattern": [
+    "III",
+    "ICI",
+    "III"
+  ],
   "key": {
-    "I": {"item": "minecraft:gold_ingot"},
-    "C": {"item": "cursedchests:iron_chest"}
+    "I": {
+      "item": "minecraft:gold_ingot"
+    },
+    "C": {
+      "item": "cursedchests:iron_chest"
+    }
   },
-  "result": {"item": "cursedchests:gold_chest"}
+  "result": {
+    "item": "cursedchests:gold_chest"
+  }
 }

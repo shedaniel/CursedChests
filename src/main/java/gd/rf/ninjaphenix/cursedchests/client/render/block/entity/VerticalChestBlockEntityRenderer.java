@@ -1,6 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests.client.render.block.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
@@ -15,21 +16,22 @@ import net.minecraft.client.render.entity.model.ChestEntityModel;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
-@Environment(EnvType.CLIENT) public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<VerticalChestBlockEntity>
+@Environment(EnvType.CLIENT)
+public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<VerticalChestBlockEntity>
 {
 	private final ChestEntityModel modelSingleChest = new ChestEntityModel();
-	private final ChestEntityModel modelDoubleChest = new TallChestEntityModel();
+	private final ChestEntityModel modelTallChest = new TallChestEntityModel();
 
 	@Override public void render(VerticalChestBlockEntity blockEntity, double x, double y, double z, float lidPitch, int breaking_stage)
 	{
 		GlStateManager.enableDepthTest();
 		GlStateManager.depthFunc(515);
 		GlStateManager.depthMask(true);
-		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : ModBlocks.wood_chest.getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH);
+		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : blockEntity.hasBlock() ? blockEntity.getBlock().getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH) : ModBlocks.wood_chest.getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH);
 		VerticalChestType chestType = state.get(VerticalChestBlock.TYPE);
 		boolean isDouble = chestType != VerticalChestType.SINGLE;
-		if (chestType == VerticalChestType.TOP && breaking_stage  < 0) return;
-		ChestEntityModel chestModel = getChestModelAndBindTexture(blockEntity, breaking_stage, isDouble);
+		if (chestType == VerticalChestType.TOP && breaking_stage < 0) return;
+		ChestEntityModel chestModel = getChestModelAndBindTexture((VerticalChestBlock) state.getBlock(), breaking_stage, isDouble);
 		if (breaking_stage >= 0)
 		{
 			GlStateManager.matrixMode(5890);
@@ -64,13 +66,13 @@ import net.minecraft.util.math.Direction;
 		}
 	}
 
-	private ChestEntityModel getChestModelAndBindTexture(VerticalChestBlockEntity blockEntity, int breaking_stage, boolean isDouble)
+	private ChestEntityModel getChestModelAndBindTexture(VerticalChestBlock block, int breaking_stage, boolean isTall)
 	{
 		Identifier identifier_5;
 		if (breaking_stage >= 0) identifier_5 = DESTROY_STAGE_TEXTURES[breaking_stage];
-		else identifier_5 = blockEntity.getTexture(isDouble);
+		else identifier_5 = CursedChestRegistry.getChestTexture(block, isTall);
 		bindTexture(identifier_5);
-		return isDouble ? modelDoubleChest : modelSingleChest;
+		return isTall ? modelTallChest : modelSingleChest;
 	}
 
 	private void setLidPitch(VerticalChestBlockEntity blockEntity, float lidPitch, ChestEntityModel model)

@@ -4,9 +4,7 @@ import net.minecraft.util.StringIdentifiable;
 
 public enum VerticalChestType implements StringIdentifiable
 {
-	SINGLE("single"),
-	TOP("top"),
-	BOTTOM("bottom");
+	SINGLE("single"), TOP("top"), BOTTOM("bottom");
 
 	private final String name;
 

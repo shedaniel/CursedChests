@@ -24,14 +24,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-@EnvironmentInterface(itf=ClientModInitializer.class, value=EnvType.CLIENT)
+@EnvironmentInterface(itf = ClientModInitializer.class, value = EnvType.CLIENT)
 public class CursedChests implements ModInitializer, ClientModInitializer
 {
 	@Override public void onInitialize()
 	{
 		ModBlocks.init();
 		ModItems.init();
-
 		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->
 		{
 			BlockPos pos = buf.readBlockPos();
@@ -39,14 +38,12 @@ public class CursedChests implements ModInitializer, ClientModInitializer
 			World world = player.getEntityWorld();
 			return new ScrollableContainer(syncId, player.inventory, VerticalChestBlock.getInventoryStatic(world.getBlockState(pos), world, pos), containerName);
 		}));
-
 		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->
 		{
 			Item handItem = player.getStackInHand(hand).getItem();
 			if (handItem instanceof ChestModifier) return ((ChestModifier) handItem).useOnEntity(world, player, hand, entity, hitResult);
 			return ActionResult.PASS;
 		});
-
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) ->
 		{
 			Item handItem = player.getStackInHand(hand).getItem();

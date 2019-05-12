@@ -1,10 +1,22 @@
 {
   "type": "crafting_shaped",
-  "pattern": ["GGG", "ICI", "GGG"],
+  "pattern": [
+    "GGG",
+    "ICI",
+    "GGG"
+  ],
   "key": {
-    "I": {"item": "minecraft:diamond"},
-    "C": {"item": "cursedchests:gold_chest"},
-    "G": {"tag": "cursedchests:impermeable"}
+    "I": {
+      "item": "minecraft:diamond"
+    },
+    "C": {
+      "item": "cursedchests:gold_chest"
+    },
+    "G": {
+      "tag": "cursedchests:impermeable"
+    }
   },
-  "result": {"item": "cursedchests:diamond_chest"}
+  "result": {
+    "item": "cursedchests:diamond_chest"
+  }
 }

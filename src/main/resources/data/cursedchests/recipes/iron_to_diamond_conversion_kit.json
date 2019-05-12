@@ -1,10 +1,22 @@
 {
   "type": "crafting_shaped",
-  "pattern": ["GGG", "DKD", "GGG"],
+  "pattern": [
+    "GGG",
+    "DKD",
+    "GGG"
+  ],
   "key": {
-    "K": {"item": "cursedchests:iron_to_gold_conversion_kit"},
-    "D": {"item": "minecraft:diamond"},
-    "G": {"tag": "cursedchests:impermeable"}
+    "K": {
+      "item": "cursedchests:iron_to_gold_conversion_kit"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "G": {
+      "tag": "cursedchests:impermeable"
+    }
   },
-  "result": {"item": "cursedchests:iron_to_diamond_conversion_kit"}
+  "result": {
+    "item": "cursedchests:iron_to_diamond_conversion_kit"
+  }
 }

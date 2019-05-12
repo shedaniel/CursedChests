@@ -24,13 +24,12 @@ public class ModItems
 		registerConversionItem(ModBlocks.diamond_chest, ModBlocks.obsidian_chest);
 	}
 
-	@SuppressWarnings("UnusedReturnValue")
-	private static Item registerConversionItem(VerticalChestBlock from, VerticalChestBlock to)
+	@SuppressWarnings("UnusedReturnValue") private static Item registerConversionItem(VerticalChestBlock from, VerticalChestBlock to)
 	{
-		String fromName = from.getName();
-		String toName = to.getName();
+		String fromName = Registry.BLOCK.getId(from).getPath();
+		String toName = Registry.BLOCK.getId(to).getPath();
 		Item conversionKit = new ChestConversionItem(new Item.Settings().itemGroup(ItemGroup.TOOLS), from, to);
-		Registry.register(Registry.ITEM, new Identifier("cursedchests", fromName.substring(0, fromName.indexOf('_'))+"_to_"+toName.substring(0, toName.indexOf('_'))+"_conversion_kit"), conversionKit);
+		Registry.register(Registry.ITEM, new Identifier("cursedchests", fromName.substring(0, fromName.indexOf('_')) + "_to_" + toName.substring(0, toName.indexOf('_')) + "_conversion_kit"), conversionKit);
 		return conversionKit;
 	}
 }

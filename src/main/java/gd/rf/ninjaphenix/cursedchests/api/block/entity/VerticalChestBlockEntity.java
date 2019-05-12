@@ -19,6 +19,8 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -28,13 +30,16 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BoundingBox;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import java.util.Iterator;
 import java.util.List;
 
 @EnvironmentInterfaces({@EnvironmentInterface(value = EnvType.CLIENT, itf = ChestAnimationProgress.class)})
-public abstract class VerticalChestBlockEntity extends LootableContainerBlockEntity implements ChestAnimationProgress, Tickable, SidedInventory
+public class VerticalChestBlockEntity extends LootableContainerBlockEntity implements ChestAnimationProgress, Tickable, SidedInventory
 {
+	private final Component defaultContainerName;
+	private final int inventorySize;
 	private DefaultedList<ItemStack> inventory;
 	private float animationAngle;
 	private float lastAnimationAngle;
@@ -42,23 +47,62 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 	private int ticksOpen;
 	private int[] SLOTS;
 
-	public VerticalChestBlockEntity(BlockEntityType type)
+	// Nullable used purely for item rendering.
+	private VerticalChestBlock block;
+
+	public VerticalChestBlockEntity()
 	{
-		super(type);
-		inventory = DefaultedList.create(getInvSize(), ItemStack.EMPTY);
-		SLOTS = new int[getInvSize()];
-		for (int i = 0; i<SLOTS.length; i++){ SLOTS[i] = i; }
+		this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "vertical_chest")), 0, new TextComponent("Error Chest"));
 	}
 
-	@Override public boolean onBlockAction(int actionId, int value){ if (actionId == 1){ viewerCount = value; return true; } else { return super.onBlockAction(actionId, value); } }
+	public VerticalChestBlockEntity(int slots, Component containerName)
+	{
+		this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "vertical_chest")), slots, containerName);
+	}
+
+	public VerticalChestBlockEntity(BlockEntityType type, int slots, Component containerName)
+	{
+		super(type);
+		defaultContainerName = containerName;
+		inventorySize = slots;
+		inventory = DefaultedList.create(inventorySize, ItemStack.EMPTY);
+		SLOTS = new int[inventorySize];
+		for (int i = 0; i < inventorySize; i++) SLOTS[i] = i;
+	}
+
+	@Override public boolean onBlockAction(int actionId, int value)
+	{
+		if (actionId == 1)
+		{
+			viewerCount = value;
+			return true;
+		}
+		else { return super.onBlockAction(actionId, value); }
+	}
+
+	public void setBlock(VerticalChestBlock verticalChestBlock){ block = verticalChestBlock; }
+
+	public VerticalChestBlock getBlock(){ return block; }
+
+	public boolean hasBlock(){ return block != null; }
+
 	@Override protected DefaultedList<ItemStack> getInvStackList(){ return inventory; }
+
 	@Override public void setInvStackList(DefaultedList<ItemStack> defaultedList_1){ inventory = defaultedList_1; }
+
 	@Environment(EnvType.CLIENT) @Override public float getAnimationProgress(float float_1){ return MathHelper.lerp(float_1, lastAnimationAngle, animationAngle); }
+
 	@Override protected Container createContainer(int int_1, PlayerInventory playerInventory){ return null; }
+
 	@Override public int[] getInvAvailableSlots(Direction direction){ return SLOTS; }
+
 	@Override public boolean canInsertInvStack(int slot, ItemStack stack, Direction direction){ return this.isValidInvStack(slot, stack); }
+
 	@Override public boolean canExtractInvStack(int slot, ItemStack stack, Direction direction){ return true; }
-	public abstract Identifier getTexture(boolean isDouble);
+
+	@Override public int getInvSize(){ return inventorySize; }
+
+	@Override protected Component getContainerName(){ return defaultContainerName; }
 
 	@Override public boolean isInvEmpty()
 	{
@@ -68,15 +112,14 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 		{
 			if (!inventoryIterator.hasNext()) return true;
 			stack = inventoryIterator.next();
-		}
-		while (stack.isEmpty());
+		} while (stack.isEmpty());
 		return false;
 	}
 
 	@Override public void fromTag(CompoundTag tag)
 	{
 		super.fromTag(tag);
-		inventory = DefaultedList.create(getInvSize(), ItemStack.EMPTY);
+		inventory = DefaultedList.create(inventorySize, ItemStack.EMPTY); // todo: is this really needed?
 		if (!deserializeLootTable(tag)) Inventories.fromTag(tag, inventory);
 	}
 
@@ -95,7 +138,8 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 		if (viewerCount == 0 && animationAngle > 0.0F || viewerCount > 0 && animationAngle < 1.0F)
 		{
 			float float_2 = animationAngle;
-			if (viewerCount > 0) animationAngle += 0.1F; else animationAngle -= 0.1F;
+			if (viewerCount > 0) animationAngle += 0.1F;
+			else animationAngle -= 0.1F;
 			animationAngle = MathHelper.clamp(animationAngle, 0, 1);
 			if (animationAngle < 0.5F && float_2 >= 0.5F) playSound(SoundEvents.BLOCK_CHEST_CLOSE);
 		}
@@ -112,8 +156,7 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 		int viewers = 0;
 		List<PlayerEntity> playersInRange = world.getEntities(PlayerEntity.class, new BoundingBox(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6));
 		Iterator<PlayerEntity> playerIterator = playersInRange.iterator();
-
-		while(true)
+		while (true)
 		{
 			SidedInventory inventory;
 			do
@@ -123,11 +166,9 @@ public abstract class VerticalChestBlockEntity extends LootableContainerBlockEnt
 				{
 					if (!playerIterator.hasNext()) { return viewers; }
 					player = playerIterator.next();
-				}
-				while(!(player.container instanceof ScrollableContainer));
+				} while (!(player.container instanceof ScrollableContainer));
 				inventory = ((ScrollableContainer) player.container).getInventory();
-			}
-			while(inventory != instance && (!(inventory instanceof DoubleSidedInventory) || !((DoubleSidedInventory) inventory).isPart(instance)));
+			} while (inventory != instance && (!(inventory instanceof DoubleSidedInventory) || !((DoubleSidedInventory) inventory).isPart(instance)));
 			viewers++;
 		}
 	}

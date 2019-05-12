@@ -1,5 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.api.block;
 
+import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
 import gd.rf.ninjaphenix.cursedchests.api.inventory.DoubleSidedInventory;
 import net.fabricmc.api.EnvType;
@@ -39,11 +40,14 @@ import net.minecraft.world.World;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public abstract class VerticalChestBlock extends BlockWithEntity implements Waterloggable, InventoryProvider
+public class VerticalChestBlock extends BlockWithEntity implements Waterloggable, InventoryProvider
 {
+	@Override public BlockEntity createBlockEntity(BlockView var1){ return new VerticalChestBlockEntity(CursedChestRegistry.getSlots(this), CursedChestRegistry.getDefaultContainerName(this)); }
+
 	interface PropertyRetriever<T>
 	{
 		T getFromDoubleChest(VerticalChestBlockEntity var1, VerticalChestBlockEntity var2);
+
 		T getFromSingleChest(VerticalChestBlockEntity var1);
 	}
 
@@ -58,6 +62,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	private static final PropertyRetriever<SidedInventory> INVENTORY_RETRIEVER = new PropertyRetriever<SidedInventory>()
 	{
 		@Override public SidedInventory getFromDoubleChest(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity){ return new DoubleSidedInventory(bottomChestBlockEntity, topChestBlockEntity); }
+
 		@Override public SidedInventory getFromSingleChest(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity; }
 	};
 
@@ -80,18 +85,28 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 	}
 
 	@Environment(EnvType.CLIENT) @Override public boolean hasBlockEntityBreakingRender(BlockState state){ return true; }
+
 	@Override public BlockRenderType getRenderType(BlockState state){ return BlockRenderType.ENTITYBLOCK_ANIMATED; }
+
 	@Override public FluidState getFluidState(BlockState state){ return state.get(WATERLOGGED) ? Fluids.WATER.getDefaultState() : super.getFluidState(state); }
+
 	@Override protected void appendProperties(StateFactory.Builder<Block, BlockState> stateBuilder){ stateBuilder.add(FACING, TYPE, WATERLOGGED); }
+
 	@Override public boolean hasComparatorOutput(BlockState state){ return true; }
+
 	@Override public int getComparatorOutput(BlockState state, World world, BlockPos pos){ return Container.calculateComparatorOutput(getInventory(state, world, pos)); }
+
 	@Override public BlockState rotate(BlockState state, BlockRotation rotation){ return state.with(FACING, rotation.rotate(state.get(FACING))); }
+
 	@Override public BlockState mirror(BlockState state, BlockMirror mirror){ return state.rotate(mirror.getRotation(state.get(FACING))); }
+
 	@Override public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos){ return retrieve(state, world, pos, INVENTORY_RETRIEVER); }
+
 	private static boolean isChestBlocked(IWorld world, BlockPos pos){ return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos); }
+
 	private Stat<Identifier> getOpenStat(){ return Stats.CUSTOM.getOrCreateStat(Stats.OPEN_CHEST); }
+
 	public static SidedInventory getInventoryStatic(BlockState state, IWorld world, BlockPos pos){ return retrieve(state, world, pos, INVENTORY_RETRIEVER); }
-	public abstract String getName();
 
 	@Override public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext verticalEntityPosition)
 	{
@@ -238,7 +253,7 @@ public abstract class VerticalChestBlock extends BlockWithEntity implements Wate
 
 	private static boolean hasOcelotOnTop(IWorld world, BlockPos pos)
 	{
-		List<CatEntity> cats = world.getEntities(CatEntity.class, new BoundingBox(pos.getX(),pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
+		List<CatEntity> cats = world.getEntities(CatEntity.class, new BoundingBox(pos.getX(), pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
 		for (CatEntity catEntity_1 : cats) if (catEntity_1.isSitting()) return true;
 		return false;
 	}

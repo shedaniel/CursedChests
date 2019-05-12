@@ -5,7 +5,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Cuboid;
 import net.minecraft.client.render.entity.model.ChestEntityModel;
 
-@Environment(EnvType.CLIENT) public class TallChestEntityModel extends ChestEntityModel
+@Environment(EnvType.CLIENT)
+public class TallChestEntityModel extends ChestEntityModel
 {
 	public TallChestEntityModel()
 	{

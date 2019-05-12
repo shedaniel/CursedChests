@@ -26,10 +26,10 @@ public class ScrollableContainer extends Container
 		super(null, syncId);
 		this.inventory = inventory;
 		this.containerName = containerName;
-		realRows = inventory.getInvSize()/9;
+		realRows = inventory.getInvSize() / 9;
 		rows = realRows > 6 ? 6 : realRows;
 		// todo eval if fabric loader removes this statement on server side
-		if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) unsortedToSortedSlotMap = new Integer[realRows*9];
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) unsortedToSortedSlotMap = new Integer[realRows * 9];
 		int int_3 = (rows - 4) * 18;
 		inventory.onInvOpen(playerInventory.player);
 		for (int y = 0; y < realRows; ++y)
@@ -38,8 +38,8 @@ public class ScrollableContainer extends Container
 			if (y < rows) yPos = 18 + y * 18;
 			for (int x = 0; x < 9; ++x)
 			{
-				int slot = x + 9*y;
-				if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) unsortedToSortedSlotMap[slot] = slot;
+				int slot = x + 9 * y;
+				if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) unsortedToSortedSlotMap[slot] = slot;
 				addSlot(new Slot(inventory, slot, 8 + x * 18, yPos));
 			}
 		}
@@ -48,10 +48,18 @@ public class ScrollableContainer extends Container
 	}
 
 	public SidedInventory getInventory(){ return inventory; }
+
 	@Environment(EnvType.CLIENT) public int getRows(){ return realRows; }
+
 	@Environment(EnvType.CLIENT) public Component getDisplayName(){ return containerName; }
+
 	@Override public boolean canUse(PlayerEntity player){ return inventory.canPlayerUseInv(player); }
-	@Override public void close(PlayerEntity player){ super.close(player); inventory.onInvClose(player); }
+
+	@Override public void close(PlayerEntity player)
+	{
+		super.close(player);
+		inventory.onInvClose(player);
+	}
 
 	@Environment(EnvType.CLIENT) public void setSearchTerm(String term)
 	{
@@ -82,8 +90,7 @@ public class ScrollableContainer extends Container
 		if (stack_a.isEmpty() && !stack_b.isEmpty()) return 1;
 		if (!stack_a.isEmpty() && stack_b.isEmpty()) return -1;
 		if (stack_a.isEmpty() && stack_b.isEmpty()) return 0;
-		return stack_a.getDisplayName().getString().toLowerCase().contains(searchTerm) ? -1 :
-				stack_b.getDisplayName().getString().toLowerCase().contains(searchTerm) ? 1 : 0;
+		return stack_a.getDisplayName().getString().toLowerCase().contains(searchTerm) ? -1 : stack_b.getDisplayName().getString().toLowerCase().contains(searchTerm) ? 1 : 0;
 	}
 
 	@Override public ItemStack transferSlot(PlayerEntity player, int slotIndex)
@@ -94,7 +101,7 @@ public class ScrollableContainer extends Container
 		{
 			ItemStack slotStack = slot.getStack();
 			stack = slotStack.copy();
-			if (slotIndex < inventory.getInvSize()){ if (!insertItem(slotStack, inventory.getInvSize(), slotList.size(), true)) return ItemStack.EMPTY; }
+			if (slotIndex < inventory.getInvSize()) { if (!insertItem(slotStack, inventory.getInvSize(), slotList.size(), true)) return ItemStack.EMPTY; }
 			else if (!insertItem(slotStack, 0, inventory.getInvSize(), false)) return ItemStack.EMPTY;
 			if (slotStack.isEmpty()) slot.setStack(ItemStack.EMPTY);
 			else slot.markDirty();

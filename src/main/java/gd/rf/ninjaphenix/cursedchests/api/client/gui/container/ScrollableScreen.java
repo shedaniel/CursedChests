@@ -14,7 +14,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-@Environment(EnvType.CLIENT) public class ScrollableScreen extends ContainerScreen<ScrollableContainer> implements ContainerProvider<ScrollableContainer>
+@Environment(EnvType.CLIENT)
+public class ScrollableScreen extends ContainerScreen<ScrollableContainer> implements ContainerProvider<ScrollableContainer>
 {
 	private static final Identifier BASE_TEXTURE = new Identifier("textures/gui/container/generic_54.png");
 	private static final Identifier SCROLL_TEXTURE = new Identifier("cursedchests", "textures/gui/container/scroll.png");
@@ -32,8 +33,7 @@ import net.minecraft.util.math.MathHelper;
 		realRows = container.getRows();
 		topRow = 0;
 		rows = hasScrollbar() ? 6 : realRows;
-		if (hasScrollbar() && !FabricLoader.getInstance().isModLoaded("roughlyenoughitems"))
-			containerWidth += 22;
+		if (hasScrollbar() && !FabricLoader.getInstance().isModLoaded("roughlyenoughitems")) containerWidth += 22;
 		containerHeight = 114 + rows * 18;
 		progress = 0;
 		container.setSearchTerm("");
@@ -48,7 +48,8 @@ import net.minecraft.util.math.MathHelper;
 		searchBox.setHasBorder(false);
 		searchBox.setVisible(hasScrollbar());
 		searchBox.setEditableColor(16777215);
-		searchBox.setChangedListener(str -> {
+		searchBox.setChangedListener(str ->
+		{
 			if (str.equals(searchBoxOldText)) return;
 			container.setSearchTerm(str);
 			progress = 0;
@@ -56,7 +57,9 @@ import net.minecraft.util.math.MathHelper;
 			searchBoxOldText = str;
 		});
 	}
+
 	public static ScrollableScreen createScreen(ScrollableContainer container){ return new ScrollableScreen(container, MinecraftClient.getInstance().player.inventory, container.getDisplayName()); }
+
 	@Override public void tick(){ searchBox.tick(); }
 
 	@Override public void render(int mouseX, int mouseY, float float_1)
@@ -85,7 +88,7 @@ import net.minecraft.util.math.MathHelper;
 		{
 			minecraft.getTextureManager().bindTexture(SCROLL_TEXTURE);
 			blit(int_3 + 172, int_4, 0, 0, 22, 132);
-			blit(int_3 + 174, (int) (int_4+18 + 91*progress), 22, 0, 12, 15);
+			blit(int_3 + 174, (int) (int_4 + 18 + 91 * progress), 22, 0, 12, 15);
 			blit(int_3 + 79, int_4 + 126, 34, 0, 90, 11);
 			searchBox.render(int_1, int_2, float_1);
 		}
@@ -116,7 +119,6 @@ import net.minecraft.util.math.MathHelper;
 		progress = MathHelper.clamp((mouseY - top - 25.5) / 90, 0, 1);
 		setTopRow((int) (progress * (realRows - 6)));
 		return true;
-
 	}
 
 	@Override public boolean mouseClicked(double mouseX, double mouseY, int button)
@@ -150,7 +152,11 @@ import net.minecraft.util.math.MathHelper;
 
 	@Override public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
-		if (keyCode == 256) { minecraft.player.closeContainer(); return true; }
+		if (keyCode == 256)
+		{
+			minecraft.player.closeContainer();
+			return true;
+		}
 		if (!searchBox.isFocused())
 		{
 			if (minecraft.options.keyChat.matchesKey(keyCode, scanCode))
@@ -171,8 +177,7 @@ import net.minecraft.util.math.MathHelper;
 		return super.charTyped(char_1, int_1);
 	}
 
-	@Override
-	public void resize(MinecraftClient client, int int_1, int int_2)
+	@Override public void resize(MinecraftClient client, int int_1, int int_2)
 	{
 		String text = searchBox.getText();
 		boolean focused = searchBox.isFocused();
@@ -186,7 +191,9 @@ import net.minecraft.util.math.MathHelper;
 	}
 
 	public int getTop(){return this.top;}
+
 	public int getLeft(){return this.left;}
-	public boolean hasScrollbar() { return realRows > 6; }
+
+	public boolean hasScrollbar(){ return realRows > 6; }
 }
 
