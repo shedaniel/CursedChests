@@ -47,7 +47,7 @@ import net.minecraft.util.math.MathHelper;
 		searchBox.setMaxLength(50);
 		searchBox.setHasBorder(false);
 		searchBox.setVisible(hasScrollbar());
-		searchBox.method_1868(16777215);
+		searchBox.setEditableColor(16777215);
 		searchBox.setChangedListener(str -> {
 			if (str.equals(searchBoxOldText)) return;
 			container.setSearchTerm(str);
