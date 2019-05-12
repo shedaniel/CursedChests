@@ -24,7 +24,7 @@ public class CursedChestREIPlugin implements REIPluginEntry
 				ScrollableScreen screen = (ScrollableScreen) client.currentScreen;
 
 				ArrayList<Rectangle> rv = new ArrayList<>(1);
-				if(isOnRightSide){ rv.add(new Rectangle(screen.getLeft() + 172, screen.getTop(), 22, 132));}
+				if(isOnRightSide && screen.hasScrollbar()){ rv.add(new Rectangle(screen.getLeft() + 172, screen.getTop(), 22, 132));}
 				return rv;
 			}
 		});
