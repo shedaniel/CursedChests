@@ -31,8 +31,8 @@ import net.minecraft.util.math.MathHelper;
 		super(container, playerInventory, containerTitle);
 		realRows = container.getRows();
 		topRow = 0;
-		rows = realRows > 6 ? 6 : realRows;
-		if (realRows > 6 && !FabricLoader.getInstance().isModLoaded("roughlyenoughitems"))
+		rows = hasScrollbar() ? 6 : realRows;
+		if (hasScrollbar() && !FabricLoader.getInstance().isModLoaded("roughlyenoughitems"))
 			containerWidth += 22;
 		containerHeight = 114 + rows * 18;
 		progress = 0;
@@ -46,7 +46,7 @@ import net.minecraft.util.math.MathHelper;
 		searchBox = addButton(new SearchTextFieldWidget(font, left + 82, top + 127, 80, 8, ""));
 		searchBox.setMaxLength(50);
 		searchBox.setHasBorder(false);
-		searchBox.setVisible(realRows > 6);
+		searchBox.setVisible(hasScrollbar());
 		searchBox.method_1868(16777215);
 		searchBox.setChangedListener(str -> {
 			if (str.equals(searchBoxOldText)) return;
@@ -81,7 +81,7 @@ import net.minecraft.util.math.MathHelper;
 		int int_4 = (height - containerHeight) / 2;
 		blit(int_3, int_4, 0, 0, containerWidth, rows * 18 + 17);
 		blit(int_3, int_4 + rows * 18 + 17, 0, 126, containerWidth, 96);
-		if (realRows > 6)
+		if (hasScrollbar())
 		{
 			minecraft.getTextureManager().bindTexture(SCROLL_TEXTURE);
 			blit(int_3 + 172, int_4, 0, 0, 22, 132);
@@ -93,7 +93,7 @@ import net.minecraft.util.math.MathHelper;
 
 	@Override public boolean mouseScrolled(double mouseX, double mouseY, double scrollDelta)
 	{
-		if (realRows > 6)
+		if (hasScrollbar())
 		{
 			setTopRow(topRow - (int) scrollDelta);
 			progress = ((double) topRow) / ((double) (realRows - 6));
@@ -106,7 +106,7 @@ import net.minecraft.util.math.MathHelper;
 	{
 		boolean left_up_down = mouseX < left || mouseY < top || mouseY > top + height;
 		boolean right = mouseX > left + width;
-		if (realRows > 6) right = (right && mouseY > top + 132) || mouseX > left + width + 18;
+		if (hasScrollbar()) right = (right && mouseY > top + 132) || mouseX > left + width + 18;
 		return left_up_down || right;
 	}
 
@@ -187,5 +187,6 @@ import net.minecraft.util.math.MathHelper;
 
 	public int getTop(){return this.top;}
 	public int getLeft(){return this.left;}
+	public boolean hasScrollbar() { return realRows > 6; }
 }
 
