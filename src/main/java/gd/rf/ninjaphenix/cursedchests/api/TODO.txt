@@ -1,4 +1,8 @@
-todo:
-    Maybe add custom stats for each chest type
-    Curse of binding to lock a chest to a specific player (make upgrade ?)
-    Trapped chest variant (make upgrade ?)
+real todo:
+  Towelette support (when their api is released)
+  Stair chests (should these be full blocks like old chests or indented like new blocks)
+
+possible todo:
+  Maybe add custom open stat for each chest type
+  Curse of binding to lock a chest to a specific player (make upgrade ?)
+  Trapped chest variant (make upgrade ?)
