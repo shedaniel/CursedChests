@@ -35,7 +35,7 @@ public class CursedChests implements ModInitializer, ClientModInitializer
 		{
 			BlockPos pos = buf.readBlockPos();
 			Component containerName = buf.readTextComponent();
-			World world = player.getWorld();
+			World world = player.getEntityWorld();
 			return new ScrollableContainer(syncId, player.inventory, VerticalChestBlock.getInventoryStatic(world.getBlockState(pos), world, pos), containerName);
 		}));
 		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->
