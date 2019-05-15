@@ -15,6 +15,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.entity.model.ChestEntityModel;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 
 @Environment(EnvType.CLIENT)
 public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<VerticalChestBlockEntity>
@@ -27,11 +28,13 @@ public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<Vertic
 		GlStateManager.enableDepthTest();
 		GlStateManager.depthFunc(515);
 		GlStateManager.depthMask(true);
-		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : blockEntity.hasBlock() ? blockEntity.getBlock().getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH) : ModBlocks.wood_chest.getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH);
+		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : ModBlocks.wood_chest.getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH);
 		VerticalChestType chestType = state.get(VerticalChestBlock.TYPE);
 		boolean isDouble = chestType != VerticalChestType.SINGLE;
 		if (chestType == VerticalChestType.TOP && breaking_stage < 0) return;
-		ChestEntityModel chestModel = getChestModelAndBindTexture((VerticalChestBlock) state.getBlock(), breaking_stage, isDouble);
+		Identifier b = blockEntity.getBlock();
+		if(b == null) b = Registry.BLOCK.getId(ModBlocks.wood_chest);
+		ChestEntityModel chestModel = getChestModelAndBindTexture(b, breaking_stage, isDouble);
 		if (breaking_stage >= 0)
 		{
 			GlStateManager.matrixMode(5890);
@@ -66,7 +69,7 @@ public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<Vertic
 		}
 	}
 
-	private ChestEntityModel getChestModelAndBindTexture(VerticalChestBlock block, int breaking_stage, boolean isTall)
+	private ChestEntityModel getChestModelAndBindTexture(Identifier block, int breaking_stage, boolean isTall)
 	{
 		Identifier identifier_5;
 		if (breaking_stage >= 0) identifier_5 = DESTROY_STAGE_TEXTURES[breaking_stage];

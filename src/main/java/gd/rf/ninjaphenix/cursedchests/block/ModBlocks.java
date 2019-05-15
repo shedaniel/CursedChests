@@ -30,14 +30,16 @@ public class ModBlocks
 		gold_chest = register(new VerticalChestBlock(FabricBlockSettings.copy(Blocks.GOLD_BLOCK).build()), "gold_chest", 9, new Identifier("cursedchests", "textures/entity/gold_chest/single.png"), new Identifier("cursedchests", "textures/entity/gold_chest/double.png"), new TranslatableComponent("container.cursedchests.gold_chest"));
 		diamond_chest = register(new VerticalChestBlock(FabricBlockSettings.copy(Blocks.DIAMOND_BLOCK).build()), "diamond_chest", 12, new Identifier("cursedchests", "textures/entity/diamond_chest/single.png"), new Identifier("cursedchests", "textures/entity/diamond_chest/double.png"), new TranslatableComponent("container.cursedchests.diamond_chest"));
 		obsidian_chest = register(new VerticalChestBlock(FabricBlockSettings.copy(Blocks.OBSIDIAN).build()), "obsidian_chest", 12, new Identifier("cursedchests", "textures/entity/obsidian_chest/single.png"), new Identifier("cursedchests", "textures/entity/obsidian_chest/double.png"), new TranslatableComponent("container.cursedchests.obsidian_chest"));
-		VERTICAL_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "vertical_chest"), BlockEntityType.Builder.create(VerticalChestBlockEntity::new, wood_chest, iron_chest, gold_chest, diamond_chest, obsidian_chest).build(null));
+		// todo: move to api
+		VERTICAL_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "vertical_chest"), BlockEntityType.Builder.create(VerticalChestBlockEntity::new, wood_chest, iron_chest, gold_chest, diamond_chest, obsidian_chest).
+				build(null));
 	}
 
 	private static VerticalChestBlock register(VerticalChestBlock block, String name, int rows, Identifier singleTexture, Identifier doubleTexture, TranslatableComponent containerName)
 	{
 		Registry.register(Registry.BLOCK, new Identifier("cursedchests", name), block);
 		Registry.register(Registry.ITEM, new Identifier("cursedchests", name), new BlockItem(block, new Item.Settings().itemGroup(ItemGroup.DECORATIONS)));
-		CursedChestRegistry.registerChest(block, rows, singleTexture, doubleTexture, containerName);
+		CursedChestRegistry.registerChest(new Identifier("cursedchests", name), rows, singleTexture, doubleTexture, containerName);
 		return block;
 	}
 }

@@ -1,5 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.api.block.entity;
 
+import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
@@ -12,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.client.block.ChestAnimationProgress;
+import net.minecraft.client.network.packet.BlockEntityUpdateS2CPacket;
 import net.minecraft.container.Container;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,7 +22,6 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -38,8 +39,8 @@ import java.util.List;
 @EnvironmentInterfaces({@EnvironmentInterface(value = EnvType.CLIENT, itf = ChestAnimationProgress.class)})
 public class VerticalChestBlockEntity extends LootableContainerBlockEntity implements ChestAnimationProgress, Tickable, SidedInventory
 {
-	private final Component defaultContainerName;
-	private final int inventorySize;
+	private Component defaultContainerName;
+	private int inventorySize;
 	private DefaultedList<ItemStack> inventory;
 	private float animationAngle;
 	private float lastAnimationAngle;
@@ -47,24 +48,30 @@ public class VerticalChestBlockEntity extends LootableContainerBlockEntity imple
 	private int ticksOpen;
 	private int[] SLOTS;
 
-	// Nullable used purely for item rendering.
-	private VerticalChestBlock block;
+	// May be Identifier("null", "null")
+	private Identifier block;
 
 	public VerticalChestBlockEntity()
 	{
-		this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "vertical_chest")), 0, new TextComponent("Error Chest"));
+		this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "vertical_chest")), new Identifier("null", "null"));
 	}
 
-	public VerticalChestBlockEntity(int slots, Component containerName)
+	public VerticalChestBlockEntity(Identifier block)
 	{
-		this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "vertical_chest")), slots, containerName);
+		this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "vertical_chest")), block);
 	}
 
-	public VerticalChestBlockEntity(BlockEntityType type, int slots, Component containerName)
+	public VerticalChestBlockEntity(BlockEntityType type, Identifier block)
 	{
 		super(type);
-		defaultContainerName = containerName;
-		inventorySize = slots;
+		this.initialize(block);
+	}
+
+	private void initialize(Identifier block)
+	{
+		this.block = block;
+		defaultContainerName = CursedChestRegistry.getDefaultContainerName(block);
+		inventorySize = CursedChestRegistry.getSlots(block);
 		inventory = DefaultedList.create(inventorySize, ItemStack.EMPTY);
 		SLOTS = new int[inventorySize];
 		for (int i = 0; i < inventorySize; i++) SLOTS[i] = i;
@@ -80,11 +87,9 @@ public class VerticalChestBlockEntity extends LootableContainerBlockEntity imple
 		else { return super.onBlockAction(actionId, value); }
 	}
 
-	public void setBlock(VerticalChestBlock verticalChestBlock){ block = verticalChestBlock; }
+	public void setBlock(Identifier verticalChestBlock){ block = verticalChestBlock; }
 
-	public VerticalChestBlock getBlock(){ return block; }
-
-	public boolean hasBlock(){ return block != null; }
+	public Identifier getBlock(){ return block; }
 
 	@Override protected DefaultedList<ItemStack> getInvStackList(){ return inventory; }
 
@@ -119,15 +124,27 @@ public class VerticalChestBlockEntity extends LootableContainerBlockEntity imple
 	@Override public void fromTag(CompoundTag tag)
 	{
 		super.fromTag(tag);
-		inventory = DefaultedList.create(inventorySize, ItemStack.EMPTY); // todo: is this really needed?
+		System.out.println(tag.toTextComponent().getText());
+		String namespace = tag.getString("namespace");
+		String path = tag.getString("path");
+		this.initialize(new Identifier(namespace.equals("") ? "null" : namespace, path.equals("") ? "null" : path));
 		if (!deserializeLootTable(tag)) Inventories.fromTag(tag, inventory);
 	}
 
 	@Override public CompoundTag toTag(CompoundTag tag)
 	{
 		super.toTag(tag);
+		tag.putString("namespace", block.getNamespace());
+		tag.putString("path", block.getPath());
 		if (!serializeLootTable(tag)) Inventories.toTag(tag, inventory);
 		return tag;
+	}
+
+	@Override public CompoundTag toInitialChunkDataTag()
+	{
+		CompoundTag initialChunkTag = toTag(new CompoundTag());
+		initialChunkTag.remove("Items");
+		return initialChunkTag;
 	}
 
 	@Override public void tick()

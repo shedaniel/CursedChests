@@ -33,6 +33,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BoundingBox;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
@@ -42,7 +43,12 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class VerticalChestBlock extends BlockWithEntity implements Waterloggable, InventoryProvider
 {
-	@Override public BlockEntity createBlockEntity(BlockView var1){ return new VerticalChestBlockEntity(CursedChestRegistry.getSlots(this), CursedChestRegistry.getDefaultContainerName(this)); }
+	@Override public BlockEntity createBlockEntity(BlockView var1)
+	{
+		Identifier id = Registry.BLOCK.getId(this);
+		VerticalChestBlockEntity blockEntity = new VerticalChestBlockEntity(id);
+		return blockEntity;
+	}
 
 	interface PropertyRetriever<T>
 	{

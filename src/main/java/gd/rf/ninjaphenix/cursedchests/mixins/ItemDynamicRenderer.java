@@ -10,6 +10,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.registry.Registry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,7 +28,7 @@ public class ItemDynamicRenderer
 			Block block = ((BlockItem) item).getBlock();
 			if (block instanceof VerticalChestBlock)
 			{
-				VerticalChestBlockEntity blockEntity = CursedChestRegistry.getChestBlockEntity((VerticalChestBlock) block);
+				VerticalChestBlockEntity blockEntity = CursedChestRegistry.getChestBlockEntity(Registry.BLOCK.getId(block));
 				if (blockEntity != null)
 				{
 					BlockEntityRenderDispatcher.INSTANCE.renderEntity(blockEntity);

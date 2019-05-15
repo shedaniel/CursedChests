@@ -1,6 +1,7 @@
 real todo:
   Towelette support (when their api is released)
   Stair chests (should these be full blocks like old chests or indented like new blocks)
+  Make the api a proper api, perhaps have an entry point that gives the API instance.
 
 possible todo:
   Maybe add custom open stat for each chest type
