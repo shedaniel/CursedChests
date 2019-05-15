@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.client.block.ChestAnimationProgress;
-import net.minecraft.client.network.packet.BlockEntityUpdateS2CPacket;
 import net.minecraft.container.Container;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -124,26 +123,33 @@ public class VerticalChestBlockEntity extends LootableContainerBlockEntity imple
 	@Override public void fromTag(CompoundTag tag)
 	{
 		super.fromTag(tag);
-		System.out.println(tag.toTextComponent().getText());
-		String namespace = tag.getString("namespace");
-		String path = tag.getString("path");
-		this.initialize(new Identifier(namespace.equals("") ? "null" : namespace, path.equals("") ? "null" : path));
+		Identifier id = new Identifier(tag.getString("type"));
+		this.initialize(id);
 		if (!deserializeLootTable(tag)) Inventories.fromTag(tag, inventory);
 	}
 
 	@Override public CompoundTag toTag(CompoundTag tag)
 	{
-		super.toTag(tag);
-		tag.putString("namespace", block.getNamespace());
-		tag.putString("path", block.getPath());
+		tag.putString("id", new Identifier("cursedchests", "vertical_chest").toString());
+		tag.putInt("x", this.pos.getX());
+		tag.putInt("y", this.pos.getY());
+		tag.putInt("z", this.pos.getZ());
+		if (getCustomName() != null) tag.putString("CustomName", Component.Serializer.toJsonString(this.getCustomName()));
+		if (block == null)
+		{
+			Identifier type = BlockEntityType.getId(this.getType());
+			tag.putString("id", "cursedchests:vertical_chest");
+			tag.putString("type", "cursedchests:"+type.getPath().split("_")[0]+"_chest");
+		}
+		else tag.putString("type", block.toString());
 		if (!serializeLootTable(tag)) Inventories.toTag(tag, inventory);
 		return tag;
 	}
 
 	@Override public CompoundTag toInitialChunkDataTag()
 	{
-		CompoundTag initialChunkTag = toTag(new CompoundTag());
-		initialChunkTag.remove("Items");
+		CompoundTag initialChunkTag = super.toTag(new CompoundTag());
+		initialChunkTag.putString("type", block.toString());
 		return initialChunkTag;
 	}
 

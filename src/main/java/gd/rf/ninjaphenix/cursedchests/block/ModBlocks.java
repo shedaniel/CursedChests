@@ -33,6 +33,12 @@ public class ModBlocks
 		// todo: move to api
 		VERTICAL_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "vertical_chest"), BlockEntityType.Builder.create(VerticalChestBlockEntity::new, wood_chest, iron_chest, gold_chest, diamond_chest, obsidian_chest).
 				build(null));
+
+		Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "wood_vertical_chest"), BlockEntityType.Builder.create(VerticalChestBlockEntity::new, wood_chest).build(null));
+		Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "iron_vertical_chest"), BlockEntityType.Builder.create(VerticalChestBlockEntity::new, iron_chest).build(null));
+		Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "gold_vertical_chest"), BlockEntityType.Builder.create(VerticalChestBlockEntity::new, gold_chest).build(null));
+		Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "diamond_vertical_chest"), BlockEntityType.Builder.create(VerticalChestBlockEntity::new, diamond_chest).build(null));
+		Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "obsidian_vertical_chest"), BlockEntityType.Builder.create(VerticalChestBlockEntity::new, obsidian_chest).build(null));
 	}
 
 	private static VerticalChestBlock register(VerticalChestBlock block, String name, int rows, Identifier singleTexture, Identifier doubleTexture, TranslatableComponent containerName)
