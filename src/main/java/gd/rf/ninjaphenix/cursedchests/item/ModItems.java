@@ -1,6 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.item;
 
-import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.item.ChestConversionItem;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import net.minecraft.item.Item;
@@ -24,7 +24,7 @@ public class ModItems
 		registerConversionItem(ModBlocks.diamond_chest, ModBlocks.obsidian_chest);
 	}
 
-	@SuppressWarnings("UnusedReturnValue") private static Item registerConversionItem(VerticalChestBlock from, VerticalChestBlock to)
+	@SuppressWarnings("UnusedReturnValue") private static Item registerConversionItem(CursedChestBlock from, CursedChestBlock to)
 	{
 		String fromName = Registry.BLOCK.getId(from).getPath();
 		String toName = Registry.BLOCK.getId(to).getPath();

@@ -1,7 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.api.block;
 
-import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
-import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 import gd.rf.ninjaphenix.cursedchests.api.inventory.DoubleSidedInventory;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -41,20 +40,20 @@ import net.minecraft.world.World;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class VerticalChestBlock extends BlockWithEntity implements Waterloggable, InventoryProvider
+public class CursedChestBlock extends BlockWithEntity implements Waterloggable, InventoryProvider
 {
 	@Override public BlockEntity createBlockEntity(BlockView var1)
 	{
 		Identifier id = Registry.BLOCK.getId(this);
-		VerticalChestBlockEntity blockEntity = new VerticalChestBlockEntity(id);
+		CursedChestBlockEntity blockEntity = new CursedChestBlockEntity(id);
 		return blockEntity;
 	}
 
 	interface PropertyRetriever<T>
 	{
-		T getFromDoubleChest(VerticalChestBlockEntity var1, VerticalChestBlockEntity var2);
+		T getFromDoubleChest(CursedChestBlockEntity var1, CursedChestBlockEntity var2);
 
-		T getFromSingleChest(VerticalChestBlockEntity var1);
+		T getFromSingleChest(CursedChestBlockEntity var1);
 	}
 
 	private static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
@@ -67,24 +66,24 @@ public class VerticalChestBlock extends BlockWithEntity implements Waterloggable
 
 	private static final PropertyRetriever<SidedInventory> INVENTORY_RETRIEVER = new PropertyRetriever<SidedInventory>()
 	{
-		@Override public SidedInventory getFromDoubleChest(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity){ return new DoubleSidedInventory(bottomChestBlockEntity, topChestBlockEntity); }
+		@Override public SidedInventory getFromDoubleChest(CursedChestBlockEntity bottomChestBlockEntity, CursedChestBlockEntity topChestBlockEntity){ return new DoubleSidedInventory(bottomChestBlockEntity, topChestBlockEntity); }
 
-		@Override public SidedInventory getFromSingleChest(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity; }
+		@Override public SidedInventory getFromSingleChest(CursedChestBlockEntity chestBlockEntity){ return chestBlockEntity; }
 	};
 
 	private static final PropertyRetriever<Component> NAME_RETRIEVER = new PropertyRetriever<Component>()
 	{
-		@Override public Component getFromDoubleChest(VerticalChestBlockEntity bottomChestBlockEntity, VerticalChestBlockEntity topChestBlockEntity)
+		@Override public Component getFromDoubleChest(CursedChestBlockEntity bottomChestBlockEntity, CursedChestBlockEntity topChestBlockEntity)
 		{
 			if (bottomChestBlockEntity.hasCustomName()) return bottomChestBlockEntity.getDisplayName();
 			if (topChestBlockEntity.hasCustomName()) return topChestBlockEntity.getDisplayName();
 			return new TranslatableComponent(DOUBLE_PREFIX, bottomChestBlockEntity.getDisplayName());
 		}
 
-		@Override public Component getFromSingleChest(VerticalChestBlockEntity chestBlockEntity){ return chestBlockEntity.getDisplayName(); }
+		@Override public Component getFromSingleChest(CursedChestBlockEntity chestBlockEntity){ return chestBlockEntity.getDisplayName(); }
 	};
 
-	public VerticalChestBlock(Settings settings)
+	public CursedChestBlock(Settings settings)
 	{
 		super(settings);
 		setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false).with(TYPE, VerticalChestType.SINGLE));
@@ -172,7 +171,7 @@ public class VerticalChestBlock extends BlockWithEntity implements Waterloggable
 		if (stack.hasDisplayName())
 		{
 			BlockEntity blockEntity = world.getBlockEntity(pos);
-			if (blockEntity instanceof VerticalChestBlockEntity) ((VerticalChestBlockEntity) blockEntity).setCustomName(stack.getDisplayName());
+			if (blockEntity instanceof CursedChestBlockEntity) ((CursedChestBlockEntity) blockEntity).setCustomName(stack.getDisplayName());
 		}
 	}
 
@@ -225,8 +224,8 @@ public class VerticalChestBlock extends BlockWithEntity implements Waterloggable
 	private static <T> T retrieve(BlockState state_1, IWorld world, BlockPos pos_1, PropertyRetriever<T> var_1)
 	{
 		BlockEntity blockEntity_1 = world.getBlockEntity(pos_1);
-		if (!(blockEntity_1 instanceof VerticalChestBlockEntity) || isChestBlocked(world, pos_1)) return null;
-		VerticalChestBlockEntity chestBlockEntity1 = (VerticalChestBlockEntity) blockEntity_1;
+		if (!(blockEntity_1 instanceof CursedChestBlockEntity) || isChestBlocked(world, pos_1)) return null;
+		CursedChestBlockEntity chestBlockEntity1 = (CursedChestBlockEntity) blockEntity_1;
 		VerticalChestType chestType_1 = state_1.get(TYPE);
 		if (chestType_1 == VerticalChestType.SINGLE) return var_1.getFromSingleChest(chestBlockEntity1);
 		BlockPos pos_2;
@@ -240,10 +239,10 @@ public class VerticalChestBlock extends BlockWithEntity implements Waterloggable
 			{
 				if (isChestBlocked(world, pos_2)) return null;
 				BlockEntity blockEntity_2 = world.getBlockEntity(pos_2);
-				if (blockEntity_2 instanceof VerticalChestBlockEntity)
+				if (blockEntity_2 instanceof CursedChestBlockEntity)
 				{
-					VerticalChestBlockEntity chestBlockEntity_2 = chestType_1 == VerticalChestType.TOP ? chestBlockEntity1 : (VerticalChestBlockEntity) blockEntity_2;
-					VerticalChestBlockEntity chestBlockEntity_3 = chestType_1 == VerticalChestType.TOP ? (VerticalChestBlockEntity) blockEntity_2 : chestBlockEntity1;
+					CursedChestBlockEntity chestBlockEntity_2 = chestType_1 == VerticalChestType.TOP ? chestBlockEntity1 : (CursedChestBlockEntity) blockEntity_2;
+					CursedChestBlockEntity chestBlockEntity_3 = chestType_1 == VerticalChestType.TOP ? (CursedChestBlockEntity) blockEntity_2 : chestBlockEntity1;
 					return var_1.getFromDoubleChest(chestBlockEntity_2, chestBlockEntity_3);
 				}
 			}

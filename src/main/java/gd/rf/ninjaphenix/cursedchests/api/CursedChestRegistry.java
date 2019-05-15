@@ -1,7 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.api;
 
-import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
-import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -18,11 +17,11 @@ public class CursedChestRegistry
 {
 	private static HashMap<Identifier, CursedChest> blockdataMap = new HashMap<>();
 
+	// Prevents old worlds from crashing ( just in case anyone does update with existing chests )
 	static{
 		Identifier id = new Identifier("null", "null");
 		blockdataMap.put(id, new CursedChest(0, id, id, new TextComponent("Error")));
 	}
-
 
 	/**
 	 * Registers a new chest block. Currently only used by the ItemRenderer Mixin to correctly render chest blocks in inventories, otherwise they will look like vanilla chests.
@@ -50,9 +49,9 @@ public class CursedChestRegistry
 	 * @return An instance of that block's block entity.
 	 * @since 1.0.5
 	 */
-	public static VerticalChestBlockEntity getChestBlockEntity(Identifier block)
+	public static CursedChestBlockEntity getChestBlockEntity(Identifier block)
 	{
-		VerticalChestBlockEntity be = (VerticalChestBlockEntity) Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "vertical_chest")).instantiate();
+		CursedChestBlockEntity be = (CursedChestBlockEntity) Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "cursed_chest")).instantiate();
 		be.setBlock(block);
 		return be;
 	}
@@ -84,12 +83,12 @@ public class CursedChestRegistry
 
 	static class CursedChest
 	{
-		public final int slots;
-		public final Identifier singleTexture;
-		public final Identifier tallTexture;
-		public final Component containerName;
+		final int slots;
+		final Identifier singleTexture;
+		final Identifier tallTexture;
+		final Component containerName;
 
-		public CursedChest(int slots, Identifier singleTexture, Identifier tallTexture, Component containerName)
+		CursedChest(int slots, Identifier singleTexture, Identifier tallTexture, Component containerName)
 		{
 			this.slots = slots;
 			this.singleTexture = singleTexture;

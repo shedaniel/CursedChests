@@ -1,7 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests.api.block.entity;
 
 import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
-import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import gd.rf.ninjaphenix.cursedchests.api.inventory.DoubleSidedInventory;
@@ -36,7 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @EnvironmentInterfaces({@EnvironmentInterface(value = EnvType.CLIENT, itf = ChestAnimationProgress.class)})
-public class VerticalChestBlockEntity extends LootableContainerBlockEntity implements ChestAnimationProgress, Tickable, SidedInventory
+public class CursedChestBlockEntity extends LootableContainerBlockEntity implements ChestAnimationProgress, Tickable, SidedInventory
 {
 	private Component defaultContainerName;
 	private int inventorySize;
@@ -50,17 +50,17 @@ public class VerticalChestBlockEntity extends LootableContainerBlockEntity imple
 	// May be Identifier("null", "null")
 	private Identifier block;
 
-	public VerticalChestBlockEntity()
+	public CursedChestBlockEntity()
 	{
-		this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "vertical_chest")), new Identifier("null", "null"));
+		this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "cursed_chest")), new Identifier("null", "null"));
 	}
 
-	public VerticalChestBlockEntity(Identifier block)
+	public CursedChestBlockEntity(Identifier block)
 	{
-		this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "vertical_chest")), block);
+		this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "cursed_chest")), block);
 	}
 
-	public VerticalChestBlockEntity(BlockEntityType type, Identifier block)
+	public CursedChestBlockEntity(BlockEntityType type, Identifier block)
 	{
 		super(type);
 		this.initialize(block);
@@ -130,18 +130,8 @@ public class VerticalChestBlockEntity extends LootableContainerBlockEntity imple
 
 	@Override public CompoundTag toTag(CompoundTag tag)
 	{
-		tag.putString("id", new Identifier("cursedchests", "vertical_chest").toString());
-		tag.putInt("x", this.pos.getX());
-		tag.putInt("y", this.pos.getY());
-		tag.putInt("z", this.pos.getZ());
-		if (getCustomName() != null) tag.putString("CustomName", Component.Serializer.toJsonString(this.getCustomName()));
-		if (block == null)
-		{
-			Identifier type = BlockEntityType.getId(this.getType());
-			tag.putString("id", "cursedchests:vertical_chest");
-			tag.putString("type", "cursedchests:"+type.getPath().split("_")[0]+"_chest");
-		}
-		else tag.putString("type", block.toString());
+		super.toTag(tag);
+		tag.putString("type", block.toString());
 		if (!serializeLootTable(tag)) Inventories.toTag(tag, inventory);
 		return tag;
 	}
@@ -168,13 +158,13 @@ public class VerticalChestBlockEntity extends LootableContainerBlockEntity imple
 		}
 	}
 
-	private static int tickViewerCount(World world, VerticalChestBlockEntity instance, int ticksOpen, int x, int y, int z, int viewCount)
+	private static int tickViewerCount(World world, CursedChestBlockEntity instance, int ticksOpen, int x, int y, int z, int viewCount)
 	{
 		if (!world.isClient && viewCount != 0 && (ticksOpen + x + y + z) % 200 == 0) { return countViewers(world, instance, x, y, z); }
 		return viewCount;
 	}
 
-	private static int countViewers(World world, VerticalChestBlockEntity instance, int x, int y, int z)
+	private static int countViewers(World world, CursedChestBlockEntity instance, int x, int y, int z)
 	{
 		int viewers = 0;
 		List<PlayerEntity> playersInRange = world.getEntities(PlayerEntity.class, new BoundingBox(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6));
@@ -199,7 +189,7 @@ public class VerticalChestBlockEntity extends LootableContainerBlockEntity imple
 	private void playSound(SoundEvent soundEvent)
 	{
 		double z = pos.getZ();
-		VerticalChestType chestType = getCachedState().get(VerticalChestBlock.TYPE);
+		VerticalChestType chestType = getCachedState().get(CursedChestBlock.TYPE);
 		if (chestType == VerticalChestType.SINGLE) z += 0.5D;
 		else if (chestType == VerticalChestType.BOTTOM) return;
 		world.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, z, soundEvent, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
@@ -223,7 +213,7 @@ public class VerticalChestBlockEntity extends LootableContainerBlockEntity imple
 	private void onInvOpenOrClose()
 	{
 		Block block = getCachedState().getBlock();
-		if (block instanceof VerticalChestBlock)
+		if (block instanceof CursedChestBlock)
 		{
 			world.addBlockAction(pos, block, 1, viewerCount);
 			world.updateNeighborsAlways(pos, block);

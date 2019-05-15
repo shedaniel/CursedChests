@@ -1,8 +1,8 @@
 package gd.rf.ninjaphenix.cursedchests.mixins;
 
 import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
-import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
-import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -26,9 +26,9 @@ public class ItemDynamicRenderer
 		if (item instanceof BlockItem)
 		{
 			Block block = ((BlockItem) item).getBlock();
-			if (block instanceof VerticalChestBlock)
+			if (block instanceof CursedChestBlock)
 			{
-				VerticalChestBlockEntity blockEntity = CursedChestRegistry.getChestBlockEntity(Registry.BLOCK.getId(block));
+				CursedChestBlockEntity blockEntity = CursedChestRegistry.getChestBlockEntity(Registry.BLOCK.getId(block));
 				if (blockEntity != null)
 				{
 					BlockEntityRenderDispatcher.INSTANCE.renderEntity(blockEntity);

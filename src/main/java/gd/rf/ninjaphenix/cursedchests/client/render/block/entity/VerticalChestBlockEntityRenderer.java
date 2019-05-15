@@ -2,9 +2,9 @@ package gd.rf.ninjaphenix.cursedchests.client.render.block.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
-import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
-import gd.rf.ninjaphenix.cursedchests.api.block.entity.VerticalChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import gd.rf.ninjaphenix.cursedchests.client.render.entity.model.TallChestEntityModel;
 import net.fabricmc.api.EnvType;
@@ -18,18 +18,18 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 
 @Environment(EnvType.CLIENT)
-public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<VerticalChestBlockEntity>
+public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<CursedChestBlockEntity>
 {
 	private final ChestEntityModel modelSingleChest = new ChestEntityModel();
 	private final ChestEntityModel modelTallChest = new TallChestEntityModel();
 
-	@Override public void render(VerticalChestBlockEntity blockEntity, double x, double y, double z, float lidPitch, int breaking_stage)
+	@Override public void render(CursedChestBlockEntity blockEntity, double x, double y, double z, float lidPitch, int breaking_stage)
 	{
 		GlStateManager.enableDepthTest();
 		GlStateManager.depthFunc(515);
 		GlStateManager.depthMask(true);
-		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : ModBlocks.wood_chest.getDefaultState().with(VerticalChestBlock.FACING, Direction.SOUTH);
-		VerticalChestType chestType = state.get(VerticalChestBlock.TYPE);
+		BlockState state = blockEntity.hasWorld() ? blockEntity.getCachedState() : ModBlocks.wood_chest.getDefaultState().with(CursedChestBlock.FACING, Direction.SOUTH);
+		VerticalChestType chestType = state.get(CursedChestBlock.TYPE);
 		boolean isDouble = chestType != VerticalChestType.SINGLE;
 		if (chestType == VerticalChestType.TOP && breaking_stage < 0) return;
 		Identifier b = blockEntity.getBlock();
@@ -78,7 +78,7 @@ public class VerticalChestBlockEntityRenderer extends BlockEntityRenderer<Vertic
 		return isTall ? modelTallChest : modelSingleChest;
 	}
 
-	private void setLidPitch(VerticalChestBlockEntity blockEntity, float lidPitch, ChestEntityModel model)
+	private void setLidPitch(CursedChestBlockEntity blockEntity, float lidPitch, ChestEntityModel model)
 	{
 		float newPitch = 1.0F - blockEntity.getAnimationProgress(lidPitch);
 		model.method_2798().pitch = -((1.0F - newPitch * newPitch * newPitch) * 1.5707964F);
