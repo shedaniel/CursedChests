@@ -66,21 +66,21 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 
 	private static final PropertyRetriever<SidedInventory> INVENTORY_RETRIEVER = new PropertyRetriever<SidedInventory>()
 	{
-		@Override public SidedInventory getFromDoubleChest(CursedChestBlockEntity bottomChestBlockEntity, CursedChestBlockEntity topChestBlockEntity){ return new DoubleSidedInventory(bottomChestBlockEntity, topChestBlockEntity); }
+		@Override public SidedInventory getFromDoubleChest(CursedChestBlockEntity mainBlockEntity, CursedChestBlockEntity secondaryBlockEntity){ return new DoubleSidedInventory(mainBlockEntity, secondaryBlockEntity); }
 
-		@Override public SidedInventory getFromSingleChest(CursedChestBlockEntity chestBlockEntity){ return chestBlockEntity; }
+		@Override public SidedInventory getFromSingleChest(CursedChestBlockEntity mainBlockEntity){ return mainBlockEntity; }
 	};
 
 	private static final PropertyRetriever<Component> NAME_RETRIEVER = new PropertyRetriever<Component>()
 	{
-		@Override public Component getFromDoubleChest(CursedChestBlockEntity bottomChestBlockEntity, CursedChestBlockEntity topChestBlockEntity)
+		@Override public Component getFromDoubleChest(CursedChestBlockEntity mainBlockEntity, CursedChestBlockEntity secondaryBlockEntity)
 		{
-			if (bottomChestBlockEntity.hasCustomName()) return bottomChestBlockEntity.getDisplayName();
-			if (topChestBlockEntity.hasCustomName()) return topChestBlockEntity.getDisplayName();
-			return new TranslatableComponent(DOUBLE_PREFIX, bottomChestBlockEntity.getDisplayName());
+			if (mainBlockEntity.hasCustomName()) return mainBlockEntity.getDisplayName();
+			if (secondaryBlockEntity.hasCustomName()) return secondaryBlockEntity.getDisplayName();
+			return new TranslatableComponent(DOUBLE_PREFIX, mainBlockEntity.getDisplayName());
 		}
 
-		@Override public Component getFromSingleChest(CursedChestBlockEntity chestBlockEntity){ return chestBlockEntity.getDisplayName(); }
+		@Override public Component getFromSingleChest(CursedChestBlockEntity mainBlockEntity){ return mainBlockEntity.getDisplayName(); }
 	};
 
 	public CursedChestBlock(Settings settings)
@@ -221,33 +221,33 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		}));
 	}
 
-	private static <T> T retrieve(BlockState state_1, IWorld world, BlockPos pos_1, PropertyRetriever<T> var_1)
+	private static <T> T retrieve(BlockState clickedState, IWorld world, BlockPos clickedPos, PropertyRetriever<T> propertyRetriever)
 	{
-		BlockEntity blockEntity_1 = world.getBlockEntity(pos_1);
-		if (!(blockEntity_1 instanceof CursedChestBlockEntity) || isChestBlocked(world, pos_1)) return null;
-		CursedChestBlockEntity chestBlockEntity1 = (CursedChestBlockEntity) blockEntity_1;
-		VerticalChestType chestType_1 = state_1.get(TYPE);
-		if (chestType_1 == VerticalChestType.SINGLE) return var_1.getFromSingleChest(chestBlockEntity1);
-		BlockPos pos_2;
-		if (chestType_1 == VerticalChestType.TOP) pos_2 = pos_1.offset(Direction.DOWN);
-		else pos_2 = pos_1.offset(Direction.UP);
-		BlockState state_2 = world.getBlockState(pos_2);
-		if (state_2.getBlock() == state_1.getBlock())
+		BlockEntity clickedBlockEntity = world.getBlockEntity(clickedPos);
+		if (!(clickedBlockEntity instanceof CursedChestBlockEntity) || isChestBlocked(world, clickedPos)) return null;
+		CursedChestBlockEntity clickedChestBlockEntity = (CursedChestBlockEntity) clickedBlockEntity;
+		VerticalChestType clickedChestType = clickedState.get(TYPE);
+		if (clickedChestType == VerticalChestType.SINGLE) return propertyRetriever.getFromSingleChest(clickedChestBlockEntity);
+		BlockPos pairedPos;
+		if (clickedChestType == VerticalChestType.TOP) pairedPos = clickedPos.offset(Direction.DOWN);
+		else pairedPos = clickedPos.offset(Direction.UP);
+		BlockState pairedState = world.getBlockState(pairedPos);
+		if (pairedState.getBlock() == clickedState.getBlock())
 		{
-			VerticalChestType chestType_2 = state_2.get(TYPE);
-			if (chestType_2 != VerticalChestType.SINGLE && chestType_1 != chestType_2 && state_2.get(FACING) == state_1.get(FACING))
+			VerticalChestType pairedChestType = pairedState.get(TYPE);
+			if (pairedChestType != VerticalChestType.SINGLE && clickedChestType != pairedChestType && pairedState.get(FACING) == clickedState.get(FACING))
 			{
-				if (isChestBlocked(world, pos_2)) return null;
-				BlockEntity blockEntity_2 = world.getBlockEntity(pos_2);
-				if (blockEntity_2 instanceof CursedChestBlockEntity)
+				if (isChestBlocked(world, pairedPos)) return null;
+				BlockEntity pairedBlockEntity = world.getBlockEntity(pairedPos);
+				if (pairedBlockEntity instanceof CursedChestBlockEntity)
 				{
-					CursedChestBlockEntity chestBlockEntity_2 = chestType_1 == VerticalChestType.TOP ? chestBlockEntity1 : (CursedChestBlockEntity) blockEntity_2;
-					CursedChestBlockEntity chestBlockEntity_3 = chestType_1 == VerticalChestType.TOP ? (CursedChestBlockEntity) blockEntity_2 : chestBlockEntity1;
-					return var_1.getFromDoubleChest(chestBlockEntity_2, chestBlockEntity_3);
+					CursedChestBlockEntity mainChestBlockEntity = clickedChestType == VerticalChestType.TOP ? (CursedChestBlockEntity) pairedBlockEntity :  clickedChestBlockEntity;
+					CursedChestBlockEntity secondaryChestBlockEntity = clickedChestType == VerticalChestType.TOP ? clickedChestBlockEntity : (CursedChestBlockEntity) pairedBlockEntity;
+					return propertyRetriever.getFromDoubleChest(mainChestBlockEntity, secondaryChestBlockEntity);
 				}
 			}
 		}
-		return var_1.getFromSingleChest(chestBlockEntity1);
+		return propertyRetriever.getFromSingleChest(clickedChestBlockEntity);
 	}
 
 	private static boolean hasBlockOnTop(BlockView view, BlockPos pos)
