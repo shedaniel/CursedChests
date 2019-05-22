@@ -62,30 +62,26 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 	private static final VoxelShape SINGLE_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 15);
 	private static final VoxelShape TOP_SHAPE = Block.createCuboidShape(1, -16, 1, 15, 14, 15);
 	private static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 30, 15);
-
 	//private static final VoxelShape LEFT_NORTH_SHAPE = Block.createCuboidShape(1-16, 0, 1, 15, 14, 15);     // a
 	//private static final VoxelShape LEFT_SOUTH_SHAPE = Block.createCuboidShape(1, 0, 1, 31, 14, 15);        // b
 	//private static final VoxelShape LEFT_WEST_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 31);         // c
 	//private static final VoxelShape LEFT_EAST_SHAPE = Block.createCuboidShape(1, 0, 1-16, 15, 14, 15);      // d
-
 	//private static final VoxelShape RIGHT_NORTH_SHAPE = Block.createCuboidShape(1, 0, 1, 31, 14, 15);       // b
 	//private static final VoxelShape RIGHT_SOUTH_SHAPE = Block.createCuboidShape(1-16, 0, 1, 15, 14, 15);    // a
 	//private static final VoxelShape RIGHT_WEST_SHAPE = Block.createCuboidShape(1, 0, 1-16, 15, 14, 15);     // d
 	//private static final VoxelShape RIGHT_EAST_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 31);        // c
-
 	//private static final VoxelShape FRONT_NORTH_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 31);       // c
 	//private static final VoxelShape FRONT_SOUTH_SHAPE = Block.createCuboidShape(1, 0, 1-16, 15, 14, 15);    // d
 	//private static final VoxelShape FRONT_WEST_SHAPE = Block.createCuboidShape(1, 0, 1, 31, 14, 15);        // b
 	//private static final VoxelShape FRONT_EAST_SHAPE = Block.createCuboidShape(1-16, 0, 1, 15, 14, 15);     // a
-
 	//private static final VoxelShape BACK_NORTH_SHAPE = Block.createCuboidShape(1, 0, 1-16, 15, 14, 15);     // d
 	//private static final VoxelShape BACK_SOUTH_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 31);        // c
 	//private static final VoxelShape BACK_WEST_SHAPE = Block.createCuboidShape(1-16, 0, 1, 15, 14, 15);      // a
 	//private static final VoxelShape BACK_EAST_SHAPE = Block.createCuboidShape(1, 0, 1, 31, 14, 15);         // b
 
 	private static final VoxelShape A = Block.createCuboidShape(1, 0, 1, 31, 14, 15);     // a
-	private static final VoxelShape B = Block.createCuboidShape(1-16, 0, 1, 15, 14, 15);        // b
-	private static final VoxelShape C = Block.createCuboidShape(1, 0, 1-16, 15, 14, 15);         // c
+	private static final VoxelShape B = Block.createCuboidShape(1 - 16, 0, 1, 15, 14, 15);        // b
+	private static final VoxelShape C = Block.createCuboidShape(1, 0, 1 - 16, 15, 14, 15);         // c
 	private static final VoxelShape D = Block.createCuboidShape(1, 0, 1, 15, 14, 31);      // d
 
 	protected static final String DOUBLE_PREFIX = "container.cursedchests.generic_double";
@@ -147,7 +143,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 			case TOP: return TOP_SHAPE;
 			case BOTTOM: return BOTTOM_SHAPE;
 			case FRONT:
-				switch(state.get(FACING))
+				switch (state.get(FACING))
 				{
 					case NORTH:
 						return D;
@@ -159,7 +155,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 						return A;
 				}
 			case BACK:
-				switch(state.get(FACING))
+				switch (state.get(FACING))
 				{
 					case NORTH:
 						return C;
@@ -171,7 +167,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 						return B;
 				}
 			case LEFT:
-				switch(state.get(FACING))
+				switch (state.get(FACING))
 				{
 					case NORTH:
 						return B;
@@ -183,7 +179,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 						return D;
 				}
 			case RIGHT:
-				switch(state.get(FACING))
+				switch (state.get(FACING))
 				{
 					case NORTH:
 						return A;
@@ -206,20 +202,57 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		Direction direction_1 = context.getPlayerHorizontalFacing().getOpposite();
 		Direction direction_2 = context.getFacing();
 		boolean sneaking = context.isPlayerSneaking();
-		if (direction_2.getAxis().isVertical() && sneaking)
+		if (sneaking)
 		{
-			BlockState state = world.getBlockState(pos.offset(direction_2.getOpposite()));
-			Direction direction_3 = state.getBlock() == this && state.get(TYPE) == CursedChestType.SINGLE ? state.get(FACING) : null;
-			if (direction_3 != null && direction_3.getAxis() != direction_2.getAxis() && direction_3 == direction_1) chestType = direction_2 == Direction.UP ? CursedChestType.TOP : CursedChestType.BOTTOM;
-		}
-		else if (!sneaking)
-		{
-			BlockState aboveBlockState = world.getBlockState(pos.offset(Direction.UP));
-			if (aboveBlockState.getBlock() == this && aboveBlockState.get(TYPE) == CursedChestType.SINGLE && aboveBlockState.get(FACING) == direction_1) chestType = CursedChestType.BOTTOM;
+			BlockState state;
+			Direction direction_3;
+			if (direction_2.getAxis() == Direction.Axis.Y)
+			{
+				state = world.getBlockState(pos.offset(direction_2.getOpposite()));
+				direction_3 = state.getBlock() == this && state.get(TYPE) == CursedChestType.SINGLE ? state.get(FACING) : null;
+				if (direction_3 != null && direction_3.getAxis() != direction_2.getAxis() && direction_3 == direction_1) chestType = direction_2 == Direction.UP ? CursedChestType.TOP : CursedChestType.BOTTOM;
+			}
 			else
 			{
-				BlockState belowBlockState = world.getBlockState(pos.offset(Direction.DOWN));
-				if (belowBlockState.getBlock() == this && belowBlockState.get(TYPE) == CursedChestType.SINGLE && belowBlockState.get(FACING) == direction_1) chestType = CursedChestType.TOP;
+				Direction offsetDir = direction_2.getOpposite();
+				BlockState clickedBlock = world.getBlockState(pos.offset(offsetDir));
+				if (clickedBlock.getBlock() == this)
+				{
+					if (clickedBlock.get(TYPE) == CursedChestType.SINGLE)
+					{
+						if (clickedBlock.get(FACING) == offsetDir || clickedBlock.get(FACING) == direction_2)
+						{
+							if (clickedBlock.get(FACING) == direction_2) chestType = CursedChestType.FRONT;
+						}
+						else
+						{
+							state = world.getBlockState(pos.offset(direction_2.getOpposite()));
+							if (state.get(FACING).getHorizontal() < 2) offsetDir = offsetDir.getOpposite();
+							if (direction_1 == state.get(FACING))
+							{
+								if (offsetDir == Direction.WEST || offsetDir == Direction.NORTH) chestType = CursedChestType.LEFT;
+								else chestType = CursedChestType.RIGHT;
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			BlockState state;
+			Direction rdir;
+			for (Direction dir : Direction.values())
+			{
+				rdir = dir;
+				state = world.getBlockState(pos.offset(rdir));
+				if (state.getBlock() != this) continue;
+				if (state.get(FACING).getHorizontal() < 2) rdir = dir.getOpposite();
+				if (state.getBlock() == this && state.get(TYPE) == CursedChestType.SINGLE && state.get(FACING) == direction_1)
+				{
+					chestType = CursedChestType.typeOf(rdir);
+					break;
+				}
 			}
 		}
 		return getDefaultState().with(FACING, direction_1).with(TYPE, chestType).with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
@@ -227,17 +260,17 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 
 	@Override public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState otherState, IWorld world, BlockPos pos, BlockPos otherPos)
 	{
-		if (state.get(WATERLOGGED)) world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
-		if (state.get(TYPE) == CursedChestType.TOP && world.getBlockState(pos.offset(Direction.DOWN)).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
-		if (state.get(TYPE) == CursedChestType.BOTTOM && world.getBlockState(pos.offset(Direction.UP)).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
-		if (state.get(TYPE) == CursedChestType.SINGLE && direction.getAxis().isVertical())
-		{
-			BlockState realOtherState = world.getBlockState(pos.offset(direction));
-			if (!realOtherState.contains(TYPE)) return state.with(TYPE, CursedChestType.SINGLE);
-			if (direction == Direction.UP && realOtherState.get(TYPE) == CursedChestType.TOP) return state.with(TYPE, CursedChestType.BOTTOM);
-			if (direction == Direction.DOWN && realOtherState.get(TYPE) == CursedChestType.BOTTOM) return state.with(TYPE, CursedChestType.TOP);
-			return state.with(TYPE, CursedChestType.SINGLE);
-		}
+		//if (state.get(WATERLOGGED)) world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+		//if (state.get(TYPE) == CursedChestType.TOP && world.getBlockState(pos.offset(Direction.DOWN)).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
+		//if (state.get(TYPE) == CursedChestType.BOTTOM && world.getBlockState(pos.offset(Direction.UP)).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
+		//if (state.get(TYPE) == CursedChestType.SINGLE && direction.getAxis().isVertical())
+		//{
+		//	BlockState realOtherState = world.getBlockState(pos.offset(direction));
+		//	if (!realOtherState.contains(TYPE)) return state.with(TYPE, CursedChestType.SINGLE);
+		//	if (direction == Direction.UP && realOtherState.get(TYPE) == CursedChestType.TOP) return state.with(TYPE, CursedChestType.BOTTOM);
+		//	if (direction == Direction.DOWN && realOtherState.get(TYPE) == CursedChestType.BOTTOM) return state.with(TYPE, CursedChestType.TOP);
+		//	return state.with(TYPE, CursedChestType.SINGLE);
+		//}
 		return super.getStateForNeighborUpdate(state, direction, otherState, world, pos, otherPos);
 	}
 
@@ -316,7 +349,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 				BlockEntity pairedBlockEntity = world.getBlockEntity(pairedPos);
 				if (pairedBlockEntity instanceof CursedChestBlockEntity)
 				{
-					CursedChestBlockEntity mainChestBlockEntity = clickedChestType == CursedChestType.TOP ? (CursedChestBlockEntity) pairedBlockEntity :  clickedChestBlockEntity;
+					CursedChestBlockEntity mainChestBlockEntity = clickedChestType == CursedChestType.TOP ? (CursedChestBlockEntity) pairedBlockEntity : clickedChestBlockEntity;
 					CursedChestBlockEntity secondaryChestBlockEntity = clickedChestType == CursedChestType.TOP ? clickedChestBlockEntity : (CursedChestBlockEntity) pairedBlockEntity;
 					return propertyRetriever.getFromDoubleChest(mainChestBlockEntity, secondaryChestBlockEntity);
 				}

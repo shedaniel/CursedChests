@@ -1,6 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests.api.block;
 
 import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.math.Direction;
 
 public enum CursedChestType implements StringIdentifiable
 {
@@ -9,6 +10,27 @@ public enum CursedChestType implements StringIdentifiable
 	private final String name;
 
 	CursedChestType(String string){ name = string; }
+
+	public static CursedChestType typeOf(Direction dir)
+	{
+		switch(dir)
+		{
+			case UP:
+				return BOTTOM;
+			case DOWN:
+				return TOP;
+			case NORTH:
+				return BACK;
+			case SOUTH:
+				return FRONT;
+			case EAST:
+				return RIGHT;
+			case WEST:
+				return LEFT;
+			default:
+				return null;
+		}
+	}
 
 	public CursedChestType getOpposite(CursedChestType type)
 	{

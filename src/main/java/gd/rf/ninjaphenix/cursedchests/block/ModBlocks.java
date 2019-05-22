@@ -23,6 +23,20 @@ public class ModBlocks
 	public static CursedChestBlock diamond_chest;
 	public static CursedChestBlock obsidian_chest;
 
+	/*
+
+	Vanilla:
+	delete from 25 to 33
+	copy from 17 to 24 TO 27 to 34
+	copy from 21 to 23 TO 25 to 27
+
+	Long:
+	delete from 11 to 19
+	copy from 4 to 11 TO 12 to 19
+	copy from 19 to 20 TO 11 to 12
+
+	 */
+
 	public static void init()
 	{
 		wood_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "wood_chest", 3, new TranslatableComponent("container.cursedchests.wood_chest"),
