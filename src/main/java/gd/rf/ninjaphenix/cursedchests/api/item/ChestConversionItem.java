@@ -1,7 +1,7 @@
 package gd.rf.ninjaphenix.cursedchests.api.item;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
-import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
+import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -39,7 +39,7 @@ public class ChestConversionItem extends Item implements ChestModifier
 
 	public ChestConversionItem(Settings settings, CursedChestBlock from, CursedChestBlock to){ this(settings, Registry.BLOCK.getId(from), Registry.BLOCK.getId(to)); }
 
-	@Override public ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos topBlockPos)
+	@Override public ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos otherBlockPos)
 	{
 		if (world.isClient) return player.isSneaking() ? ActionResult.SUCCESS : ActionResult.FAIL;
 		BlockState mainBlockState = world.getBlockState(mainBlockPos);
@@ -49,18 +49,18 @@ public class ChestConversionItem extends Item implements ChestModifier
 		BlockEntity mainBlockEntity = world.getBlockEntity(mainBlockPos);
 		if (mainBlockEntity == null) return ActionResult.FAIL;
 		Direction rotation = mainBlockState.get(Properties.FACING_HORIZONTAL);
-		if (topBlockPos == null || (handStack.getAmount() == 1 && !player.isCreative()))
+		if (otherBlockPos == null || (handStack.getAmount() == 1 && !player.isCreative()))
 		{
 			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
 			if (!player.isCreative()) handStack.subtractAmount(1);
 		}
 		else
 		{
-			BlockEntity topBlockEntity = world.getBlockEntity(topBlockPos);
+			BlockEntity topBlockEntity = world.getBlockEntity(otherBlockPos);
 			if (topBlockEntity == null) return ActionResult.FAIL;
 			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
-			upgradeChest(world, topBlockPos, topBlockEntity, rotation);
-			world.setBlockState(topBlockPos, world.getBlockState(topBlockPos).with(CursedChestBlock.TYPE, VerticalChestType.TOP));
+			upgradeChest(world, otherBlockPos, topBlockEntity, rotation);
+			world.setBlockState(otherBlockPos, world.getBlockState(otherBlockPos).with(CursedChestBlock.TYPE, CursedChestType.TOP));
 			if (!player.isCreative()) handStack.subtractAmount(2);
 		}
 		return ActionResult.FAIL;

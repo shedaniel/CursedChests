@@ -2,7 +2,7 @@ package gd.rf.ninjaphenix.cursedchests.api.block.entity;
 
 import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
-import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
+import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import gd.rf.ninjaphenix.cursedchests.api.inventory.DoubleSidedInventory;
 import net.fabricmc.api.EnvType;
@@ -189,9 +189,9 @@ public class CursedChestBlockEntity extends LootableContainerBlockEntity impleme
 	private void playSound(SoundEvent soundEvent)
 	{
 		double z = pos.getZ();
-		VerticalChestType chestType = getCachedState().get(CursedChestBlock.TYPE);
-		if (chestType == VerticalChestType.SINGLE) z += 0.5D;
-		else if (chestType == VerticalChestType.BOTTOM) return;
+		CursedChestType chestType = getCachedState().get(CursedChestBlock.TYPE);
+		if (chestType == CursedChestType.SINGLE) z += 0.5D;
+		else if (chestType == CursedChestType.BOTTOM) return;
 		world.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, z, soundEvent, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
 	}
 

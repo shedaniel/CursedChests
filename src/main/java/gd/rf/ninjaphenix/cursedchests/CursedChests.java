@@ -1,13 +1,13 @@
 package gd.rf.ninjaphenix.cursedchests;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
-import gd.rf.ninjaphenix.cursedchests.api.block.VerticalChestType;
+import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 import gd.rf.ninjaphenix.cursedchests.api.client.gui.container.ScrollableScreen;
 import gd.rf.ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import gd.rf.ninjaphenix.cursedchests.api.item.ChestModifier;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
-import gd.rf.ninjaphenix.cursedchests.client.render.block.entity.VerticalChestBlockEntityRenderer;
+import gd.rf.ninjaphenix.cursedchests.client.render.block.entity.CursedChestBlockEntityRenderer;
 import gd.rf.ninjaphenix.cursedchests.item.ModItems;
 import net.fabricmc.api.*;
 import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry;
@@ -53,10 +53,10 @@ public class CursedChests implements ModInitializer, ClientModInitializer
 				if (world.getBlockState(hitBlockPos).getBlock() instanceof CursedChestBlock)
 				{
 					BlockState usedChestBlockState = world.getBlockState(hitBlockPos);
-					VerticalChestType type = usedChestBlockState.get(CursedChestBlock.TYPE);
-					if (type == VerticalChestType.SINGLE) return ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, null);
-					else if (type == VerticalChestType.TOP) return ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos.offset(Direction.DOWN), hitBlockPos);
-					else if (type == VerticalChestType.BOTTOM) return ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, hitBlockPos.offset(Direction.UP));
+					CursedChestType type = usedChestBlockState.get(CursedChestBlock.TYPE);
+					if (type == CursedChestType.SINGLE) return ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, null);
+					else if (type == CursedChestType.TOP) return ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos.offset(Direction.DOWN), hitBlockPos);
+					else if (type == CursedChestType.BOTTOM) return ((ChestModifier) handItem).useOnChest(world, player, hand, hitResult, hitBlockPos, hitBlockPos.offset(Direction.UP));
 				}
 			}
 			return ActionResult.PASS;
@@ -65,7 +65,7 @@ public class CursedChests implements ModInitializer, ClientModInitializer
 
 	@Environment(EnvType.CLIENT) @Override public void onInitializeClient()
 	{
-		BlockEntityRendererRegistry.INSTANCE.register(CursedChestBlockEntity.class, new VerticalChestBlockEntityRenderer());
+		BlockEntityRendererRegistry.INSTANCE.register(CursedChestBlockEntity.class, new CursedChestBlockEntityRenderer());
 		ScreenProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ScrollableScreen::createScreen);
 	}
 }

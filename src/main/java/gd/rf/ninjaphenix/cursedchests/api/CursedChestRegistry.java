@@ -1,5 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.api;
 
+import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -20,24 +21,26 @@ public class CursedChestRegistry
 	// Prevents old worlds from crashing ( just in case anyone does update with existing chests )
 	static{
 		Identifier id = new Identifier("null", "null");
-		blockdataMap.put(id, new CursedChest(0, id, id, new TextComponent("Error")));
+		blockdataMap.put(id, new CursedChest(0, new TextComponent("Error"), id, id, id, id));
 	}
 
 	/**
 	 * Registers a new chest block. Currently only used by the ItemRenderer Mixin to correctly render chest blocks in inventories, otherwise they will look like vanilla chests.
 	 *
-	 * @param block        The identifier for the vertical chest block.
-	 * @param rows          The amount of slot rows the chest should have.
-	 * @param singleTexture The texture for when the chest is single.
-	 * @param tallTexture   The texture for when the chest is tall.
-	 * @param containerName The name of the chest inside of the container.
-	 * @throws AssertionError Thrown when block is null or already registered.
+	 * @param block            The identifier for the vertical chest block.
+	 * @param rows             The amount of slot rows the chest should have.
+	 * @param containerName    The name of the chest inside of the container.
+	 * @param singleTexture    The texture for when the chest is single style.
+	 * @param vanillaTexture   The texture for when the chest is vanilla style.
+	 * @param tallTexture      The texture for when the chest is tall style.
+	 * @param longTexture      The texture for when the chest is long style.
+	 * @throws AssertionError  Thrown when block is null or already registered.
 	 * @since 1.0.5
 	 */
-	public static void registerChest(Identifier block, int rows, Identifier singleTexture, Identifier tallTexture, TranslatableComponent containerName)
+	public static void registerChest(Identifier block, int rows, TranslatableComponent containerName, Identifier singleTexture, Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
 	{
 		assert block != null && blockdataMap.containsKey(block);
-		CursedChest data = new CursedChest(9 * rows, singleTexture, tallTexture, containerName);
+		CursedChest data = new CursedChest(9 * rows, containerName, singleTexture, vanillaTexture, tallTexture, longTexture);
 		blockdataMap.put(block, data);
 	}
 
@@ -60,13 +63,23 @@ public class CursedChestRegistry
 	 * Gets the identifier for the texture of the given chest.
 	 *
 	 * @param block  The identifier for the vertical chest block.
-	 * @param isTall Return tall texture if true else single texture.
+	 * @param type
 	 * @since 1.2.17
 	 */
-	public static Identifier getChestTexture(Identifier block, boolean isTall)
+	public static Identifier getChestTexture(Identifier block, CursedChestType type)
 	{
 		assert block != null && blockdataMap.containsKey(block);
-		return isTall ? blockdataMap.get(block).tallTexture : blockdataMap.get(block).singleTexture;
+		switch(type)
+		{
+			case BOTTOM:
+				return blockdataMap.get(block).tallTexture;
+			case LEFT:
+				return blockdataMap.get(block).vanillaTexure;
+			case FRONT:
+				return blockdataMap.get(block).longTexture;
+			default:
+				return blockdataMap.get(block).singleTexture;
+		}
 	}
 
 	public static int getSlots(Identifier block)
@@ -83,16 +96,20 @@ public class CursedChestRegistry
 
 	static class CursedChest
 	{
-		final int slots;
-		final Identifier singleTexture;
-		final Identifier tallTexture;
-		final Component containerName;
+		private final int slots;
+		private final Identifier singleTexture;
+		private final Identifier vanillaTexure;
+		private final Identifier tallTexture;
+		private final Identifier longTexture;
+		private final Component containerName;
 
-		CursedChest(int slots, Identifier singleTexture, Identifier tallTexture, Component containerName)
+		CursedChest(int slots, Component containerName, Identifier singleTexture, Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
 		{
 			this.slots = slots;
 			this.singleTexture = singleTexture;
+			this.vanillaTexure = vanillaTexture;
 			this.tallTexture = tallTexture;
+			this.longTexture = longTexture;
 			this.containerName = containerName;
 		}
 	}

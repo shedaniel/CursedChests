@@ -31,12 +31,12 @@ public interface ChestModifier
 	 * @param hand           The hand that the item was used from.
 	 * @param blockHitResult The hit result.
 	 * @param mainBlockPos   The block pos of the single or bottom chest.
-	 * @param topBlockPos    The block pos of the top chest block or null if the chest is a single chest.
+	 * @param otherBlockPos    The block pos of the top chest block or null if the chest is a single chest.
 	 * @return ActionResult
 	 * @see UseBlockCallback
 	 * @since 1.0.5
 	 */
-	default ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos topBlockPos){ return ActionResult.PASS; }
+	default ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos otherBlockPos){ return ActionResult.PASS; }
 
 	/**
 	 * This method is called automatically when an Item implementing this interface is used on an entity. ( Requires the cursed chest mod to be installed )
