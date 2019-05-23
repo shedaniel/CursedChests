@@ -32,7 +32,7 @@ public enum CursedChestType implements StringIdentifiable
 		}
 	}
 
-	public CursedChestType getOpposite(CursedChestType type)
+	public static CursedChestType getOpposite(CursedChestType type)
 	{
 		switch (type)
 		{

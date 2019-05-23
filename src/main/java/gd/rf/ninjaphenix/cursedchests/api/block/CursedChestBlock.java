@@ -194,6 +194,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		}
 	}
 
+	// todo: go over this to optimize it
 	@Override public BlockState getPlacementState(ItemPlacementContext context)
 	{
 		World world = context.getWorld();
@@ -240,17 +241,14 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		}
 		else
 		{
-			BlockState state;
-			Direction rdir;
 			for (Direction dir : Direction.values())
 			{
-				rdir = dir;
-				state = world.getBlockState(pos.offset(rdir));
-				if (state.getBlock() != this) continue;
-				if (state.get(FACING).getHorizontal() < 2) rdir = dir.getOpposite();
-				if (state.getBlock() == this && state.get(TYPE) == CursedChestType.SINGLE && state.get(FACING) == direction_1)
+				BlockState state = world.getBlockState(pos.offset(dir));
+				if (state.getBlock() != this || state.get(TYPE) != CursedChestType.SINGLE || state.get(FACING) != direction_1) continue;
+				CursedChestType type = getChestType(direction_1, dir);
+				if (type != CursedChestType.SINGLE)
 				{
-					chestType = CursedChestType.typeOf(rdir);
+					chestType = type;
 					break;
 				}
 			}
@@ -258,11 +256,28 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		return getDefaultState().with(FACING, direction_1).with(TYPE, chestType).with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
 	}
 
+	private CursedChestType getChestType(Direction facing, Direction offset)
+	{
+		if (facing.rotateYClockwise() == offset) return CursedChestType.RIGHT;
+		else if (facing.rotateYCounterclockwise() == offset) return CursedChestType.LEFT;
+		else if (facing == offset) return CursedChestType.BACK;
+		else if (facing == offset.getOpposite()) return CursedChestType.FRONT;
+		else if (offset == Direction.DOWN) return CursedChestType.TOP;
+		else if (offset == Direction.UP) return CursedChestType.BOTTOM;
+		return CursedChestType.SINGLE;
+	}
+
 	@Override public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState otherState, IWorld world, BlockPos pos, BlockPos otherPos)
 	{
-		//if (state.get(WATERLOGGED)) world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
-		//if (state.get(TYPE) == CursedChestType.TOP && world.getBlockState(pos.offset(Direction.DOWN)).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
-		//if (state.get(TYPE) == CursedChestType.BOTTOM && world.getBlockState(pos.offset(Direction.UP)).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
+		if (state.get(WATERLOGGED)) world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+		CursedChestType type = state.get(TYPE);
+		Direction facing = state.get(FACING);
+		if (type == CursedChestType.TOP && world.getBlockState(pos.offset(Direction.DOWN)).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
+		if (type == CursedChestType.BOTTOM && world.getBlockState(pos.offset(Direction.UP)).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
+		if (type == CursedChestType.FRONT && world.getBlockState(pos.offset(facing.getOpposite())).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
+		if (type == CursedChestType.BACK && world.getBlockState(pos.offset(facing)).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
+		if (type == CursedChestType.LEFT && world.getBlockState(pos.offset(facing.rotateYCounterclockwise())).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
+		if (type == CursedChestType.RIGHT && world.getBlockState(pos.offset(facing.rotateYClockwise())).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
 		//if (state.get(TYPE) == CursedChestType.SINGLE && direction.getAxis().isVertical())
 		//{
 		//	BlockState realOtherState = world.getBlockState(pos.offset(direction));
@@ -271,6 +286,18 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		//	if (direction == Direction.DOWN && realOtherState.get(TYPE) == CursedChestType.BOTTOM) return state.with(TYPE, CursedChestType.TOP);
 		//	return state.with(TYPE, CursedChestType.SINGLE);
 		//}
+
+		if(type == CursedChestType.SINGLE)
+		{
+
+			BlockState realOtherState = world.getBlockState(pos.offset(direction));
+			if(!realOtherState.contains(TYPE)) return state.with(TYPE, CursedChestType.SINGLE);
+			CursedChestType newType = getChestType(facing, direction);
+			if(realOtherState.get(TYPE) == CursedChestType.getOpposite(newType))
+			{
+				return state.with(TYPE,newType);
+			}
+		}
 		return super.getStateForNeighborUpdate(state, direction, otherState, world, pos, otherPos);
 	}
 
