@@ -293,7 +293,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 			BlockState realOtherState = world.getBlockState(pos.offset(direction));
 			if(!realOtherState.contains(TYPE)) return state.with(TYPE, CursedChestType.SINGLE);
 			CursedChestType newType = getChestType(facing, direction);
-			if(realOtherState.get(TYPE) == CursedChestType.getOpposite(newType))
+			if(realOtherState.get(TYPE) == CursedChestType.getOpposite(newType) && facing == realOtherState.get(FACING))
 			{
 				return state.with(TYPE,newType);
 			}
