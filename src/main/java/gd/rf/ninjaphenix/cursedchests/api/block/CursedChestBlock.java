@@ -278,24 +278,14 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		if (type == CursedChestType.BACK && world.getBlockState(pos.offset(facing)).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
 		if (type == CursedChestType.LEFT && world.getBlockState(pos.offset(facing.rotateYCounterclockwise())).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
 		if (type == CursedChestType.RIGHT && world.getBlockState(pos.offset(facing.rotateYClockwise())).getBlock() != this) return state.with(TYPE, CursedChestType.SINGLE);
-		//if (state.get(TYPE) == CursedChestType.SINGLE && direction.getAxis().isVertical())
-		//{
-		//	BlockState realOtherState = world.getBlockState(pos.offset(direction));
-		//	if (!realOtherState.contains(TYPE)) return state.with(TYPE, CursedChestType.SINGLE);
-		//	if (direction == Direction.UP && realOtherState.get(TYPE) == CursedChestType.TOP) return state.with(TYPE, CursedChestType.BOTTOM);
-		//	if (direction == Direction.DOWN && realOtherState.get(TYPE) == CursedChestType.BOTTOM) return state.with(TYPE, CursedChestType.TOP);
-		//	return state.with(TYPE, CursedChestType.SINGLE);
-		//}
-
-		if(type == CursedChestType.SINGLE)
+		if (type == CursedChestType.SINGLE)
 		{
-
 			BlockState realOtherState = world.getBlockState(pos.offset(direction));
-			if(!realOtherState.contains(TYPE)) return state.with(TYPE, CursedChestType.SINGLE);
+			if (!realOtherState.contains(TYPE)) return state.with(TYPE, CursedChestType.SINGLE);
 			CursedChestType newType = getChestType(facing, direction);
-			if(realOtherState.get(TYPE) == CursedChestType.getOpposite(newType) && facing == realOtherState.get(FACING))
+			if (realOtherState.get(TYPE) == CursedChestType.getOpposite(newType) && facing == realOtherState.get(FACING))
 			{
-				return state.with(TYPE,newType);
+				return state.with(TYPE, newType);
 			}
 		}
 		return super.getStateForNeighborUpdate(state, direction, otherState, world, pos, otherPos);
@@ -318,7 +308,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 			if (blockEntity instanceof Inventory)
 			{
 				ItemScatterer.spawn(world, pos, (Inventory) blockEntity);
-				world.updateHorizontalAdjacent(pos, this);
+				world.updateNeighbors(pos, this);
 			}
 			super.onBlockRemoved(state_1, world, pos, state_2, boolean_1);
 		}
