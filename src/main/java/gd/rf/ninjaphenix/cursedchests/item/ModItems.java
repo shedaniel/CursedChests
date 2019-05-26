@@ -2,6 +2,7 @@ package gd.rf.ninjaphenix.cursedchests.item;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.item.ChestConversionItem;
+import gd.rf.ninjaphenix.cursedchests.api.item.ChestMutatorItem;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
@@ -21,8 +22,8 @@ public class ModItems
 		registerConversionItem(ModBlocks.gold_chest, ModBlocks.diamond_chest);
 		registerConversionItem(ModBlocks.gold_chest, ModBlocks.obsidian_chest);
 		registerConversionItem(ModBlocks.diamond_chest, ModBlocks.obsidian_chest);
-		//ChestMutatorItem chestMutator = new ChestMutatorItem();
-		//Registry.register(Registry.ITEM, new Identifier("cursedchests", "chest_mutator"), chestMutator);
+		ChestMutatorItem chestMutator = new ChestMutatorItem();
+		Registry.register(Registry.ITEM, new Identifier("cursedchests", "chest_mutator"), chestMutator);
 	}
 
 	@SuppressWarnings("UnusedReturnValue") private static Item registerConversionItem(CursedChestBlock from, CursedChestBlock to)

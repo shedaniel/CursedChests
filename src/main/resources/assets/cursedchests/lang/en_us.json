@@ -10,6 +10,7 @@
   "block.cursedchests.gold_chest": "Gold Chest",
   "block.cursedchests.diamond_chest": "Diamond Chest",
   "block.cursedchests.obsidian_chest": "Obsidian Chest",
+
   "item.cursedchests.wood_to_iron_conversion_kit": "Wood to Iron upgrade",
   "item.cursedchests.wood_to_gold_conversion_kit": "Wood to Gold upgrade",
   "item.cursedchests.wood_to_diamond_conversion_kit": "Wood to Diamond upgrade",
@@ -20,5 +21,11 @@
   "item.cursedchests.gold_to_diamond_conversion_kit": "Gold to Diamond upgrade",
   "item.cursedchests.gold_to_obsidian_conversion_kit": "Gold to Obsidian upgrade",
   "item.cursedchests.diamond_to_obsidian_conversion_kit": "Diamond to Obsidian upgrade",
-  "item.cursedchests.chest_mutator": "Chest Mutator"
+
+  "item.cursedchests.chest_mutator": "Chest Mutator",
+
+  "tooltip.cursedchests.chest_mutator.merge": "Merge",
+  "tooltip.cursedchests.chest_mutator.unmerge": "Unmerge",
+  "tooltip.cursedchests.chest_mutator.rotate": "Rotate",
+  "tooltip.cursedchests.tool_mode": "Tool Mode: %s"
 }
