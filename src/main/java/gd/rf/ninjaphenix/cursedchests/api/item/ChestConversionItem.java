@@ -1,78 +1,100 @@
 package gd.rf.ninjaphenix.cursedchests.api.item;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
-import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DefaultedList;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
-/**
- * @author NinjaPhenix
- * @version 1.0.5
- * @since 1.0.5
- */
-public class ChestConversionItem extends Item implements ChestModifier
+public class ChestConversionItem extends ChestModifierItem
 {
 	private Identifier from, to;
 
-	public ChestConversionItem(Settings settings, Identifier from, Identifier to)
+	private void upgradeChest(World world, BlockPos pos, CursedChestBlockEntity entity, Direction direction)
 	{
-		super(settings.stackSize(16));
+		DefaultedList<ItemStack> inventoryData = DefaultedList.create(entity.getInvSize(), ItemStack.EMPTY);
+		Inventories.fromTag(entity.toTag(new CompoundTag()), inventoryData);
+		world.removeBlockEntity(pos);
+		world.setBlockState(pos, Registry.BLOCK.get(to).getDefaultState().with(CursedChestBlock.FACING, direction));
+		BlockEntity blockEntity = world.getBlockEntity(pos);
+		blockEntity.fromTag(Inventories.toTag(blockEntity.toTag(new CompoundTag()), inventoryData));
+	}
+
+
+	public ChestConversionItem(Identifier from, Identifier to)
+	{
+		super(new Item.Settings().itemGroup(ItemGroup.TOOLS).stackSize(16));
 		this.from = from;
 		this.to = to;
 	}
 
-	public ChestConversionItem(Settings settings, CursedChestBlock from, CursedChestBlock to){ this(settings, Registry.BLOCK.getId(from), Registry.BLOCK.getId(to)); }
-
-	@Override public ActionResult useOnChest(World world, PlayerEntity player, Hand hand, BlockHitResult blockHitResult, BlockPos mainBlockPos, BlockPos otherBlockPos)
+	public ChestConversionItem(CursedChestBlock from, CursedChestBlock to)
 	{
-		if (world.isClient) return player.isSneaking() ? ActionResult.SUCCESS : ActionResult.FAIL;
+		this(Registry.BLOCK.getId(from), Registry.BLOCK.getId(to));
+	}
+
+	@Override protected ActionResult useModifierOnChestBlock(ItemUsageContext context, CursedChestBlock mainBlock, BlockPos mainBlockPos, CursedChestBlock otherBlock, BlockPos otherBlockPos)
+	{
+		World world = context.getWorld();
+		PlayerEntity player = context.getPlayer();
 		BlockState mainBlockState = world.getBlockState(mainBlockPos);
-		CursedChestBlock mainBlock = (CursedChestBlock) mainBlockState.getBlock();
 		if (Registry.BLOCK.getId(mainBlock) != from) return ActionResult.FAIL;
-		ItemStack handStack = player.getStackInHand(hand);
+		ItemStack handStack = player.getStackInHand(context.getHand());
 		BlockEntity mainBlockEntity = world.getBlockEntity(mainBlockPos);
 		if (mainBlockEntity == null) return ActionResult.FAIL;
-		Direction rotation = mainBlockState.get(Properties.FACING_HORIZONTAL);
+		Direction rotation = mainBlockState.get(CursedChestBlock.FACING);
 		if (otherBlockPos == null || (handStack.getAmount() == 1 && !player.isCreative()))
 		{
-			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
-			if (!player.isCreative()) handStack.subtractAmount(1);
+			if (!world.isClient)
+			{
+				upgradeChest(world, mainBlockPos, (CursedChestBlockEntity) mainBlockEntity, rotation);
+				handStack.subtractAmount(1);
+			}
+			return ActionResult.SUCCESS;
 		}
 		else
 		{
-			BlockEntity topBlockEntity = world.getBlockEntity(otherBlockPos);
-			if (topBlockEntity == null) return ActionResult.FAIL;
-			upgradeChest(world, mainBlockPos, mainBlockEntity, rotation);
-			upgradeChest(world, otherBlockPos, topBlockEntity, rotation);
-			world.setBlockState(otherBlockPos, world.getBlockState(otherBlockPos).with(CursedChestBlock.TYPE, CursedChestType.TOP));
-			if (!player.isCreative()) handStack.subtractAmount(2);
+			BlockEntity otherBlockEntity = world.getBlockEntity(otherBlockPos);
+			if (otherBlockEntity == null) return ActionResult.FAIL;
+			if (!world.isClient)
+			{
+				BlockState otherState = world.getBlockState(otherBlockPos);
+				upgradeChest(world, mainBlockPos, (CursedChestBlockEntity) mainBlockEntity, rotation);
+				upgradeChest(world, otherBlockPos, (CursedChestBlockEntity) otherBlockEntity, rotation);
+				world.setBlockState(otherBlockPos, world.getBlockState(otherBlockPos).with(CursedChestBlock.TYPE, otherState.get(CursedChestBlock.TYPE)));
+				handStack.subtractAmount(2);
+			}
+			return ActionResult.SUCCESS;
 		}
-		return ActionResult.FAIL;
 	}
 
-	private void upgradeChest(World world, BlockPos pos, BlockEntity entity, Direction direction)
+	@Override protected ActionResult useModifierOnBlock(ItemUsageContext context, Block block)
 	{
-		DefaultedList<ItemStack> inventoryData = DefaultedList.create(((CursedChestBlockEntity) entity).getInvSize(), ItemStack.EMPTY);
-		Inventories.fromTag(entity.toTag(new CompoundTag()), inventoryData);
-		world.removeBlockEntity(pos);
-		world.setBlockState(pos, Registry.BLOCK.get(to).getDefaultState().with(Properties.FACING_HORIZONTAL, direction));
-		entity = world.getBlockEntity(pos);
-		entity.fromTag(Inventories.toTag(entity.toTag(new CompoundTag()), inventoryData));
+		return null;
+	}
+
+	@Override protected boolean useModifierOnEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand)
+	{
+		player.sendMessage(new TextComponent("Modifier used on entity."));
+		return false;
+	}
+
+	@Override protected TypedActionResult<ItemStack> useModifierInAir(World world, PlayerEntity player, Hand hand)
+	{
+		return new TypedActionResult<>(ActionResult.PASS, player.getStackInHand(hand));
 	}
 }

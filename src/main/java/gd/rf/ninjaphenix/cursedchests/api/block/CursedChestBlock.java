@@ -316,19 +316,11 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 
 	@Override public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
-		if (world.isClient) return true;
-		if (player.isSneaking() && hitResult.getSide().getAxis().isVertical() && state.get(TYPE) == CursedChestType.SINGLE)
+		if (!world.isClient)
 		{
-			Direction direction = hitResult.getSide();
-			BlockState offsetState = world.getBlockState(pos.offset(direction));
-			if (offsetState.getBlock() == this && offsetState.get(TYPE) == CursedChestType.SINGLE && state.get(FACING) == offsetState.get(FACING))
-			{
-				world.setBlockState(pos, state.with(TYPE, direction == Direction.UP ? CursedChestType.BOTTOM : CursedChestType.TOP));
-				return true;
-			}
+			openContainer(state, world, pos, player, hand, hitResult);
+			player.incrementStat(getOpenStat());
 		}
-		openContainer(state, world, pos, player, hand, hitResult);
-		player.incrementStat(getOpenStat());
 		return true;
 	}
 
@@ -355,7 +347,11 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		if (clickedChestType == CursedChestType.SINGLE) return propertyRetriever.getFromSingleChest(clickedChestBlockEntity);
 		BlockPos pairedPos;
 		if (clickedChestType == CursedChestType.TOP) pairedPos = clickedPos.offset(Direction.DOWN);
-		else pairedPos = clickedPos.offset(Direction.UP);
+		else if (clickedChestType == CursedChestType.BOTTOM) pairedPos = clickedPos.offset(Direction.UP);
+		else if (clickedChestType == CursedChestType.LEFT) pairedPos = clickedPos.offset(clickedState.get(FACING).rotateYCounterclockwise());
+		else if (clickedChestType == CursedChestType.RIGHT) pairedPos = clickedPos.offset(clickedState.get(FACING).rotateYClockwise());
+		else if (clickedChestType == CursedChestType.FRONT) pairedPos = clickedPos.offset(clickedState.get(FACING).getOpposite());
+		else pairedPos = clickedPos.offset(clickedState.get(FACING));
 		BlockState pairedState = world.getBlockState(pairedPos);
 		if (pairedState.getBlock() == clickedState.getBlock())
 		{
@@ -366,9 +362,14 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 				BlockEntity pairedBlockEntity = world.getBlockEntity(pairedPos);
 				if (pairedBlockEntity instanceof CursedChestBlockEntity)
 				{
-					CursedChestBlockEntity mainChestBlockEntity = clickedChestType == CursedChestType.TOP ? (CursedChestBlockEntity) pairedBlockEntity : clickedChestBlockEntity;
-					CursedChestBlockEntity secondaryChestBlockEntity = clickedChestType == CursedChestType.TOP ? clickedChestBlockEntity : (CursedChestBlockEntity) pairedBlockEntity;
-					return propertyRetriever.getFromDoubleChest(mainChestBlockEntity, secondaryChestBlockEntity);
+					if (clickedChestType == CursedChestType.LEFT || clickedChestType == CursedChestType.BOTTOM || clickedChestType == CursedChestType.FRONT)
+					{
+						return propertyRetriever.getFromDoubleChest(clickedChestBlockEntity, (CursedChestBlockEntity) pairedBlockEntity);
+					}
+					else
+					{
+						return propertyRetriever.getFromDoubleChest((CursedChestBlockEntity) pairedBlockEntity, clickedChestBlockEntity);
+					}
 				}
 			}
 		}
