@@ -2,10 +2,8 @@ package gd.rf.ninjaphenix.cursedchests.api.item;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
@@ -13,7 +11,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -47,16 +44,15 @@ public class ChestConversionItem extends ChestModifierItem
 		this(Registry.BLOCK.getId(from), Registry.BLOCK.getId(to));
 	}
 
-	@Override protected ActionResult useModifierOnChestBlock(ItemUsageContext context, CursedChestBlock mainBlock, BlockPos mainBlockPos, CursedChestBlock otherBlock, BlockPos otherBlockPos)
+	@Override protected ActionResult useModifierOnChestBlock(ItemUsageContext context, BlockState mainState, BlockPos mainBlockPos, BlockState otherState, BlockPos otherBlockPos)
 	{
 		World world = context.getWorld();
 		PlayerEntity player = context.getPlayer();
-		BlockState mainBlockState = world.getBlockState(mainBlockPos);
-		if (Registry.BLOCK.getId(mainBlock) != from) return ActionResult.FAIL;
+		if (Registry.BLOCK.getId(mainState.getBlock()) != from) return ActionResult.FAIL;
 		ItemStack handStack = player.getStackInHand(context.getHand());
 		BlockEntity mainBlockEntity = world.getBlockEntity(mainBlockPos);
 		if (mainBlockEntity == null) return ActionResult.FAIL;
-		Direction rotation = mainBlockState.get(CursedChestBlock.FACING);
+		Direction rotation = mainState.get(CursedChestBlock.FACING);
 		if (otherBlockPos == null || (handStack.getAmount() == 1 && !player.isCreative()))
 		{
 			if (!world.isClient)
@@ -72,7 +68,6 @@ public class ChestConversionItem extends ChestModifierItem
 			if (otherBlockEntity == null) return ActionResult.FAIL;
 			if (!world.isClient)
 			{
-				BlockState otherState = world.getBlockState(otherBlockPos);
 				upgradeChest(world, mainBlockPos, (CursedChestBlockEntity) mainBlockEntity, rotation);
 				upgradeChest(world, otherBlockPos, (CursedChestBlockEntity) otherBlockEntity, rotation);
 				world.setBlockState(otherBlockPos, world.getBlockState(otherBlockPos).with(CursedChestBlock.TYPE, otherState.get(CursedChestBlock.TYPE)));
@@ -80,21 +75,5 @@ public class ChestConversionItem extends ChestModifierItem
 			}
 			return ActionResult.SUCCESS;
 		}
-	}
-
-	@Override protected ActionResult useModifierOnBlock(ItemUsageContext context, Block block)
-	{
-		return null;
-	}
-
-	@Override protected boolean useModifierOnEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand)
-	{
-		player.sendMessage(new TextComponent("Modifier used on entity."));
-		return false;
-	}
-
-	@Override protected TypedActionResult<ItemStack> useModifierInAir(World world, PlayerEntity player, Hand hand)
-	{
-		return new TypedActionResult<>(ActionResult.PASS, player.getStackInHand(hand));
 	}
 }

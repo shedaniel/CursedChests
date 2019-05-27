@@ -256,7 +256,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		return getDefaultState().with(FACING, direction_1).with(TYPE, chestType).with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
 	}
 
-	private CursedChestType getChestType(Direction facing, Direction offset)
+	public static CursedChestType getChestType(Direction facing, Direction offset)
 	{
 		if (facing.rotateYClockwise() == offset) return CursedChestType.RIGHT;
 		else if (facing.rotateYCounterclockwise() == offset) return CursedChestType.LEFT;

@@ -30,38 +30,38 @@ public abstract class ChestModifierItem extends Item
 			ActionResult result = ActionResult.FAIL;
 			CursedChestType type = state.get(CursedChestBlock.TYPE);
 			Direction facing = state.get(CursedChestBlock.FACING);
-			if (type == CursedChestType.SINGLE) result = useModifierOnChestBlock(context, (CursedChestBlock) state.getBlock(), pos, null, null);
+			if (type == CursedChestType.SINGLE) result = useModifierOnChestBlock(context, state, pos, null, null);
 			else if (type == CursedChestType.BOTTOM)
 			{
 				BlockPos otherPos = pos.offset(Direction.UP);
-				result = useModifierOnChestBlock(context, (CursedChestBlock) state.getBlock(), pos, (CursedChestBlock) world.getBlockState(otherPos).getBlock(), otherPos);
+				result = useModifierOnChestBlock(context, state, pos, world.getBlockState(otherPos), otherPos);
 			}
 			else if (type == CursedChestType.TOP)
 			{
 				BlockPos otherPos = pos.offset(Direction.DOWN);
-				result = useModifierOnChestBlock(context, (CursedChestBlock) world.getBlockState(otherPos).getBlock(), otherPos, (CursedChestBlock) state.getBlock(), pos);
+				result = useModifierOnChestBlock(context, world.getBlockState(otherPos), otherPos, state, pos);
 			}
 			else if (type == CursedChestType.LEFT)
 			{
 				BlockPos otherPos = pos.offset(facing.rotateYCounterclockwise());
-				result = useModifierOnChestBlock(context, (CursedChestBlock) state.getBlock(), pos, (CursedChestBlock) world.getBlockState(otherPos).getBlock(), otherPos);
+				result = useModifierOnChestBlock(context, state, pos, world.getBlockState(otherPos), otherPos);
 
 			}
 			else if (type == CursedChestType.RIGHT)
 			{
 				BlockPos otherPos = pos.offset(facing.rotateYClockwise());
-				result = useModifierOnChestBlock(context, (CursedChestBlock) world.getBlockState(otherPos).getBlock(), otherPos, (CursedChestBlock) state.getBlock(), pos);
+				result = useModifierOnChestBlock(context, world.getBlockState(otherPos), otherPos, state, pos);
 
 			}
 			else if (type == CursedChestType.FRONT)
 			{
 				BlockPos otherPos = pos.offset(facing.getOpposite());
-				result = useModifierOnChestBlock(context, (CursedChestBlock) state.getBlock(), pos, (CursedChestBlock) world.getBlockState(otherPos).getBlock(), otherPos);
+				result = useModifierOnChestBlock(context, state, pos, world.getBlockState(otherPos), otherPos);
 			}
 			else if (type == CursedChestType.BACK)
 			{
 				BlockPos otherPos = pos.offset(facing);
-				result = useModifierOnChestBlock(context, (CursedChestBlock) world.getBlockState(otherPos).getBlock(), otherPos, (CursedChestBlock) state.getBlock(), pos);
+				result = useModifierOnChestBlock(context, world.getBlockState(otherPos), otherPos, state, pos);
 			}
 			return result;
 		}
@@ -83,7 +83,7 @@ public abstract class ChestModifierItem extends Item
 		return result;
 	}
 
-	protected ActionResult useModifierOnChestBlock(ItemUsageContext context, CursedChestBlock mainBlock, BlockPos mainBlockPos, CursedChestBlock otherBlock, BlockPos otherBlockPos){ return ActionResult.PASS; }
+	protected ActionResult useModifierOnChestBlock(ItemUsageContext context, BlockState mainState, BlockPos mainBlockPos, BlockState otherState, BlockPos otherBlockPos){ return ActionResult.PASS; }
 
 	protected ActionResult useModifierOnBlock(ItemUsageContext context, Block block){ return ActionResult.PASS; }
 

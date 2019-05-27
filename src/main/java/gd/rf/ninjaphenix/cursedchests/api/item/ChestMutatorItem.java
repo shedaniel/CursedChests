@@ -1,6 +1,8 @@
 package gd.rf.ninjaphenix.cursedchests.api.item;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
+import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -19,25 +21,60 @@ import net.minecraft.world.World;
 
 public class ChestMutatorItem extends ChestModifierItem
 {
-	private static final Component[] modes = new Component[]{
-		new TranslatableComponent("tooltip.cursedchests.chest_mutator.merge"),
-		new TranslatableComponent("tooltip.cursedchests.chest_mutator.unmerge"),
-		new TranslatableComponent("tooltip.cursedchests.chest_mutator.rotate")
-	};
+	private static final Component[] modes = new Component[]{new TranslatableComponent("tooltip.cursedchests.chest_mutator.merge"), new TranslatableComponent("tooltip.cursedchests.chest_mutator.unmerge"), new TranslatableComponent("tooltip.cursedchests.chest_mutator.rotate")};
 
 	public ChestMutatorItem()
 	{
 		super(new Item.Settings().stackSize(1).itemGroup(ItemGroup.TOOLS));
 	}
 
-	@Override protected ActionResult useModifierOnChestBlock(ItemUsageContext context, CursedChestBlock mainBlock, BlockPos mainBlockPos, CursedChestBlock otherBlock, BlockPos otherBlockPos)
+	@Override protected ActionResult useModifierOnChestBlock(ItemUsageContext context, BlockState mainState, BlockPos mainBlockPos, BlockState otherState, BlockPos otherBlockPos)
 	{
 		PlayerEntity player = context.getPlayer();
 		World world = context.getWorld();
 		ItemStack stack = context.getItemStack();
-		context.getPlayer().sendMessage(new TextComponent(String.valueOf(context.getItemStack())));
-		return ActionResult.SUCCESS;
-		//return super.useModifierOnChestBlock(context, mainBlock, mainBlockPos, otherBlock, otherBlockPos);
+		switch (getOrSetMode(stack))
+		{
+			case 0:
+				if (otherState == null)
+				{
+					BlockPos realOtherBlockPos = mainBlockPos.offset(context.getFacing());
+					BlockState realOtherState = world.getBlockState(realOtherBlockPos);
+					if (realOtherState.getBlock() == mainState.getBlock() &&
+						realOtherState.get(CursedChestBlock.FACING) == mainState.get(CursedChestBlock.FACING) &&
+					    realOtherState.get(CursedChestBlock.TYPE) == CursedChestType.SINGLE)
+					{
+						if (!world.isClient)
+						{
+							CursedChestType mainChestType = CursedChestBlock.getChestType(mainState.get(CursedChestBlock.FACING), context.getFacing());
+							CursedChestType otherChestType = CursedChestType.getOpposite(mainChestType);
+							world.setBlockState(mainBlockPos, mainState.with(CursedChestBlock.TYPE, mainChestType));
+							world.setBlockState(realOtherBlockPos, world.getBlockState(realOtherBlockPos).with(CursedChestBlock.TYPE, otherChestType));
+						}
+						return ActionResult.SUCCESS;
+					}
+				}
+				break;
+			case 1:
+				if (otherState != null)
+				{
+					if (!world.isClient)
+					{
+						world.setBlockState(mainBlockPos, world.getBlockState(mainBlockPos).with(CursedChestBlock.TYPE, CursedChestType.SINGLE));
+						world.setBlockState(otherBlockPos, world.getBlockState(otherBlockPos).with(CursedChestBlock.TYPE, CursedChestType.SINGLE));
+					}
+					return ActionResult.SUCCESS;
+				}
+				break;
+			case 2:
+
+				break;
+			default:
+				player.sendMessage(new TextComponent("Not yet implemented."));
+				stack.getOrCreateTag().putByte("mode", (byte) 0);
+				break;
+		}
+		return ActionResult.FAIL;
 	}
 
 	@Override protected TypedActionResult<ItemStack> useModifierInAir(World world, PlayerEntity player, Hand hand)
@@ -46,10 +83,10 @@ public class ChestMutatorItem extends ChestModifierItem
 		{
 			ItemStack stack = player.getStackInHand(hand);
 			byte mode = getOrSetMode(stack);
-			if(++mode >= modes.length){ mode = 0; }
+			if (++mode >= modes.length) { mode = 0; }
 			CompoundTag tag = stack.getOrCreateTag();
 			tag.putByte("mode", mode);
-			if(!world.isClient)
+			if (!world.isClient)
 			{
 				player.addChatMessage(new TranslatableComponent("tooltip.cursedchests.tool_mode", modes[mode]), true);
 			}

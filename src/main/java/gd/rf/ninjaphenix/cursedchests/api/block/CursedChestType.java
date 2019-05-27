@@ -11,27 +11,6 @@ public enum CursedChestType implements StringIdentifiable
 
 	CursedChestType(String string){ name = string; }
 
-	public static CursedChestType typeOf(Direction dir)
-	{
-		switch(dir)
-		{
-			case UP:
-				return BOTTOM;
-			case DOWN:
-				return TOP;
-			case NORTH:
-				return BACK;
-			case SOUTH:
-				return FRONT;
-			case EAST:
-				return RIGHT;
-			case WEST:
-				return LEFT;
-			default:
-				return null;
-		}
-	}
-
 	public static CursedChestType getOpposite(CursedChestType type)
 	{
 		switch (type)
