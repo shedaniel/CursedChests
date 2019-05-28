@@ -11,9 +11,9 @@ public enum CursedChestType implements StringIdentifiable
 
 	CursedChestType(String string){ name = string; }
 
-	public static CursedChestType getOpposite(CursedChestType type)
+	public CursedChestType getOpposite()
 	{
-		switch (type)
+		switch (this)
 		{
 			case FRONT:
 				return BACK;

@@ -12,6 +12,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Hand;
@@ -33,6 +35,8 @@ public class ChestMutatorItem extends ChestModifierItem
 		PlayerEntity player = context.getPlayer();
 		World world = context.getWorld();
 		ItemStack stack = context.getItemStack();
+		DirectionProperty FACING = CursedChestBlock.FACING;
+		EnumProperty<CursedChestType> TYPE = CursedChestBlock.TYPE;
 		switch (getOrSetMode(stack))
 		{
 			case 0:
@@ -41,15 +45,14 @@ public class ChestMutatorItem extends ChestModifierItem
 					BlockPos realOtherBlockPos = mainBlockPos.offset(context.getFacing());
 					BlockState realOtherState = world.getBlockState(realOtherBlockPos);
 					if (realOtherState.getBlock() == mainState.getBlock() &&
-						realOtherState.get(CursedChestBlock.FACING) == mainState.get(CursedChestBlock.FACING) &&
-					    realOtherState.get(CursedChestBlock.TYPE) == CursedChestType.SINGLE)
+						realOtherState.get(FACING) == mainState.get(FACING) &&
+					    realOtherState.get(TYPE) == CursedChestType.SINGLE)
 					{
 						if (!world.isClient)
 						{
-							CursedChestType mainChestType = CursedChestBlock.getChestType(mainState.get(CursedChestBlock.FACING), context.getFacing());
-							CursedChestType otherChestType = CursedChestType.getOpposite(mainChestType);
-							world.setBlockState(mainBlockPos, mainState.with(CursedChestBlock.TYPE, mainChestType));
-							world.setBlockState(realOtherBlockPos, world.getBlockState(realOtherBlockPos).with(CursedChestBlock.TYPE, otherChestType));
+							CursedChestType mainChestType = CursedChestBlock.getChestType(mainState.get(FACING), context.getFacing());
+							world.setBlockState(mainBlockPos, mainState.with(TYPE, mainChestType));
+							world.setBlockState(realOtherBlockPos, world.getBlockState(realOtherBlockPos).with(TYPE, mainChestType.getOpposite()));
 						}
 						return ActionResult.SUCCESS;
 					}
@@ -60,15 +63,35 @@ public class ChestMutatorItem extends ChestModifierItem
 				{
 					if (!world.isClient)
 					{
-						world.setBlockState(mainBlockPos, world.getBlockState(mainBlockPos).with(CursedChestBlock.TYPE, CursedChestType.SINGLE));
-						world.setBlockState(otherBlockPos, world.getBlockState(otherBlockPos).with(CursedChestBlock.TYPE, CursedChestType.SINGLE));
+						world.setBlockState(mainBlockPos, world.getBlockState(mainBlockPos).with(TYPE, CursedChestType.SINGLE));
+						world.setBlockState(otherBlockPos, world.getBlockState(otherBlockPos).with(TYPE, CursedChestType.SINGLE));
 					}
 					return ActionResult.SUCCESS;
 				}
 				break;
 			case 2:
 
-				break;
+				switch(mainState.get(CursedChestBlock.TYPE))
+				{
+					case SINGLE:
+						world.setBlockState(mainBlockPos, mainState.with(FACING, mainState.get(FACING).rotateYClockwise()));
+						player.getItemCooldownManager().set(this, 5);
+						return ActionResult.SUCCESS;
+					case FRONT:
+					case BACK:
+					case LEFT:
+					case RIGHT:
+						world.setBlockState(mainBlockPos, mainState.with(FACING, mainState.get(FACING).getOpposite()).with(TYPE, mainState.get(TYPE).getOpposite()));
+						world.setBlockState(otherBlockPos, otherState.with(FACING, otherState.get(FACING).getOpposite()).with(TYPE, otherState.get(TYPE).getOpposite()));
+						player.getItemCooldownManager().set(this, 5);
+						return ActionResult.SUCCESS;
+					case TOP:
+					case BOTTOM:
+						world.setBlockState(mainBlockPos, mainState.with(FACING, mainState.get(FACING).rotateYClockwise()));
+						world.setBlockState(otherBlockPos, otherState.with(FACING, otherState.get(FACING).rotateYClockwise()));
+						player.getItemCooldownManager().set(this, 5);
+						return ActionResult.SUCCESS;
+				}
 			default:
 				player.sendMessage(new TextComponent("Not yet implemented."));
 				stack.getOrCreateTag().putByte("mode", (byte) 0);

@@ -62,23 +62,6 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 	private static final VoxelShape SINGLE_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 15);
 	private static final VoxelShape TOP_SHAPE = Block.createCuboidShape(1, -16, 1, 15, 14, 15);
 	private static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 30, 15);
-	//private static final VoxelShape LEFT_NORTH_SHAPE = Block.createCuboidShape(1-16, 0, 1, 15, 14, 15);     // a
-	//private static final VoxelShape LEFT_SOUTH_SHAPE = Block.createCuboidShape(1, 0, 1, 31, 14, 15);        // b
-	//private static final VoxelShape LEFT_WEST_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 31);         // c
-	//private static final VoxelShape LEFT_EAST_SHAPE = Block.createCuboidShape(1, 0, 1-16, 15, 14, 15);      // d
-	//private static final VoxelShape RIGHT_NORTH_SHAPE = Block.createCuboidShape(1, 0, 1, 31, 14, 15);       // b
-	//private static final VoxelShape RIGHT_SOUTH_SHAPE = Block.createCuboidShape(1-16, 0, 1, 15, 14, 15);    // a
-	//private static final VoxelShape RIGHT_WEST_SHAPE = Block.createCuboidShape(1, 0, 1-16, 15, 14, 15);     // d
-	//private static final VoxelShape RIGHT_EAST_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 31);        // c
-	//private static final VoxelShape FRONT_NORTH_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 31);       // c
-	//private static final VoxelShape FRONT_SOUTH_SHAPE = Block.createCuboidShape(1, 0, 1-16, 15, 14, 15);    // d
-	//private static final VoxelShape FRONT_WEST_SHAPE = Block.createCuboidShape(1, 0, 1, 31, 14, 15);        // b
-	//private static final VoxelShape FRONT_EAST_SHAPE = Block.createCuboidShape(1-16, 0, 1, 15, 14, 15);     // a
-	//private static final VoxelShape BACK_NORTH_SHAPE = Block.createCuboidShape(1, 0, 1-16, 15, 14, 15);     // d
-	//private static final VoxelShape BACK_SOUTH_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 31);        // c
-	//private static final VoxelShape BACK_WEST_SHAPE = Block.createCuboidShape(1-16, 0, 1, 15, 14, 15);      // a
-	//private static final VoxelShape BACK_EAST_SHAPE = Block.createCuboidShape(1, 0, 1, 31, 14, 15);         // b
-
 	private static final VoxelShape A = Block.createCuboidShape(1, 0, 1, 31, 14, 15);     // a
 	private static final VoxelShape B = Block.createCuboidShape(1 - 16, 0, 1, 15, 14, 15);        // b
 	private static final VoxelShape C = Block.createCuboidShape(1, 0, 1 - 16, 15, 14, 15);         // c
@@ -283,7 +266,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 			BlockState realOtherState = world.getBlockState(pos.offset(direction));
 			if (!realOtherState.contains(TYPE)) return state.with(TYPE, CursedChestType.SINGLE);
 			CursedChestType newType = getChestType(facing, direction);
-			if (realOtherState.get(TYPE) == CursedChestType.getOpposite(newType) && facing == realOtherState.get(FACING))
+			if (realOtherState.get(TYPE) == newType.getOpposite() && facing == realOtherState.get(FACING))
 			{
 				return state.with(TYPE, newType);
 			}
