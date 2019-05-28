@@ -8,3 +8,7 @@ possible todo:
   Curse of binding to lock a chest to a specific player (make upgrade ?)
   Trapped chest variant (make upgrade ?)
   Ender chest variant
+
+update todo:
+  Fix Rendering
+  Test functionality compare to pre-update.
