@@ -67,7 +67,7 @@ public abstract class ChestModifierItem extends Item
 		}
 		else
 		{
-			return useModifierOnBlock(context, state.getBlock());
+			return useModifierOnBlock(context, state);
 		}
 	}
 
@@ -85,7 +85,7 @@ public abstract class ChestModifierItem extends Item
 
 	protected ActionResult useModifierOnChestBlock(ItemUsageContext context, BlockState mainState, BlockPos mainBlockPos, BlockState otherState, BlockPos otherBlockPos){ return ActionResult.PASS; }
 
-	protected ActionResult useModifierOnBlock(ItemUsageContext context, Block block){ return ActionResult.PASS; }
+	protected ActionResult useModifierOnBlock(ItemUsageContext context, BlockState state){ return ActionResult.PASS; }
 
 	protected boolean useModifierOnEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand){ return false; }
 

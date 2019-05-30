@@ -32,5 +32,10 @@ public enum CursedChestType implements StringIdentifiable
 		}
 	}
 
+	public boolean isRenderedType()
+	{
+		return this == FRONT || this == BOTTOM || this == LEFT || this == SINGLE;
+	}
+
 	public String asString(){ return name; }
 }

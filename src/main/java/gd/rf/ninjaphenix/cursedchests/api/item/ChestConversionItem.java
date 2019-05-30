@@ -76,4 +76,9 @@ public class ChestConversionItem extends ChestModifierItem
 			return ActionResult.SUCCESS;
 		}
 	}
+
+	@Override protected ActionResult useModifierOnBlock(ItemUsageContext context, BlockState state)
+	{
+		return super.useModifierOnBlock(context, state);
+	}
 }

@@ -56,7 +56,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		T getFromSingleChest(CursedChestBlockEntity var1);
 	}
 
-	private static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 	public static final DirectionProperty FACING = Properties.FACING_HORIZONTAL;
 	public static final EnumProperty<CursedChestType> TYPE = EnumProperty.create("type", CursedChestType.class);
 	private static final VoxelShape SINGLE_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 15);
