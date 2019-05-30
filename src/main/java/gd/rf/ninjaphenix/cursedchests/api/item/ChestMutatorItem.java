@@ -3,12 +3,16 @@ package gd.rf.ninjaphenix.cursedchests.api.item;
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.ChatFormat;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.EnderChestBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.ChestType;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -28,6 +32,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import java.util.List;
 
 public class ChestMutatorItem extends ChestModifierItem
 {
@@ -290,5 +295,12 @@ public class ChestMutatorItem extends ChestModifierItem
 			tag.putByte("mode", (byte) 0);
 			return 0;
 		}
+	}
+
+	@Environment(EnvType.CLIENT)
+	@Override public void buildTooltip(ItemStack stack, World world, List<Component> tooltip, TooltipContext context)
+	{
+		tooltip.add(new TranslatableComponent("tooltip.cursedchests.tool_mode", modes[getOrSetMode(stack)]).applyFormat(ChatFormat.GRAY));
+		super.buildTooltip(stack, world, tooltip, context);
 	}
 }

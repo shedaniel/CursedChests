@@ -42,12 +42,7 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class CursedChestBlock extends BlockWithEntity implements Waterloggable, InventoryProvider
 {
-	@Override public BlockEntity createBlockEntity(BlockView var1)
-	{
-		Identifier id = Registry.BLOCK.getId(this);
-		CursedChestBlockEntity blockEntity = new CursedChestBlockEntity(id);
-		return blockEntity;
-	}
+	@Override public BlockEntity createBlockEntity(BlockView var1){ return new CursedChestBlockEntity(Registry.BLOCK.getId(this)); }
 
 	interface PropertyRetriever<T>
 	{
@@ -62,12 +57,11 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 	private static final VoxelShape SINGLE_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 15);
 	private static final VoxelShape TOP_SHAPE = Block.createCuboidShape(1, -16, 1, 15, 14, 15);
 	private static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 30, 15);
-	private static final VoxelShape A = Block.createCuboidShape(1, 0, 1, 31, 14, 15);     // a
-	private static final VoxelShape B = Block.createCuboidShape(1 - 16, 0, 1, 15, 14, 15);        // b
-	private static final VoxelShape C = Block.createCuboidShape(1, 0, 1 - 16, 15, 14, 15);         // c
-	private static final VoxelShape D = Block.createCuboidShape(1, 0, 1, 15, 14, 31);      // d
-
-	protected static final String DOUBLE_PREFIX = "container.cursedchests.generic_double";
+	private static final VoxelShape A = Block.createCuboidShape(1, 0, 1, 31, 14, 15);
+	private static final VoxelShape B = Block.createCuboidShape(1 - 16, 0, 1, 15, 14, 15);
+	private static final VoxelShape C = Block.createCuboidShape(1, 0, 1 - 16, 15, 14, 15);
+	private static final VoxelShape D = Block.createCuboidShape(1, 0, 1, 15, 14, 31);
+	private static final String DOUBLE_PREFIX = "container.cursedchests.generic_double";
 
 	private static final PropertyRetriever<SidedInventory> INVENTORY_RETRIEVER = new PropertyRetriever<SidedInventory>()
 	{
@@ -345,7 +339,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 				BlockEntity pairedBlockEntity = world.getBlockEntity(pairedPos);
 				if (pairedBlockEntity instanceof CursedChestBlockEntity)
 				{
-					if (clickedChestType == CursedChestType.LEFT || clickedChestType == CursedChestType.BOTTOM || clickedChestType == CursedChestType.FRONT)
+					if (clickedChestType.isRenderedType())
 					{
 						return propertyRetriever.getFromDoubleChest(clickedChestBlockEntity, (CursedChestBlockEntity) pairedBlockEntity);
 					}
