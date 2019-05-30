@@ -17,24 +17,23 @@ import java.util.HashMap;
 public class CursedChestRegistry
 {
 	private static HashMap<Identifier, CursedChest> blockdataMap = new HashMap<>();
-
 	// Prevents old worlds from crashing ( just in case anyone does update with existing chests )
-	static{
+	static
+	{
 		Identifier id = new Identifier("null", "null");
 		blockdataMap.put(id, new CursedChest(0, new TextComponent("Error"), id, id, id, id));
 	}
-
 	/**
 	 * Registers a new chest block. Currently only used by the ItemRenderer Mixin to correctly render chest blocks in inventories, otherwise they will look like vanilla chests.
 	 *
-	 * @param block            The identifier for the vertical chest block.
-	 * @param rows             The amount of slot rows the chest should have.
-	 * @param containerName    The name of the chest inside of the container.
-	 * @param singleTexture    The texture for when the chest is single style.
-	 * @param vanillaTexture   The texture for when the chest is vanilla style.
-	 * @param tallTexture      The texture for when the chest is tall style.
-	 * @param longTexture      The texture for when the chest is long style.
-	 * @throws AssertionError  Thrown when block is null or already registered.
+	 * @param block          The identifier for the vertical chest block.
+	 * @param rows           The amount of slot rows the chest should have.
+	 * @param containerName  The name of the chest inside of the container.
+	 * @param singleTexture  The texture for when the chest is single style.
+	 * @param vanillaTexture The texture for when the chest is vanilla style.
+	 * @param tallTexture    The texture for when the chest is tall style.
+	 * @param longTexture    The texture for when the chest is long style.
+	 * @throws AssertionError Thrown when block is null or already registered.
 	 * @since 1.0.5
 	 */
 	public static void registerChest(Identifier block, int rows, TranslatableComponent containerName, Identifier singleTexture, Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
@@ -62,14 +61,14 @@ public class CursedChestRegistry
 	/**
 	 * Gets the identifier for the texture of the given chest.
 	 *
-	 * @param block  The identifier for the vertical chest block.
+	 * @param block The identifier for the vertical chest block.
 	 * @param type
 	 * @since 1.2.17
 	 */
 	public static Identifier getChestTexture(Identifier block, CursedChestType type)
 	{
 		assert block != null && blockdataMap.containsKey(block);
-		switch(type)
+		switch (type)
 		{
 			case BOTTOM:
 				return blockdataMap.get(block).tallTexture;

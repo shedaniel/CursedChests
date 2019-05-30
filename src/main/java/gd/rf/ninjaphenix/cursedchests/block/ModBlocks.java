@@ -39,36 +39,11 @@ public class ModBlocks
 
 	public static void init()
 	{
-		wood_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "wood_chest", 3, new TranslatableComponent("container.cursedchests.wood_chest"),
-				new Identifier("minecraft", "textures/entity/chest/normal.png"),
-				new Identifier("minecraft", "textures/entity/chest/normal_double.png"),
-				new Identifier("cursedchests", "textures/entity/wood_chest/tall.png"),
-				new Identifier("cursedchests", "textures/entity/wood_chest/long.png"));
-
-		iron_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.IRON_BLOCK).build()), "iron_chest", 6, new TranslatableComponent("container.cursedchests.iron_chest"),
-				new Identifier("cursedchests", "textures/entity/iron_chest/single.png"),
-				new Identifier("cursedchests", "textures/entity/iron_chest/vanilla.png"),
-				new Identifier("cursedchests", "textures/entity/iron_chest/tall.png"),
-				new Identifier("cursedchests", "textures/entity/iron_chest/long.png"));
-
-		gold_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.GOLD_BLOCK).build()), "gold_chest", 9, new TranslatableComponent("container.cursedchests.gold_chest"),
-				new Identifier("cursedchests", "textures/entity/gold_chest/single.png"),
-				new Identifier("cursedchests", "textures/entity/gold_chest/vanilla.png"),
-				new Identifier("cursedchests", "textures/entity/gold_chest/tall.png"),
-				new Identifier("cursedchests", "textures/entity/gold_chest/long.png"));
-
-		diamond_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.DIAMOND_BLOCK).build()), "diamond_chest", 12, new TranslatableComponent("container.cursedchests.diamond_chest"),
-				new Identifier("cursedchests", "textures/entity/diamond_chest/single.png"),
-				new Identifier("cursedchests", "textures/entity/diamond_chest/vanilla.png"),
-				new Identifier("cursedchests", "textures/entity/diamond_chest/tall.png"),
-				new Identifier("cursedchests", "textures/entity/diamond_chest/long.png"));
-
-		obsidian_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.OBSIDIAN).build()), "obsidian_chest", 12, new TranslatableComponent("container.cursedchests.obsidian_chest"),
-				new Identifier("cursedchests", "textures/entity/obsidian_chest/single.png"),
-				new Identifier("cursedchests", "textures/entity/obsidian_chest/vanilla.png"),
-				new Identifier("cursedchests", "textures/entity/obsidian_chest/tall.png"),
-				new Identifier("cursedchests", "textures/entity/obsidian_chest/long.png"));
-
+		wood_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "wood_chest", 3, new TranslatableComponent("container.cursedchests.wood_chest"), new Identifier("minecraft", "textures/entity/chest/normal.png"), new Identifier("minecraft", "textures/entity/chest/normal_double.png"), new Identifier("cursedchests", "textures/entity/wood_chest/tall.png"), new Identifier("cursedchests", "textures/entity/wood_chest/long.png"));
+		iron_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.IRON_BLOCK).build()), "iron_chest", 6, new TranslatableComponent("container.cursedchests.iron_chest"), new Identifier("cursedchests", "textures/entity/iron_chest/single.png"), new Identifier("cursedchests", "textures/entity/iron_chest/vanilla.png"), new Identifier("cursedchests", "textures/entity/iron_chest/tall.png"), new Identifier("cursedchests", "textures/entity/iron_chest/long.png"));
+		gold_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.GOLD_BLOCK).build()), "gold_chest", 9, new TranslatableComponent("container.cursedchests.gold_chest"), new Identifier("cursedchests", "textures/entity/gold_chest/single.png"), new Identifier("cursedchests", "textures/entity/gold_chest/vanilla.png"), new Identifier("cursedchests", "textures/entity/gold_chest/tall.png"), new Identifier("cursedchests", "textures/entity/gold_chest/long.png"));
+		diamond_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.DIAMOND_BLOCK).build()), "diamond_chest", 12, new TranslatableComponent("container.cursedchests.diamond_chest"), new Identifier("cursedchests", "textures/entity/diamond_chest/single.png"), new Identifier("cursedchests", "textures/entity/diamond_chest/vanilla.png"), new Identifier("cursedchests", "textures/entity/diamond_chest/tall.png"), new Identifier("cursedchests", "textures/entity/diamond_chest/long.png"));
+		obsidian_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.OBSIDIAN).build()), "obsidian_chest", 12, new TranslatableComponent("container.cursedchests.obsidian_chest"), new Identifier("cursedchests", "textures/entity/obsidian_chest/single.png"), new Identifier("cursedchests", "textures/entity/obsidian_chest/vanilla.png"), new Identifier("cursedchests", "textures/entity/obsidian_chest/tall.png"), new Identifier("cursedchests", "textures/entity/obsidian_chest/long.png"));
 		// todo: move to api
 		CURSED_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "cursed_chest"), BlockEntityType.Builder.create(CursedChestBlockEntity::new, wood_chest, iron_chest, gold_chest, diamond_chest, obsidian_chest).build(null));
 	}

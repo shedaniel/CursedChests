@@ -2,7 +2,6 @@ package gd.rf.ninjaphenix.cursedchests.api.item;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,13 +44,11 @@ public abstract class ChestModifierItem extends Item
 			{
 				BlockPos otherPos = pos.offset(facing.rotateYCounterclockwise());
 				result = useModifierOnChestBlock(context, state, pos, world.getBlockState(otherPos), otherPos);
-
 			}
 			else if (type == CursedChestType.RIGHT)
 			{
 				BlockPos otherPos = pos.offset(facing.rotateYClockwise());
 				result = useModifierOnChestBlock(context, world.getBlockState(otherPos), otherPos, state, pos);
-
 			}
 			else if (type == CursedChestType.FRONT)
 			{

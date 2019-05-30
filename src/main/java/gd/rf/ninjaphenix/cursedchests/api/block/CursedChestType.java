@@ -1,7 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.api.block;
 
 import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.math.Direction;
 
 public enum CursedChestType implements StringIdentifiable
 {
@@ -32,10 +31,7 @@ public enum CursedChestType implements StringIdentifiable
 		}
 	}
 
-	public boolean isRenderedType()
-	{
-		return this == FRONT || this == BOTTOM || this == LEFT || this == SINGLE;
-	}
+	public boolean isRenderedType(){ return this == FRONT || this == BOTTOM || this == LEFT || this == SINGLE; }
 
 	public String asString(){ return name; }
 }

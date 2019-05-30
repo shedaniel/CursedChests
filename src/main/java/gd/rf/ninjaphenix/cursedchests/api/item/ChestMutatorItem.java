@@ -123,22 +123,22 @@ public class ChestMutatorItem extends ChestModifierItem
 		World world = context.getWorld();
 		BlockPos mainPos = context.getBlockPos();
 		byte mode = getOrSetMode(stack);
-		if(state.getBlock() instanceof ChestBlock)
+		if (state.getBlock() instanceof ChestBlock)
 		{
-			if(mode == 0)
+			if (mode == 0)
 			{
 				Direction direction = context.getFacing();
 				BlockPos otherPos = mainPos.offset(direction);
 				BlockState otherState = world.getBlockState(otherPos);
 				Direction facing = state.get(ChestBlock.FACING);
 				ChestType type;
-				if(state.getBlock() == otherState.getBlock() && facing == otherState.get(ChestBlock.FACING) && state.get(ChestBlock.CHEST_TYPE) == ChestType.SINGLE && otherState.get(ChestBlock.CHEST_TYPE) == ChestType.SINGLE)
+				if (state.getBlock() == otherState.getBlock() && facing == otherState.get(ChestBlock.FACING) && state.get(ChestBlock.CHEST_TYPE) == ChestType.SINGLE && otherState.get(ChestBlock.CHEST_TYPE) == ChestType.SINGLE)
 				{
-					if(facing.rotateYCounterclockwise() == direction)
+					if (facing.rotateYCounterclockwise() == direction)
 					{
 						type = ChestType.RIGHT;
 					}
-					else if(facing.rotateYClockwise() == direction)
+					else if (facing.rotateYClockwise() == direction)
 					{
 						type = ChestType.LEFT;
 					}
@@ -150,7 +150,7 @@ public class ChestMutatorItem extends ChestModifierItem
 						else if (facing == direction) cursedType = CursedChestType.BACK;
 						else if (facing == direction.getOpposite()) cursedType = CursedChestType.FRONT;
 						else return ActionResult.FAIL;
-						if(!world.isClient)
+						if (!world.isClient)
 						{
 							CompoundTag tag = world.getBlockEntity(mainPos).toTag(new CompoundTag());
 							ListTag items = tag.getList("Items", 10);
@@ -172,7 +172,7 @@ public class ChestMutatorItem extends ChestModifierItem
 						player.getItemCooldownManager().set(this, 5);
 						return ActionResult.SUCCESS;
 					}
-					if(!world.isClient)
+					if (!world.isClient)
 					{
 						world.setBlockState(mainPos, state.with(ChestBlock.CHEST_TYPE, type));
 						world.setBlockState(otherPos, otherState.with(ChestBlock.CHEST_TYPE, type.getOpposite()));
@@ -182,7 +182,7 @@ public class ChestMutatorItem extends ChestModifierItem
 				}
 				return ActionResult.FAIL;
 			}
-			else if(mode == 1)
+			else if (mode == 1)
 			{
 				BlockPos otherPos;
 				switch (state.get(ChestBlock.CHEST_TYPE))
@@ -196,7 +196,7 @@ public class ChestMutatorItem extends ChestModifierItem
 					default:
 						return ActionResult.FAIL;
 				}
-				if(!world.isClient)
+				if (!world.isClient)
 				{
 					world.setBlockState(mainPos, state.with(ChestBlock.CHEST_TYPE, ChestType.SINGLE));
 					world.setBlockState(otherPos, world.getBlockState(otherPos).with(ChestBlock.CHEST_TYPE, ChestType.SINGLE));
@@ -204,7 +204,7 @@ public class ChestMutatorItem extends ChestModifierItem
 				player.getItemCooldownManager().set(this, 5);
 				return ActionResult.SUCCESS;
 			}
-			else if(mode == 2)
+			else if (mode == 2)
 			{
 				BlockPos otherPos;
 				switch (state.get(ChestBlock.CHEST_TYPE))
@@ -216,18 +216,17 @@ public class ChestMutatorItem extends ChestModifierItem
 						otherPos = mainPos.offset(state.get(ChestBlock.FACING).rotateYCounterclockwise());
 						break;
 					case SINGLE:
-						if(!world.isClient) world.setBlockState(mainPos, state.with(ChestBlock.FACING, state.get(ChestBlock.FACING).rotateYClockwise()));
+						if (!world.isClient) world.setBlockState(mainPos, state.with(ChestBlock.FACING, state.get(ChestBlock.FACING).rotateYClockwise()));
 						player.getItemCooldownManager().set(this, 5);
 						return ActionResult.SUCCESS;
 					default:
 						return ActionResult.FAIL;
 				}
-				if(!world.isClient)
+				if (!world.isClient)
 				{
 					BlockState otherState = world.getBlockState(otherPos);
-					world.setBlockState(mainPos, state.with(ChestBlock.FACING,state.get(ChestBlock.FACING).getOpposite()).with(ChestBlock.CHEST_TYPE, state.get(ChestBlock.CHEST_TYPE).getOpposite()));
-					world.setBlockState(otherPos, otherState.with(ChestBlock.FACING,otherState.get(ChestBlock.FACING).getOpposite()).with(ChestBlock.CHEST_TYPE, otherState.get(ChestBlock.CHEST_TYPE).getOpposite()));
-
+					world.setBlockState(mainPos, state.with(ChestBlock.FACING, state.get(ChestBlock.FACING).getOpposite()).with(ChestBlock.CHEST_TYPE, state.get(ChestBlock.CHEST_TYPE).getOpposite()));
+					world.setBlockState(otherPos, otherState.with(ChestBlock.FACING, otherState.get(ChestBlock.FACING).getOpposite()).with(ChestBlock.CHEST_TYPE, otherState.get(ChestBlock.CHEST_TYPE).getOpposite()));
 				}
 				player.getItemCooldownManager().set(this, 5);
 				return ActionResult.SUCCESS;
@@ -237,7 +236,7 @@ public class ChestMutatorItem extends ChestModifierItem
 		{
 			if (getOrSetMode(stack) == 2)
 			{
-				if(!world.isClient) world.setBlockState(mainPos, state.with(EnderChestBlock.FACING, state.get(EnderChestBlock.FACING).rotateYClockwise()));
+				if (!world.isClient) world.setBlockState(mainPos, state.with(EnderChestBlock.FACING, state.get(EnderChestBlock.FACING).rotateYClockwise()));
 				player.getItemCooldownManager().set(this, 5);
 				return ActionResult.SUCCESS;
 			}
