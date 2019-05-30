@@ -70,14 +70,10 @@ public class CursedChestRegistry
 		assert block != null && blockdataMap.containsKey(block);
 		switch (type)
 		{
-			case BOTTOM:
-				return blockdataMap.get(block).tallTexture;
-			case LEFT:
-				return blockdataMap.get(block).vanillaTexure;
-			case FRONT:
-				return blockdataMap.get(block).longTexture;
-			default:
-				return blockdataMap.get(block).singleTexture;
+			case BOTTOM: return blockdataMap.get(block).tallTexture;
+			case LEFT: return blockdataMap.get(block).vanillaTexure;
+			case FRONT: return blockdataMap.get(block).longTexture;
+			default: return blockdataMap.get(block).singleTexture;
 		}
 	}
 

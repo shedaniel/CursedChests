@@ -1,9 +1,12 @@
 package gd.rf.ninjaphenix.cursedchests.api.item;
 
+import gd.rf.ninjaphenix.cursedchests.api.CursedChestRegistry;
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestBlock;
-import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
+import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.enums.ChestType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
@@ -11,11 +14,11 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
@@ -23,16 +26,27 @@ public class ChestConversionItem extends ChestModifierItem
 {
 	private Identifier from, to;
 
-	private void upgradeChest(World world, BlockPos pos, CursedChestBlockEntity entity, Direction direction)
+	private void upgradeCursedChest(World world, BlockPos pos, BlockState state)
 	{
-		DefaultedList<ItemStack> inventoryData = DefaultedList.create(entity.getInvSize(), ItemStack.EMPTY);
-		Inventories.fromTag(entity.toTag(new CompoundTag()), inventoryData);
+		BlockEntity blockEnity = world.getBlockEntity(pos);
+		DefaultedList<ItemStack> inventoryData = DefaultedList.create(CursedChestRegistry.getSlots(to), ItemStack.EMPTY);
+		Inventories.fromTag(blockEnity.toTag(new CompoundTag()), inventoryData);
 		world.removeBlockEntity(pos);
-		world.setBlockState(pos, Registry.BLOCK.get(to).getDefaultState().with(CursedChestBlock.FACING, direction));
+		world.setBlockState(pos, Registry.BLOCK.get(to).getDefaultState().with(Properties.FACING_HORIZONTAL, state.get(Properties.FACING_HORIZONTAL)).with(Properties.WATERLOGGED, state.get(Properties.WATERLOGGED)).with(CursedChestBlock.TYPE, state.get(CursedChestBlock.TYPE)));
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		blockEntity.fromTag(Inventories.toTag(blockEntity.toTag(new CompoundTag()), inventoryData));
 	}
 
+	private void upgradeChest(World world, BlockPos pos, BlockState state)
+	{
+		BlockEntity blockEntity = world.getBlockEntity(pos);
+		DefaultedList<ItemStack> inventoryData = DefaultedList.create(CursedChestRegistry.getSlots(to), ItemStack.EMPTY);
+		Inventories.fromTag(blockEntity.toTag(new CompoundTag()), inventoryData);
+		world.removeBlockEntity(pos);
+		world.setBlockState(pos, Registry.BLOCK.get(to).getDefaultState().with(Properties.FACING_HORIZONTAL, state.get(Properties.FACING_HORIZONTAL)).with(Properties.WATERLOGGED, state.get(Properties.WATERLOGGED)).with(CursedChestBlock.TYPE, CursedChestType.valueOf(state.get(Properties.CHEST_TYPE))));
+		blockEntity = world.getBlockEntity(pos);
+		blockEntity.fromTag(Inventories.toTag(blockEntity.toTag(new CompoundTag()), inventoryData));
+	}
 
 	public ChestConversionItem(Identifier from, Identifier to)
 	{
@@ -52,27 +66,21 @@ public class ChestConversionItem extends ChestModifierItem
 		PlayerEntity player = context.getPlayer();
 		if (Registry.BLOCK.getId(mainState.getBlock()) != from) return ActionResult.FAIL;
 		ItemStack handStack = player.getStackInHand(context.getHand());
-		BlockEntity mainBlockEntity = world.getBlockEntity(mainBlockPos);
-		if (mainBlockEntity == null) return ActionResult.FAIL;
-		Direction rotation = mainState.get(CursedChestBlock.FACING);
 		if (otherBlockPos == null || (handStack.getAmount() == 1 && !player.isCreative()))
 		{
 			if (!world.isClient)
 			{
-				upgradeChest(world, mainBlockPos, (CursedChestBlockEntity) mainBlockEntity, rotation);
+				upgradeCursedChest(world, mainBlockPos, mainState);
 				handStack.subtractAmount(1);
 			}
 			return ActionResult.SUCCESS;
 		}
 		else
 		{
-			BlockEntity otherBlockEntity = world.getBlockEntity(otherBlockPos);
-			if (otherBlockEntity == null) return ActionResult.FAIL;
 			if (!world.isClient)
 			{
-				upgradeChest(world, mainBlockPos, (CursedChestBlockEntity) mainBlockEntity, rotation);
-				upgradeChest(world, otherBlockPos, (CursedChestBlockEntity) otherBlockEntity, rotation);
-				world.setBlockState(otherBlockPos, world.getBlockState(otherBlockPos).with(CursedChestBlock.TYPE, otherState.get(CursedChestBlock.TYPE)));
+				upgradeCursedChest(world, otherBlockPos, world.getBlockState(otherBlockPos));
+				upgradeCursedChest(world, mainBlockPos, mainState);
 				handStack.subtractAmount(2);
 			}
 			return ActionResult.SUCCESS;
@@ -81,6 +89,35 @@ public class ChestConversionItem extends ChestModifierItem
 
 	@Override protected ActionResult useModifierOnBlock(ItemUsageContext context, BlockState state)
 	{
+		if (state.getBlock() == Blocks.CHEST && from.equals(new Identifier("cursedchests", "wood_chest")))
+		{
+			World world = context.getWorld();
+			BlockPos mainpos = context.getBlockPos();
+			PlayerEntity player = context.getPlayer();
+			ItemStack handStack = player.getStackInHand(context.getHand());
+			if (state.get(Properties.CHEST_TYPE) == ChestType.SINGLE)
+			{
+				if (!world.isClient)
+				{
+					upgradeChest(world, mainpos, state);
+					handStack.subtractAmount(1);
+				}
+			}
+			else
+			{
+				BlockPos otherPos;
+				if (state.get(Properties.CHEST_TYPE) == ChestType.RIGHT) otherPos = mainpos.offset(state.get(Properties.FACING_HORIZONTAL).rotateYCounterclockwise());
+				else if (state.get(Properties.CHEST_TYPE) == ChestType.LEFT) otherPos = mainpos.offset(state.get(Properties.FACING_HORIZONTAL).rotateYClockwise());
+				else return ActionResult.FAIL;
+				if (!world.isClient)
+				{
+					upgradeChest(world, otherPos, world.getBlockState(otherPos));
+					upgradeChest(world, mainpos, state);
+					handStack.subtractAmount(2);
+				}
+			}
+			return ActionResult.SUCCESS;
+		}
 		return super.useModifierOnBlock(context, state);
 	}
 }

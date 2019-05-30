@@ -1,5 +1,6 @@
 package gd.rf.ninjaphenix.cursedchests.api.block;
 
+import net.minecraft.block.enums.ChestType;
 import net.minecraft.util.StringIdentifiable;
 
 public enum CursedChestType implements StringIdentifiable
@@ -28,6 +29,17 @@ public enum CursedChestType implements StringIdentifiable
 				return LEFT;
 			default:
 				return null;
+		}
+	}
+
+	public static CursedChestType valueOf(ChestType type)
+	{
+		switch(type)
+		{
+			case SINGLE: return SINGLE;
+			case RIGHT: return LEFT;
+			case LEFT: return RIGHT;
+			default: return null;
 		}
 	}
 
