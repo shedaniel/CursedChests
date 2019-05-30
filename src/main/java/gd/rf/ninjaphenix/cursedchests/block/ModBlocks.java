@@ -23,22 +23,9 @@ public class ModBlocks
 	public static CursedChestBlock diamond_chest;
 	public static CursedChestBlock obsidian_chest;
 
-	/*
-
-	Vanilla:
-	delete from 25 to 33
-	copy from 17 to 24 TO 27 to 34
-	copy from 21 to 23 TO 25 to 27
-
-	Long:
-	delete from 11 to 19
-	copy from 4 to 11 TO 12 to 19
-	copy from 19 to 20 TO 11 to 12
-
-	 */
-
 	public static void init()
 	{
+		// todo: move to api (wood chest)
 		wood_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "wood_chest", 3, new TranslatableComponent("container.cursedchests.wood_chest"), new Identifier("minecraft", "textures/entity/chest/normal.png"), new Identifier("minecraft", "textures/entity/chest/normal_double.png"), new Identifier("cursedchests", "textures/entity/wood_chest/tall.png"), new Identifier("cursedchests", "textures/entity/wood_chest/long.png"));
 		iron_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.IRON_BLOCK).build()), "iron_chest", 6, new TranslatableComponent("container.cursedchests.iron_chest"), new Identifier("cursedchests", "textures/entity/iron_chest/single.png"), new Identifier("cursedchests", "textures/entity/iron_chest/vanilla.png"), new Identifier("cursedchests", "textures/entity/iron_chest/tall.png"), new Identifier("cursedchests", "textures/entity/iron_chest/long.png"));
 		gold_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.GOLD_BLOCK).build()), "gold_chest", 9, new TranslatableComponent("container.cursedchests.gold_chest"), new Identifier("cursedchests", "textures/entity/gold_chest/single.png"), new Identifier("cursedchests", "textures/entity/gold_chest/vanilla.png"), new Identifier("cursedchests", "textures/entity/gold_chest/tall.png"), new Identifier("cursedchests", "textures/entity/gold_chest/long.png"));
