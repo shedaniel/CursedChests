@@ -41,6 +41,10 @@ jar {
 	from "LICENSE"
 }
 
+multimc{
+    instanceName = "Cursed Chests Development"
+}
+
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
 }
