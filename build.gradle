@@ -1,5 +1,6 @@
 plugins {
     id 'fabric-loom' version '0.2.2-SNAPSHOT'
+    id 'moe.nikky.loom-production-env' version '0.0.1-SNAPSHOT'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -17,11 +18,12 @@ dependencies {
     mappings "net.fabricmc:yarn:${minecraft_version}+${yarn_version}"
     modCompile "net.fabricmc:fabric-loader:${loader_version}"
     modCompile "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-	
-	modCompile 'roughly-enough-items:RoughlyEnoughItems:2.9.1+build.121'
-	compile "blue.endless:jankson:1.1.0"
+
+    modCompile 'roughly-enough-items:RoughlyEnoughItems:2.9.1+build.121'
+    compile "blue.endless:jankson:1.1.0"
     modCompile "cloth:ClothEvents:0.3.1.23"
     modCompile "cloth-config:ClothConfig:0.2.4.17"
+    multimc 'roughly-enough-items:RoughlyEnoughItems:2.9.1+build.121'
 }
 
 processResources{
@@ -36,9 +38,10 @@ processResources{
 }
 
 jar {
-	from "LICENSE"
+    from "LICENSE"
 }
 
+
 tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
+    options.encoding = "UTF-8"
 }
