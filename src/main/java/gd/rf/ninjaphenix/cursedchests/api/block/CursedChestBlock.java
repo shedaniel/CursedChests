@@ -198,9 +198,9 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 				{
 					if (clickedBlock.get(TYPE) == CursedChestType.SINGLE)
 					{
-						if (clickedBlock.get(FACING) == offsetDir || clickedBlock.get(FACING) == direction_2)
+						if (clickedBlock.get(FACING) == direction_2 && clickedBlock.get(FACING) == direction_1)
 						{
-							if (clickedBlock.get(FACING) == direction_2) chestType = CursedChestType.FRONT;
+							chestType = CursedChestType.FRONT;
 						}
 						else
 						{
