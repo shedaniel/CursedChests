@@ -310,17 +310,14 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		if (containerName == null) return;
 		BlockEntity clickedBlockEntity = world.getBlockEntity(pos);
 		BlockPos pairedPos = getPairedPos(world, pos);
-		if(pairedPos != null)
+		if(pairedPos == null)
 		{
-			BlockEntity pairedBlockEntity = world.getBlockEntity(pairedPos);
-			if (clickedBlockEntity instanceof CursedChestBlockEntity && pairedBlockEntity instanceof CursedChestBlockEntity)
+			if (clickedBlockEntity instanceof CursedChestBlockEntity)
 			{
 				CursedChestBlockEntity cursedClickBlockEntity = (CursedChestBlockEntity) clickedBlockEntity;
-				CursedChestBlockEntity cursedPairedBlockEntity = (CursedChestBlockEntity) pairedBlockEntity;
-				if (cursedClickBlockEntity.checkUnlocked(player) && cursedPairedBlockEntity.checkUnlocked(player))
+				if (cursedClickBlockEntity.checkUnlocked(player))
 				{
 					cursedClickBlockEntity.checkLootInteraction(player);
-					cursedPairedBlockEntity.checkLootInteraction(player);
 					ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 					{
 						packetByteBuf.writeBlockPos(pos);
@@ -331,12 +328,15 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		}
 		else
 		{
-			if (clickedBlockEntity instanceof CursedChestBlockEntity)
+			BlockEntity pairedBlockEntity = world.getBlockEntity(pairedPos);
+			if (clickedBlockEntity instanceof CursedChestBlockEntity && pairedBlockEntity instanceof CursedChestBlockEntity)
 			{
 				CursedChestBlockEntity cursedClickBlockEntity = (CursedChestBlockEntity) clickedBlockEntity;
-				if (cursedClickBlockEntity.checkUnlocked(player))
+				CursedChestBlockEntity cursedPairedBlockEntity = (CursedChestBlockEntity) pairedBlockEntity;
+				if (cursedClickBlockEntity.checkUnlocked(player) && cursedPairedBlockEntity.checkUnlocked(player))
 				{
 					cursedClickBlockEntity.checkLootInteraction(player);
+					cursedPairedBlockEntity.checkLootInteraction(player);
 					ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 					{
 						packetByteBuf.writeBlockPos(pos);
