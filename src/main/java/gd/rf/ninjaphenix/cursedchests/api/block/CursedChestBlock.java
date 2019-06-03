@@ -302,17 +302,62 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 	}
 
 	/*
-		This method must be overridden if you are not using cursed chests mod with this api.
+		This method must be overridden if you are not using cursed chests mod with this api. ( soon not going to be the case )
 	*/
 	protected void openContainer(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
 		Component containerName = retrieve(state, world, pos, NAME_RETRIEVER);
 		if (containerName == null) return;
-		ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
+		BlockEntity clickedBlockEntity = world.getBlockEntity(pos);
+		BlockPos pairedPos = getPairedPos(world, pos);
+		if(pairedPos != null)
 		{
-			packetByteBuf.writeBlockPos(pos);
-			packetByteBuf.writeTextComponent(containerName);
-		}));
+			BlockEntity pairedBlockEntity = world.getBlockEntity(pairedPos);
+			if (clickedBlockEntity instanceof CursedChestBlockEntity && pairedBlockEntity instanceof CursedChestBlockEntity)
+			{
+				CursedChestBlockEntity cursedClickBlockEntity = (CursedChestBlockEntity) clickedBlockEntity;
+				CursedChestBlockEntity cursedPairedBlockEntity = (CursedChestBlockEntity) pairedBlockEntity;
+				if (cursedClickBlockEntity.checkUnlocked(player) && cursedPairedBlockEntity.checkUnlocked(player))
+				{
+					cursedClickBlockEntity.checkLootInteraction(player);
+					cursedPairedBlockEntity.checkLootInteraction(player);
+					ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
+					{
+						packetByteBuf.writeBlockPos(pos);
+						packetByteBuf.writeTextComponent(containerName);
+					}));
+				}
+			}
+		}
+		else
+		{
+			if (clickedBlockEntity instanceof CursedChestBlockEntity)
+			{
+				CursedChestBlockEntity cursedClickBlockEntity = (CursedChestBlockEntity) clickedBlockEntity;
+				if (cursedClickBlockEntity.checkUnlocked(player))
+				{
+					cursedClickBlockEntity.checkLootInteraction(player);
+					ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
+					{
+						packetByteBuf.writeBlockPos(pos);
+						packetByteBuf.writeTextComponent(containerName);
+					}));
+				}
+			}
+		}
+	}
+
+	private static BlockPos getPairedPos(IWorld world, BlockPos pos)
+	{
+		BlockState state = world.getBlockState(pos);
+		CursedChestType chestType = state.get(TYPE);
+		if (chestType == CursedChestType.SINGLE) return null;
+		else if (chestType == CursedChestType.TOP) return pos.offset(Direction.DOWN);
+		else if (chestType == CursedChestType.BOTTOM) return pos.offset(Direction.UP);
+		else if (chestType == CursedChestType.LEFT) return pos.offset(state.get(FACING).rotateYCounterclockwise());
+		else if (chestType == CursedChestType.RIGHT) return pos.offset(state.get(FACING).rotateYClockwise());
+		else if (chestType == CursedChestType.FRONT) return pos.offset(state.get(FACING).getOpposite());
+		else return pos.offset(state.get(FACING));
 	}
 
 	private static <T> T retrieve(BlockState clickedState, IWorld world, BlockPos clickedPos, PropertyRetriever<T> propertyRetriever)
@@ -322,13 +367,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		CursedChestBlockEntity clickedChestBlockEntity = (CursedChestBlockEntity) clickedBlockEntity;
 		CursedChestType clickedChestType = clickedState.get(TYPE);
 		if (clickedChestType == CursedChestType.SINGLE) return propertyRetriever.getFromSingleChest(clickedChestBlockEntity);
-		BlockPos pairedPos;
-		if (clickedChestType == CursedChestType.TOP) pairedPos = clickedPos.offset(Direction.DOWN);
-		else if (clickedChestType == CursedChestType.BOTTOM) pairedPos = clickedPos.offset(Direction.UP);
-		else if (clickedChestType == CursedChestType.LEFT) pairedPos = clickedPos.offset(clickedState.get(FACING).rotateYCounterclockwise());
-		else if (clickedChestType == CursedChestType.RIGHT) pairedPos = clickedPos.offset(clickedState.get(FACING).rotateYClockwise());
-		else if (clickedChestType == CursedChestType.FRONT) pairedPos = clickedPos.offset(clickedState.get(FACING).getOpposite());
-		else pairedPos = clickedPos.offset(clickedState.get(FACING));
+		BlockPos pairedPos = getPairedPos(world, clickedPos);
 		BlockState pairedState = world.getBlockState(pairedPos);
 		if (pairedState.getBlock() == clickedState.getBlock())
 		{
