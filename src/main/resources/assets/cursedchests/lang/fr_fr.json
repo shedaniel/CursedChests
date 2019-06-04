@@ -19,5 +19,11 @@
   "item.cursedchests.iron_to_obsidian_conversion_kit": "Amélioration Fer en Obsidienne",
   "item.cursedchests.gold_to_diamond_conversion_kit": "Amélioration Or en Diamant",
   "item.cursedchests.gold_to_obsidian_conversion_kit": "Amélioration Or en Obsidienne",
-  "item.cursedchests.diamond_to_obsidian_conversion_kit": "Amélioration Diamant en Obsidienne"
+  "item.cursedchests.diamond_to_obsidian_conversion_kit": "Amélioration Diamant en Obsidienne",
+
+  "item.cursedchests.chest_mutator": "Chest Mutator",
+  "tooltip.cursedchests.chest_mutator.merge": "Merge",
+  "tooltip.cursedchests.chest_mutator.unmerge": "Unmerge",
+  "tooltip.cursedchests.chest_mutator.rotate": "Rotate",
+  "tooltip.cursedchests.tool_mode": "Tool Mode: %s"
 }
