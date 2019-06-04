@@ -19,5 +19,11 @@
   "item.cursedchests.iron_to_obsidian_conversion_kit": "ǝpɐɹᵷdn uɐᴉpᴉsqO oʇ uoɹI",
   "item.cursedchests.gold_to_diamond_conversion_kit": "ǝpɐɹᵷdn puoɯɐᴉᗡ oʇ pꞁo⅁",
   "item.cursedchests.gold_to_obsidian_conversion_kit": "ǝpɐɹᵷdn uɐᴉpᴉsqO oʇ pꞁo⅁",
-  "item.cursedchests.diamond_to_obsidian_conversion_kit": "ǝpɐɹᵷdn uɐᴉpᴉsqO oʇ puoɯɐᴉᗡ"
+  "item.cursedchests.diamond_to_obsidian_conversion_kit": "ǝpɐɹᵷdn uɐᴉpᴉsqO oʇ puoɯɐᴉᗡ",
+  "item.cursedchests.chest_mutator": "ɹoʇɐʇnW ʇsǝɥƆ",
+  "tooltip.cursedchests.chest_mutator.merge": "ǝᵷɹǝW",
+  "tooltip.cursedchests.chest_mutator.unmerge": "ǝᵷɹǝɯu∩",
+  "tooltip.cursedchests.chest_mutator.rotate": "ǝʇɐʇoᴚ",
+  "tooltip.cursedchests.tool_mode": "%s :ǝpoW ꞁoo⟘"
+
 }
