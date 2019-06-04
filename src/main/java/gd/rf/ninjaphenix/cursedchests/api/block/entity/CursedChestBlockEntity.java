@@ -27,9 +27,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Tickable;
-import net.minecraft.util.math.BoundingBox;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import java.util.Iterator;
@@ -188,11 +186,13 @@ public class CursedChestBlockEntity extends LootableContainerBlockEntity impleme
 
 	private void playSound(SoundEvent soundEvent)
 	{
-		double z = pos.getZ();
 		CursedChestType chestType = getCachedState().get(CursedChestBlock.TYPE);
-		if (chestType == CursedChestType.SINGLE) z += 0.5D;
-		else if (chestType == CursedChestType.BOTTOM) return;
-		world.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, z, soundEvent, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+		if (!chestType.isRenderedType()) return;
+		double zOffset = 0.5;
+		if(chestType == CursedChestType.BOTTOM) zOffset = 1;
+		BlockPos otherPos = CursedChestBlock.getPairedPos(world, pos);
+		Vec3d center = new Vec3d(pos).add(new Vec3d(otherPos == null ? pos : otherPos));
+		world.playSound(null, center.getX()/2 + 0.5D, center.getY()/2 + 0.5D, center.getZ()/2 + zOffset, soundEvent, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override public void onInvOpen(PlayerEntity player)

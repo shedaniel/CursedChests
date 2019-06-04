@@ -347,7 +347,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		}
 	}
 
-	private static BlockPos getPairedPos(IWorld world, BlockPos pos)
+	public static BlockPos getPairedPos(IWorld world, BlockPos pos)
 	{
 		BlockState state = world.getBlockState(pos);
 		CursedChestType chestType = state.get(TYPE);
