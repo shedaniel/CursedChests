@@ -20,10 +20,10 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Tickable;
@@ -36,7 +36,7 @@ import java.util.List;
 @EnvironmentInterfaces({@EnvironmentInterface(value = EnvType.CLIENT, itf = ChestAnimationProgress.class)})
 public class CursedChestBlockEntity extends LootableContainerBlockEntity implements ChestAnimationProgress, Tickable, SidedInventory
 {
-	private Component defaultContainerName;
+	private Text defaultContainerName;
 	private int inventorySize;
 	private DefaultedList<ItemStack> inventory;
 	private float animationAngle;
@@ -104,7 +104,7 @@ public class CursedChestBlockEntity extends LootableContainerBlockEntity impleme
 
 	@Override public int getInvSize(){ return inventorySize; }
 
-	@Override protected Component getContainerName(){ return defaultContainerName; }
+	@Override protected Text getContainerName(){ return defaultContainerName; }
 
 	@Override public boolean isInvEmpty()
 	{
@@ -165,7 +165,7 @@ public class CursedChestBlockEntity extends LootableContainerBlockEntity impleme
 	private static int countViewers(World world, CursedChestBlockEntity instance, int x, int y, int z)
 	{
 		int viewers = 0;
-		List<PlayerEntity> playersInRange = world.getEntities(PlayerEntity.class, new BoundingBox(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6));
+		List<PlayerEntity> playersInRange = world.getEntities(PlayerEntity.class, new Box(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6));
 		Iterator<PlayerEntity> playerIterator = playersInRange.iterator();
 		while (true)
 		{

@@ -10,7 +10,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
 import net.minecraft.client.gui.screen.ingame.ContainerProvider;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -27,7 +27,7 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
 	private SearchTextFieldWidget searchBox;
 	private String searchBoxOldText;
 
-	public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, Component containerTitle)
+	public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, Text containerTitle)
 	{
 		super(container, playerInventory, containerTitle);
 		realRows = container.getRows();
@@ -72,8 +72,8 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
 
 	@Override protected void drawForeground(int int_1, int int_2)
 	{
-		font.draw(title.getFormattedText(), 8, 6, 4210752);
-		font.draw(playerInventory.getDisplayName().getFormattedText(), 8, containerHeight - 94, 4210752);
+		font.draw(title.asFormattedString(), 8, 6, 4210752);
+		font.draw(playerInventory.getDisplayName().asFormattedString(), 8, containerHeight - 94, 4210752);
 	}
 
 	@Override protected void drawBackground(float float_1, int int_1, int int_2)

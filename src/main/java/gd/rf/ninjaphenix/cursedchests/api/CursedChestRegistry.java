@@ -2,9 +2,8 @@ package gd.rf.ninjaphenix.cursedchests.api;
 
 import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
 import gd.rf.ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import java.util.HashMap;
@@ -21,7 +20,7 @@ public class CursedChestRegistry
 	static
 	{
 		Identifier id = new Identifier("null", "null");
-		blockdataMap.put(id, new CursedChest(0, new TextComponent("Error"), id, id, id, id));
+		blockdataMap.put(id, new CursedChest(0, new LiteralText("Error"), id, id, id, id));
 	}
 	/**
 	 * Registers a new chest block. Currently only used by the ItemRenderer Mixin to correctly render chest blocks in inventories, otherwise they will look like vanilla chests.
@@ -36,7 +35,7 @@ public class CursedChestRegistry
 	 * @throws AssertionError Thrown when block is null or already registered.
 	 * @since 1.0.5
 	 */
-	public static void registerChest(Identifier block, int rows, TranslatableComponent containerName, Identifier singleTexture, Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
+	public static void registerChest(Identifier block, int rows, Text containerName, Identifier singleTexture, Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
 	{
 		assert block != null && blockdataMap.containsKey(block);
 		CursedChest data = new CursedChest(9 * rows, containerName, singleTexture, vanillaTexture, tallTexture, longTexture);
@@ -83,7 +82,7 @@ public class CursedChestRegistry
 		return blockdataMap.get(block).slots;
 	}
 
-	public static Component getDefaultContainerName(Identifier block)
+	public static Text getDefaultContainerName(Identifier block)
 	{
 		assert block != null && blockdataMap.containsKey(block);
 		return blockdataMap.get(block).containerName;
@@ -96,9 +95,9 @@ public class CursedChestRegistry
 		private final Identifier vanillaTexure;
 		private final Identifier tallTexture;
 		private final Identifier longTexture;
-		private final Component containerName;
+		private final Text containerName;
 
-		CursedChest(int slots, Component containerName, Identifier singleTexture, Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
+		CursedChest(int slots, Text containerName, Identifier singleTexture, Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
 		{
 			this.slots = slots;
 			this.singleTexture = singleTexture;

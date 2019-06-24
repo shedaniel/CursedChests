@@ -5,7 +5,6 @@ import gd.rf.ninjaphenix.cursedchests.api.block.CursedChestType;
 import gd.rf.ninjaphenix.cursedchests.block.ModBlocks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.ChatFormat;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -20,15 +19,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DefaultedList;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -36,18 +32,18 @@ import java.util.List;
 
 public class ChestMutatorItem extends ChestModifierItem
 {
-	private static final Component[] modes = new Component[]{new TranslatableComponent("tooltip.cursedchests.chest_mutator.merge"), new TranslatableComponent("tooltip.cursedchests.chest_mutator.unmerge"), new TranslatableComponent("tooltip.cursedchests.chest_mutator.rotate")};
+	private static final Text[] modes = new Text[]{new TranslatableText("tooltip.cursedchests.chest_mutator.merge"), new TranslatableText("tooltip.cursedchests.chest_mutator.unmerge"), new TranslatableText("tooltip.cursedchests.chest_mutator.rotate")};
 
 	public ChestMutatorItem()
 	{
-		super(new Item.Settings().stackSize(1).itemGroup(ItemGroup.TOOLS));
+		super(new Item.Settings().maxCount(1).group(ItemGroup.TOOLS));
 	}
 
 	@Override protected ActionResult useModifierOnChestBlock(ItemUsageContext context, BlockState mainState, BlockPos mainBlockPos, BlockState otherState, BlockPos otherBlockPos)
 	{
 		PlayerEntity player = context.getPlayer();
 		World world = context.getWorld();
-		ItemStack stack = context.getItemStack();
+		ItemStack stack = context.getStack();
 		DirectionProperty FACING = CursedChestBlock.FACING;
 		EnumProperty<CursedChestType> TYPE = CursedChestBlock.TYPE;
 		switch (getOrSetMode(stack))
@@ -55,13 +51,13 @@ public class ChestMutatorItem extends ChestModifierItem
 			case 0:
 				if (otherState == null)
 				{
-					BlockPos realOtherBlockPos = mainBlockPos.offset(context.getFacing());
+					BlockPos realOtherBlockPos = mainBlockPos.offset(context.getSide());
 					BlockState realOtherState = world.getBlockState(realOtherBlockPos);
 					if (realOtherState.getBlock() == mainState.getBlock() && realOtherState.get(FACING) == mainState.get(FACING) && realOtherState.get(TYPE) == CursedChestType.SINGLE)
 					{
 						if (!world.isClient)
 						{
-							CursedChestType mainChestType = CursedChestBlock.getChestType(mainState.get(FACING), context.getFacing());
+							CursedChestType mainChestType = CursedChestBlock.getChestType(mainState.get(FACING), context.getSide());
 							world.setBlockState(mainBlockPos, mainState.with(TYPE, mainChestType));
 							world.setBlockState(realOtherBlockPos, world.getBlockState(realOtherBlockPos).with(TYPE, mainChestType.getOpposite()));
 						}
@@ -114,7 +110,7 @@ public class ChestMutatorItem extends ChestModifierItem
 						return ActionResult.SUCCESS;
 				}
 			default:
-				player.sendMessage(new TextComponent("Not yet implemented."));
+				player.sendMessage(new LiteralText("Not yet implemented."));
 				stack.getOrCreateTag().putByte("mode", (byte) 0);
 				break;
 		}
@@ -124,7 +120,7 @@ public class ChestMutatorItem extends ChestModifierItem
 	@Override protected ActionResult useModifierOnBlock(ItemUsageContext context, BlockState state)
 	{
 		PlayerEntity player = context.getPlayer();
-		ItemStack stack = context.getItemStack();
+		ItemStack stack = context.getStack();
 		World world = context.getWorld();
 		BlockPos mainPos = context.getBlockPos();
 		byte mode = getOrSetMode(stack);
@@ -132,7 +128,7 @@ public class ChestMutatorItem extends ChestModifierItem
 		{
 			if (mode == 0)
 			{
-				Direction direction = context.getFacing();
+				Direction direction = context.getSide();
 				BlockPos otherPos = mainPos.offset(direction);
 				BlockState otherState = world.getBlockState(otherPos);
 				Direction facing = state.get(ChestBlock.FACING);
@@ -261,29 +257,29 @@ public class ChestMutatorItem extends ChestModifierItem
 			tag.putByte("mode", mode);
 			if (!world.isClient)
 			{
-				player.addChatMessage(new TranslatableComponent("tooltip.cursedchests.tool_mode", modes[mode]), true);
+				player.addChatMessage(new TranslatableText("tooltip.cursedchests.tool_mode", modes[mode]), true);
 			}
 			return new TypedActionResult<>(ActionResult.SUCCESS, stack);
 		}
 		return super.useModifierInAir(world, player, hand);
 	}
 
-	@Override public void onCrafted(ItemStack stack, World world, PlayerEntity player)
+	@Override public void onCraft(ItemStack stack, World world, PlayerEntity player)
 	{
-		super.onCrafted(stack, world, player);
+		super.onCraft(stack, world, player);
 		getOrSetMode(stack);
 	}
 
-	@Override public ItemStack getDefaultStack()
+	@Override public ItemStack getStackForRender()
 	{
-		ItemStack stack = super.getDefaultStack();
+		ItemStack stack = super.getStackForRender();
 		getOrSetMode(stack);
 		return stack;
 	}
 
-	@Override public void appendItemsForGroup(ItemGroup itemGroup, DefaultedList<ItemStack> stackList)
+	@Override public void appendStacks(ItemGroup itemGroup, DefaultedList<ItemStack> stackList)
 	{
-		if (this.isInItemGroup(itemGroup)) stackList.add(getDefaultStack());
+		if (this.isIn(itemGroup)) stackList.add(getStackForRender());
 	}
 
 	private byte getOrSetMode(ItemStack stack)
@@ -298,9 +294,9 @@ public class ChestMutatorItem extends ChestModifierItem
 	}
 
 	@Environment(EnvType.CLIENT)
-	@Override public void buildTooltip(ItemStack stack, World world, List<Component> tooltip, TooltipContext context)
+	@Override public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context)
 	{
-		tooltip.add(new TranslatableComponent("tooltip.cursedchests.tool_mode", modes[getOrSetMode(stack)]).applyFormat(ChatFormat.GRAY));
-		super.buildTooltip(stack, world, tooltip, context);
+		tooltip.add(new TranslatableText("tooltip.cursedchests.tool_mode", modes[getOrSetMode(stack)]).formatted(Formatting.GRAY));
+		super.appendTooltip(stack, world, tooltip, context);
 	}
 }

@@ -18,8 +18,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.StateFactory;
@@ -27,10 +25,12 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BoundingBox;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
@@ -52,8 +52,8 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 	}
 
 	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
-	public static final DirectionProperty FACING = Properties.FACING_HORIZONTAL;
-	public static final EnumProperty<CursedChestType> TYPE = EnumProperty.create("type", CursedChestType.class);
+	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+	public static final EnumProperty<CursedChestType> TYPE = EnumProperty.of("type", CursedChestType.class);
 	private static final VoxelShape SINGLE_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 15);
 	private static final VoxelShape TOP_SHAPE = Block.createCuboidShape(1, -16, 1, 15, 14, 15);
 	private static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 30, 15);
@@ -70,16 +70,16 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		@Override public SidedInventory getFromSingleChest(CursedChestBlockEntity mainBlockEntity){ return mainBlockEntity; }
 	};
 
-	private static final PropertyRetriever<Component> NAME_RETRIEVER = new PropertyRetriever<Component>()
+	private static final PropertyRetriever<Text> NAME_RETRIEVER = new PropertyRetriever<Text>()
 	{
-		@Override public Component getFromDoubleChest(CursedChestBlockEntity mainBlockEntity, CursedChestBlockEntity secondaryBlockEntity)
+		@Override public Text getFromDoubleChest(CursedChestBlockEntity mainBlockEntity, CursedChestBlockEntity secondaryBlockEntity)
 		{
 			if (mainBlockEntity.hasCustomName()) return mainBlockEntity.getDisplayName();
 			if (secondaryBlockEntity.hasCustomName()) return secondaryBlockEntity.getDisplayName();
-			return new TranslatableComponent(DOUBLE_PREFIX, mainBlockEntity.getDisplayName());
+			return new TranslatableText(DOUBLE_PREFIX, mainBlockEntity.getDisplayName());
 		}
 
-		@Override public Component getFromSingleChest(CursedChestBlockEntity mainBlockEntity){ return mainBlockEntity.getDisplayName(); }
+		@Override public Text getFromSingleChest(CursedChestBlockEntity mainBlockEntity){ return mainBlockEntity.getDisplayName(); }
 	};
 
 	public CursedChestBlock(Settings settings)
@@ -177,8 +177,8 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 		World world = context.getWorld();
 		BlockPos pos = context.getBlockPos();
 		CursedChestType chestType = CursedChestType.SINGLE;
-		Direction direction_1 = context.getPlayerHorizontalFacing().getOpposite();
-		Direction direction_2 = context.getFacing();
+		Direction direction_1 = context.getPlayerFacing().getOpposite();
+		Direction direction_2 = context.getSide();
 		boolean sneaking = context.isPlayerSneaking();
 		if (sneaking)
 		{
@@ -270,10 +270,10 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 
 	@Override public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
 	{
-		if (stack.hasDisplayName())
+		if (stack.hasCustomName())
 		{
 			BlockEntity blockEntity = world.getBlockEntity(pos);
-			if (blockEntity instanceof CursedChestBlockEntity) ((CursedChestBlockEntity) blockEntity).setCustomName(stack.getDisplayName());
+			if (blockEntity instanceof CursedChestBlockEntity) ((CursedChestBlockEntity) blockEntity).setCustomName(stack.getName());
 		}
 	}
 
@@ -306,11 +306,11 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 	*/
 	protected void openContainer(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult)
 	{
-		Component containerName = retrieve(state, world, pos, NAME_RETRIEVER);
+		Text containerName = retrieve(state, world, pos, NAME_RETRIEVER);
 		if (containerName == null) return;
 		BlockEntity clickedBlockEntity = world.getBlockEntity(pos);
 		BlockPos pairedPos = getPairedPos(world, pos);
-		if(pairedPos == null)
+		if (pairedPos == null)
 		{
 			if (clickedBlockEntity instanceof CursedChestBlockEntity)
 			{
@@ -321,7 +321,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 					ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 					{
 						packetByteBuf.writeBlockPos(pos);
-						packetByteBuf.writeTextComponent(containerName);
+						packetByteBuf.writeText(containerName);
 					}));
 				}
 			}
@@ -340,7 +340,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 					ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
 					{
 						packetByteBuf.writeBlockPos(pos);
-						packetByteBuf.writeTextComponent(containerName);
+						packetByteBuf.writeText(containerName);
 					}));
 				}
 			}
@@ -400,7 +400,7 @@ public class CursedChestBlock extends BlockWithEntity implements Waterloggable, 
 
 	private static boolean hasOcelotOnTop(IWorld world, BlockPos pos)
 	{
-		List<CatEntity> cats = world.getEntities(CatEntity.class, new BoundingBox(pos.getX(), pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
+		List<CatEntity> cats = world.getEntities(CatEntity.class, new Box(pos.getX(), pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
 		for (CatEntity catEntity_1 : cats) if (catEntity_1.isSitting()) return true;
 		return false;
 	}

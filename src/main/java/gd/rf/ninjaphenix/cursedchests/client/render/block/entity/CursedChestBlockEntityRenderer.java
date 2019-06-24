@@ -12,8 +12,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.entity.model.ChestDoubleEntityModel;
 import net.minecraft.client.render.entity.model.ChestEntityModel;
+import net.minecraft.client.render.entity.model.LargeChestEntityModel;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
@@ -23,7 +23,7 @@ public class CursedChestBlockEntityRenderer extends BlockEntityRenderer<CursedCh
 {
 	private static final ChestEntityModel modelSingleChest = new ChestEntityModel();
 	private static final ChestEntityModel modelTallChest = new TallChestEntityModel();
-	private static final ChestEntityModel modelVanillaChest = new ChestDoubleEntityModel();
+	private static final ChestEntityModel modelVanillaChest = new LargeChestEntityModel();
 	private static final ChestEntityModel modelLongChest = new LongChestEntityModel();
 
 	@Override public void render(CursedChestBlockEntity blockEntity, double x, double y, double z, float lidPitch, int breaking_stage)

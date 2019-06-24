@@ -32,10 +32,9 @@
     }
   ],
   "requires": {
-    "fabricloader": ">=0.4.0",
-    "fabric": ">=0.3.0"
+    "fabricloader": ">=0.4.0"
   },
   "recommends": {
-    "roughlyenoughitems": ">=2.8.2+build.104"
+    "roughlyenoughitems": ">=2.9.5+build.133"
   }
 }

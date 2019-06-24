@@ -9,19 +9,19 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 import java.util.Arrays;
 
 public class ScrollableContainer extends Container
 {
-	private final Component containerName;
+	private final Text containerName;
 	private final SidedInventory inventory;
 	private final int rows;
 	private final int realRows;
 	@Environment(EnvType.CLIENT) private String searchTerm = "";
 	@Environment(EnvType.CLIENT) private Integer[] unsortedToSortedSlotMap;
 
-	public ScrollableContainer(int syncId, PlayerInventory playerInventory, SidedInventory inventory, Component containerName)
+	public ScrollableContainer(int syncId, PlayerInventory playerInventory, SidedInventory inventory, Text containerName)
 	{
 		super(null, syncId);
 		this.inventory = inventory;
@@ -51,7 +51,7 @@ public class ScrollableContainer extends Container
 
 	@Environment(EnvType.CLIENT) public int getRows(){ return realRows; }
 
-	@Environment(EnvType.CLIENT) public Component getDisplayName(){ return containerName; }
+	@Environment(EnvType.CLIENT) public Text getDisplayName(){ return containerName; }
 
 	@Override public boolean canUse(PlayerEntity player){ return inventory.canPlayerUseInv(player); }
 
@@ -90,7 +90,7 @@ public class ScrollableContainer extends Container
 		if (stack_a.isEmpty() && !stack_b.isEmpty()) return 1;
 		if (!stack_a.isEmpty() && stack_b.isEmpty()) return -1;
 		if (stack_a.isEmpty() && stack_b.isEmpty()) return 0;
-		return stack_a.getDisplayName().getString().toLowerCase().contains(searchTerm) ? -1 : stack_b.getDisplayName().getString().toLowerCase().contains(searchTerm) ? 1 : 0;
+		return stack_a.getName().getString().toLowerCase().contains(searchTerm) ? -1 : stack_b.getName().getString().toLowerCase().contains(searchTerm) ? 1 : 0;
 	}
 
 	@Override public ItemStack transferSlot(PlayerEntity player, int slotIndex)

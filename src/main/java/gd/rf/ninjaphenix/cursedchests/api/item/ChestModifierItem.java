@@ -68,7 +68,7 @@ public abstract class ChestModifierItem extends Item
 		}
 	}
 
-	@Override public boolean interactWithEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand)
+	@Override public boolean useOnEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand)
 	{
 		return useModifierOnEntity(stack, player, entity, hand);
 	}

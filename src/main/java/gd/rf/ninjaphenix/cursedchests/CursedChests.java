@@ -11,7 +11,7 @@ import net.fabricmc.api.*;
 import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
-import net.minecraft.network.chat.Component;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,12 +21,13 @@ public class CursedChests implements ModInitializer, ClientModInitializer
 {
 	@Override public void onInitialize()
 	{
+		System.out.println("We be initialised.");
 		ModBlocks.init();
 		ModItems.init();
 		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->
 		{
 			BlockPos pos = buf.readBlockPos();
-			Component containerName = buf.readTextComponent();
+			Text containerName = buf.readText();
 			World world = player.getEntityWorld();
 			return new ScrollableContainer(syncId, player.inventory, CursedChestBlock.getInventoryStatic(world.getBlockState(pos), world, pos), containerName);
 		}));

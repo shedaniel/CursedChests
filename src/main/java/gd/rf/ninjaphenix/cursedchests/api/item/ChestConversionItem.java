@@ -32,7 +32,7 @@ public class ChestConversionItem extends ChestModifierItem
 		DefaultedList<ItemStack> inventoryData = DefaultedList.create(CursedChestRegistry.getSlots(to), ItemStack.EMPTY);
 		Inventories.fromTag(blockEnity.toTag(new CompoundTag()), inventoryData);
 		world.removeBlockEntity(pos);
-		world.setBlockState(pos, Registry.BLOCK.get(to).getDefaultState().with(Properties.FACING_HORIZONTAL, state.get(Properties.FACING_HORIZONTAL)).with(Properties.WATERLOGGED, state.get(Properties.WATERLOGGED)).with(CursedChestBlock.TYPE, state.get(CursedChestBlock.TYPE)));
+		world.setBlockState(pos, Registry.BLOCK.get(to).getDefaultState().with(Properties.HORIZONTAL_FACING, state.get(Properties.HORIZONTAL_FACING)).with(Properties.WATERLOGGED, state.get(Properties.WATERLOGGED)).with(CursedChestBlock.TYPE, state.get(CursedChestBlock.TYPE)));
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		blockEntity.fromTag(Inventories.toTag(blockEntity.toTag(new CompoundTag()), inventoryData));
 	}
@@ -43,14 +43,14 @@ public class ChestConversionItem extends ChestModifierItem
 		DefaultedList<ItemStack> inventoryData = DefaultedList.create(CursedChestRegistry.getSlots(to), ItemStack.EMPTY);
 		Inventories.fromTag(blockEntity.toTag(new CompoundTag()), inventoryData);
 		world.removeBlockEntity(pos);
-		world.setBlockState(pos, Registry.BLOCK.get(to).getDefaultState().with(Properties.FACING_HORIZONTAL, state.get(Properties.FACING_HORIZONTAL)).with(Properties.WATERLOGGED, state.get(Properties.WATERLOGGED)).with(CursedChestBlock.TYPE, CursedChestType.valueOf(state.get(Properties.CHEST_TYPE))));
+		world.setBlockState(pos, Registry.BLOCK.get(to).getDefaultState().with(Properties.HORIZONTAL_FACING, state.get(Properties.HORIZONTAL_FACING)).with(Properties.WATERLOGGED, state.get(Properties.WATERLOGGED)).with(CursedChestBlock.TYPE, CursedChestType.valueOf(state.get(Properties.CHEST_TYPE))));
 		blockEntity = world.getBlockEntity(pos);
 		blockEntity.fromTag(Inventories.toTag(blockEntity.toTag(new CompoundTag()), inventoryData));
 	}
 
 	public ChestConversionItem(Identifier from, Identifier to)
 	{
-		super(new Item.Settings().itemGroup(ItemGroup.TOOLS).stackSize(16));
+		super(new Item.Settings().group(ItemGroup.TOOLS).maxCount(16));
 		this.from = from;
 		this.to = to;
 	}
@@ -66,12 +66,12 @@ public class ChestConversionItem extends ChestModifierItem
 		PlayerEntity player = context.getPlayer();
 		if (Registry.BLOCK.getId(mainState.getBlock()) != from) return ActionResult.FAIL;
 		ItemStack handStack = player.getStackInHand(context.getHand());
-		if (otherBlockPos == null || (handStack.getAmount() == 1 && !player.isCreative()))
+		if (otherBlockPos == null || (handStack.getCount() == 1 && !player.isCreative()))
 		{
 			if (!world.isClient)
 			{
 				upgradeCursedChest(world, mainBlockPos, mainState);
-				handStack.subtractAmount(1);
+				handStack.decrement(1);
 			}
 			return ActionResult.SUCCESS;
 		}
@@ -81,7 +81,7 @@ public class ChestConversionItem extends ChestModifierItem
 			{
 				upgradeCursedChest(world, otherBlockPos, world.getBlockState(otherBlockPos));
 				upgradeCursedChest(world, mainBlockPos, mainState);
-				handStack.subtractAmount(2);
+				handStack.decrement(2);
 			}
 			return ActionResult.SUCCESS;
 		}
@@ -100,20 +100,20 @@ public class ChestConversionItem extends ChestModifierItem
 				if (!world.isClient)
 				{
 					upgradeChest(world, mainpos, state);
-					handStack.subtractAmount(1);
+					handStack.decrement(1);
 				}
 			}
 			else
 			{
 				BlockPos otherPos;
-				if (state.get(Properties.CHEST_TYPE) == ChestType.RIGHT) otherPos = mainpos.offset(state.get(Properties.FACING_HORIZONTAL).rotateYCounterclockwise());
-				else if (state.get(Properties.CHEST_TYPE) == ChestType.LEFT) otherPos = mainpos.offset(state.get(Properties.FACING_HORIZONTAL).rotateYClockwise());
+				if (state.get(Properties.CHEST_TYPE) == ChestType.RIGHT) otherPos = mainpos.offset(state.get(Properties.HORIZONTAL_FACING).rotateYCounterclockwise());
+				else if (state.get(Properties.CHEST_TYPE) == ChestType.LEFT) otherPos = mainpos.offset(state.get(Properties.HORIZONTAL_FACING).rotateYClockwise());
 				else return ActionResult.FAIL;
 				if (!world.isClient)
 				{
 					upgradeChest(world, otherPos, world.getBlockState(otherPos));
 					upgradeChest(world, mainpos, state);
-					handStack.subtractAmount(2);
+					handStack.decrement(2);
 				}
 			}
 			return ActionResult.SUCCESS;
