@@ -21,7 +21,6 @@ public class CursedChests implements ModInitializer, ClientModInitializer
 {
 	@Override public void onInitialize()
 	{
-		System.out.println("We be initialised.");
 		ModBlocks.init();
 		ModItems.init();
 		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->
