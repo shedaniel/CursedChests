@@ -1,4 +1,7 @@
 # CursedChests
 Adds some cursed chests to minecraft.
 
-Working 1.14.1 Pre 2 port of CursedChests, not backwards compatabile with 1.14 currently.
+## License
+
+The mod is now licensed under MIT, feel free to take any code and assets and use where you may need them.
+I do still intend on making a seperate API jar (just takes api package into a serparate jar in jar'able jar) however it may take some time for that to actual come into fruition.
