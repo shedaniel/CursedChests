@@ -1,6 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.2.3-SNAPSHOT'
-    id 'moe.nikky.loom-production-env' version '0.0.1-SNAPSHOT'
+    id 'fabric-loom' version '0.2.4-SNAPSHOT'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -27,7 +26,6 @@ dependencies {
     modCompile "net.fabricmc.fabric-api:fabric-object-builders-${project.fabric_object_builders}"
     // Dependency of fabric-object-builders
     modCompile "net.fabricmc.fabric-api:fabric-mining-levels-${project.fabric_mining_levels}"
-
 
     //REI
 
