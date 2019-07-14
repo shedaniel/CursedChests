@@ -28,10 +28,9 @@ public class ScrollableContainer extends Container
         this.inventory = inventory;
         this.containerName = containerName;
         realRows = inventory.getInvSize() / 9;
-        rows = realRows > 6 ? 6 : realRows;
-        // todo eval if fabric loader removes this statement on server side
+        rows = Math.min(realRows, 6);
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) unsortedToSortedSlotMap = new Integer[realRows * 9];
-        int int_3 = (rows - 4) * 18;
+        int int_3 = 18 * (rows - 4);
         inventory.onInvOpen(playerInventory.player);
         for (int y = 0; y < realRows; ++y)
         {

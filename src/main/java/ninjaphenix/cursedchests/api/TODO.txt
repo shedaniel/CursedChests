@@ -9,6 +9,5 @@ possible todo:
   Trapped chest variant (make upgrade ?)
   Ender chest variant
 
-update todo:
-  Fix Rendering
-  Test functionality compare to pre-update.
+Update todo:
+  Add paged container type with assets (mostly made already)
