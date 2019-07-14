@@ -6,6 +6,7 @@ import ninjaphenix.cursedchests.api.client.gui.container.ScrollableScreen;
 import ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import ninjaphenix.cursedchests.block.ModBlocks;
 import ninjaphenix.cursedchests.client.render.block.entity.CursedChestBlockEntityRenderer;
+import ninjaphenix.cursedchests.config.Config;
 import ninjaphenix.cursedchests.item.ModItems;
 import net.fabricmc.api.*;
 import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry;
@@ -37,6 +38,7 @@ public class CursedChests implements ModInitializer, ClientModInitializer
     @Override
     public void onInitializeClient()
     {
+        Config.initialize();
         BlockEntityRendererRegistry.INSTANCE.register(CursedChestBlockEntity.class, new CursedChestBlockEntityRenderer());
         ScreenProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ScrollableScreen::createScreen);
     }
