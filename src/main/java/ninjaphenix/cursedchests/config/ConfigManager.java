@@ -43,35 +43,17 @@ public class ConfigManager
                 if (jsonElementNew instanceof JsonObject)
                 {
                     JsonObject jsonNew = (JsonObject) jsonElementNew;
-                    if (json.getDelta(jsonNew).size() >= 0)
-                    {
-                        saveConfig(result, configFile);
-                    }
+                    if (json.getDelta(jsonNew).size() >= 0) saveConfig(result, configFile);
                 }
                 return result;
             }
-            catch (IOException e)
-            {
-                LOGGER.warn("Failed to load config File {}: {}", configFile.getName(), e);
-            }
+            catch (IOException e) { LOGGER.warn("Failed to load config File {}: {}", configFile.getName(), e); }
         }
-        catch (SyntaxError syntaxError)
-        {
-            LOGGER.warn("Failed to load config File {}: {}", configFile.getName(), syntaxError);
-        }
-        catch (IllegalAccessException | InstantiationException e)
-        {
-            LOGGER.warn("Failed to create new config file for {}: {}", configFile.getName(), e);
-        }
+        catch (SyntaxError syntaxError) { LOGGER.warn("Failed to load config File {}: {}", configFile.getName(), syntaxError); }
+        catch (IllegalAccessException | InstantiationException e) { LOGGER.warn("Failed to create new config file for {}: {}", configFile.getName(), e); }
         LOGGER.warn("Creating placeholder config for {}...", configFile.getName());
-        try
-        {
-            return clazz.newInstance();
-        }
-        catch (InstantiationException | IllegalAccessException e)
-        {
-            LOGGER.warn("Failed to create placeholder config for {}: {}", configFile.getName(), e);
-        }
+        try { return clazz.newInstance(); }
+        catch (InstantiationException | IllegalAccessException e) { LOGGER.warn("Failed to create placeholder config for {}: {}", configFile.getName(), e); }
         return null;
     }
 
