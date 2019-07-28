@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.2.4-SNAPSHOT'
+    id 'fabric-loom' version '0.2.5-SNAPSHOT'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -30,17 +30,13 @@ dependencies {
     //REI
 
     modCompile "net.fabricmc.fabric-api:fabric-keybindings-v0:0.1.1+7dfef87c"
-    modCompile "net.fabricmc.fabric-api:fabric-events-lifecycle-v0:0.1.0+59147463"
+    modCompile "net.fabricmc.fabric-api:fabric-events-lifecycle-v0:0.1.0+5914746342"
     modCompile "net.fabricmc.fabric-api:fabric-resource-loader-v0:0.1.1+59147463"
 
     compile "blue.endless:jankson:1.1.0"
     modCompile "cloth:ClothEvents:0.3.1.23"
-    modCompile "cloth-config:ClothConfig2:0.2.0"
-    modCompile 'roughly-enough-items:RoughlyEnoughItems:2.9.5+build.133'
-
-
-    // ModMenu
-    modCompile "io.github.prospector.modmenu:ModMenu:1.5.4-85"
+    modCompile "me.shedaniel.cloth:config-2:0.4.1"
+    modCompile 'roughly-enough-items:RoughlyEnoughItems:2.9.7+build.143'
 }
 
 processResources{
