@@ -19,22 +19,25 @@ import net.minecraft.world.World;
 @EnvironmentInterface(itf = ClientModInitializer.class, value = EnvType.CLIENT)
 public class CursedChests implements ModInitializer, ClientModInitializer
 {
-	@Override public void onInitialize()
-	{
-		ModBlocks.init();
-		ModItems.init();
-		ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->
-		{
-			BlockPos pos = buf.readBlockPos();
-			Component containerName = buf.readTextComponent();
-			World world = player.getEntityWorld();
-			return new ScrollableContainer(syncId, player.inventory, CursedChestBlock.getInventoryStatic(world.getBlockState(pos), world, pos), containerName);
-		}));
-	}
+    @Override
+    public void onInitialize()
+    {
+        ModBlocks.init();
+        ModItems.init();
+        ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->
+        {
+            BlockPos pos = buf.readBlockPos();
+            Component containerName = buf.readTextComponent();
+            World world = player.getEntityWorld();
+            return new ScrollableContainer(syncId, player.inventory, CursedChestBlock.getInventoryStatic(world.getBlockState(pos), world, pos), containerName);
+        }));
+    }
 
-	@Environment(EnvType.CLIENT) @Override public void onInitializeClient()
-	{
-		BlockEntityRendererRegistry.INSTANCE.register(CursedChestBlockEntity.class, new CursedChestBlockEntityRenderer());
-		ScreenProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ScrollableScreen::createScreen);
-	}
+    @Environment(EnvType.CLIENT)
+    @Override
+    public void onInitializeClient()
+    {
+        BlockEntityRendererRegistry.INSTANCE.register(CursedChestBlockEntity.class, new CursedChestBlockEntityRenderer());
+        ScreenProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ScrollableScreen::createScreen);
+    }
 }
