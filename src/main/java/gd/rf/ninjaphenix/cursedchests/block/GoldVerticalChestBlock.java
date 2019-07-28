@@ -9,8 +9,11 @@ import net.minecraft.world.BlockView;
 
 public class GoldVerticalChestBlock extends VerticalChestBlock
 {
-	GoldVerticalChestBlock() { super(FabricBlockSettings.copy(Blocks.GOLD_BLOCK).build()); }
+    GoldVerticalChestBlock() { super(FabricBlockSettings.copy(Blocks.GOLD_BLOCK).build()); }
 
-	@Override public BlockEntity createBlockEntity(BlockView view){ return new GoldVerticalChestBlockEntity(); }
-	@Override public String getName(){ return "gold_chest"; }
+    @Override
+    public BlockEntity createBlockEntity(BlockView view) { return new GoldVerticalChestBlockEntity(); }
+
+    @Override
+    public String getName() { return "gold_chest"; }
 }

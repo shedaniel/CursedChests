@@ -10,26 +10,27 @@ import net.minecraft.util.registry.Registry;
 
 public class ModBlocks
 {
-	public static VerticalChestBlock wood_chest;
-	public static VerticalChestBlock iron_chest;
-	public static VerticalChestBlock gold_chest;
-	public static VerticalChestBlock diamond_chest;
-	public static VerticalChestBlock obsidian_chest;
+    public static VerticalChestBlock wood_chest;
+    public static VerticalChestBlock iron_chest;
+    public static VerticalChestBlock gold_chest;
+    public static VerticalChestBlock diamond_chest;
+    public static VerticalChestBlock obsidian_chest;
 
-	public static void init()
-	{
-		wood_chest = register(new WoodVerticalChestBlock());
-		iron_chest = register(new IronVerticalChestBlock());
-		gold_chest = register(new GoldVerticalChestBlock());
-		diamond_chest = register(new DiamondVerticalChestBlock());
-		obsidian_chest = register(new ObsidianVerticalChestBlock());
-	}
+    public static void init()
+    {
+        wood_chest = register(new WoodVerticalChestBlock());
+        iron_chest = register(new IronVerticalChestBlock());
+        gold_chest = register(new GoldVerticalChestBlock());
+        diamond_chest = register(new DiamondVerticalChestBlock());
+        obsidian_chest = register(new ObsidianVerticalChestBlock());
+    }
 
-	private static VerticalChestBlock register(VerticalChestBlock block)
-	{
-		Registry.register(Registry.BLOCK, new Identifier("cursedchests", block.getName()), block);
-		Registry.register(Registry.ITEM, new Identifier("cursedchests", block.getName()), new BlockItem(block, new Item.Settings().itemGroup(ItemGroup.DECORATIONS)));
-		CursedChestRegistry.registerChest(block);
-		return block;
-	}
+    private static VerticalChestBlock register(VerticalChestBlock block)
+    {
+        Registry.register(Registry.BLOCK, new Identifier("cursedchests", block.getName()), block);
+        Registry.register(Registry.ITEM, new Identifier("cursedchests", block.getName()),
+                new BlockItem(block, new Item.Settings().itemGroup(ItemGroup.DECORATIONS)));
+        CursedChestRegistry.registerChest(block);
+        return block;
+    }
 }

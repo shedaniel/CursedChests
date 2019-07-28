@@ -8,14 +8,18 @@ import net.minecraft.util.Identifier;
 
 public class DiamondVerticalChestBlockEntity extends VerticalChestBlockEntity
 {
-	public DiamondVerticalChestBlockEntity(){ super(CursedChests.DIAMOND_VERTICAL_CHEST); }
+    public DiamondVerticalChestBlockEntity() { super(CursedChests.DIAMOND_VERTICAL_CHEST); }
 
-	@Override protected Component getContainerName(){ return new TranslatableComponent("container.cursedchests.diamond_chest"); }
-	@Override public int getInvSize(){ return 108; }
+    @Override
+    protected Component getContainerName() { return new TranslatableComponent("container.cursedchests.diamond_chest"); }
 
-	@Override public Identifier getTexture(boolean isDouble)
-	{
-		if (isDouble) return new Identifier("cursedchests", "textures/entity/diamond_chest/double.png");
-		return new Identifier("cursedchests", "textures/entity/diamond_chest/single.png");
-	}
+    @Override
+    public int getInvSize() { return 108; }
+
+    @Override
+    public Identifier getTexture(boolean isDouble)
+    {
+        if (isDouble) return new Identifier("cursedchests", "textures/entity/diamond_chest/double.png");
+        return new Identifier("cursedchests", "textures/entity/diamond_chest/single.png");
+    }
 }

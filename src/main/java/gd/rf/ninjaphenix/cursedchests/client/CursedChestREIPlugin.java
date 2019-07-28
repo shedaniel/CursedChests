@@ -13,23 +13,26 @@ import java.util.List;
 
 public class CursedChestREIPlugin implements REIPluginEntry
 {
-	@Override public void registerBounds(DisplayHelper displayHelper)
-	{
-		BaseBoundsHandler handler = displayHelper.getBaseBoundsHandler();
-		handler.registerExclusionZones(ScrollableScreen.class, new BaseBoundsHandler.ExclusionZoneSupplier()
-		{
-			@Override public List<Rectangle> apply(boolean isOnRightSide)
-			{
-				MinecraftClient client = MinecraftClient.getInstance();
-				ScrollableScreen screen = (ScrollableScreen) client.currentScreen;
+    @Override
+    public void registerBounds(DisplayHelper displayHelper)
+    {
+        BaseBoundsHandler handler = displayHelper.getBaseBoundsHandler();
+        handler.registerExclusionZones(ScrollableScreen.class, new BaseBoundsHandler.ExclusionZoneSupplier()
+        {
+            @Override
+            public List<Rectangle> apply(boolean isOnRightSide)
+            {
+                MinecraftClient client = MinecraftClient.getInstance();
+                ScrollableScreen screen = (ScrollableScreen) client.currentScreen;
 
-				ArrayList<Rectangle> rv = new ArrayList<>(1);
-				if(isOnRightSide && screen.hasScrollbar()){ rv.add(new Rectangle(screen.getLeft() + 172, screen.getTop(), 22, 132));}
-				return rv;
-			}
-		});
+                ArrayList<Rectangle> rv = new ArrayList<>(1);
+                if (isOnRightSide && screen.hasScrollbar()) { rv.add(new Rectangle(screen.getLeft() + 172, screen.getTop(), 22, 132));}
+                return rv;
+            }
+        });
 
-	}
+    }
 
-	@Override public Identifier getPluginIdentifier(){ return new Identifier("cursedchests", "reiplugin"); }
+    @Override
+    public Identifier getPluginIdentifier() { return new Identifier("cursedchests", "reiplugin"); }
 }

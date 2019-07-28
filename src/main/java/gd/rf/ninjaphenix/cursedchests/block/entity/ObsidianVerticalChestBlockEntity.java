@@ -8,14 +8,18 @@ import net.minecraft.util.Identifier;
 
 public class ObsidianVerticalChestBlockEntity extends VerticalChestBlockEntity
 {
-	public ObsidianVerticalChestBlockEntity(){ super(CursedChests.OBSIDIAN_VERTICAL_CHEST); }
+    public ObsidianVerticalChestBlockEntity() { super(CursedChests.OBSIDIAN_VERTICAL_CHEST); }
 
-	@Override protected Component getContainerName(){ return new TranslatableComponent("container.cursedchests.obsidian_chest"); }
-	@Override public int getInvSize(){ return 108; }
+    @Override
+    protected Component getContainerName() { return new TranslatableComponent("container.cursedchests.obsidian_chest"); }
 
-	@Override public Identifier getTexture(boolean isDouble)
-	{
-		if (isDouble) return new Identifier("cursedchests", "textures/entity/obsidian_chest/double.png");
-		return new Identifier("cursedchests", "textures/entity/obsidian_chest/single.png");
-	}
+    @Override
+    public int getInvSize() { return 108; }
+
+    @Override
+    public Identifier getTexture(boolean isDouble)
+    {
+        if (isDouble) return new Identifier("cursedchests", "textures/entity/obsidian_chest/double.png");
+        return new Identifier("cursedchests", "textures/entity/obsidian_chest/single.png");
+    }
 }

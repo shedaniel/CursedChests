@@ -1,1 +1,7 @@
-{"variants":{"":{"model":"cursedchests:block/wood_chest"}}}
+{
+  "variants": {
+    "": {
+      "model": "cursedchests:block/wood_chest"
+    }
+  }
+}

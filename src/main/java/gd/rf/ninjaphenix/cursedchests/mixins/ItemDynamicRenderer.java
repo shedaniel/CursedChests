@@ -16,20 +16,25 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(net.minecraft.client.render.item.ItemDynamicRenderer.class)
-@Environment(EnvType.CLIENT) public class ItemDynamicRenderer
+@Environment(EnvType.CLIENT)
+public class ItemDynamicRenderer
 {
-	@Inject(at = @At("HEAD"), method="render", cancellable=true)
-	private void render(ItemStack itemStack, CallbackInfo info)
-	{
-		Item item = itemStack.getItem();
-		if (item instanceof BlockItem)
-		{
-			Block block = ((BlockItem) item).getBlock();
-			if (block instanceof VerticalChestBlock)
-			{
-				BlockEntity blockEntity = CursedChestRegistry.getChestBlockEntity((VerticalChestBlock) block);
-				if (blockEntity != null){ BlockEntityRenderDispatcher.INSTANCE.renderEntity(blockEntity); info.cancel(); }
-			}
-		}
-	}
+    @Inject(at = @At("HEAD"), method = "render", cancellable = true)
+    private void render(ItemStack itemStack, CallbackInfo info)
+    {
+        Item item = itemStack.getItem();
+        if (item instanceof BlockItem)
+        {
+            Block block = ((BlockItem) item).getBlock();
+            if (block instanceof VerticalChestBlock)
+            {
+                BlockEntity blockEntity = CursedChestRegistry.getChestBlockEntity((VerticalChestBlock) block);
+                if (blockEntity != null)
+                {
+                    BlockEntityRenderDispatcher.INSTANCE.renderEntity(blockEntity);
+                    info.cancel();
+                }
+            }
+        }
+    }
 }

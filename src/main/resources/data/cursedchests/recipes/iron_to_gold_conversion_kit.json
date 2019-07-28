@@ -1,9 +1,19 @@
 {
   "type": "crafting_shaped",
-  "pattern": ["GGG", "GIG", "GGG"],
+  "pattern": [
+    "GGG",
+    "GIG",
+    "GGG"
+  ],
   "key": {
-    "I": {"item": "minecraft:iron_ingot"},
-    "G": {"item": "minecraft:gold_ingot"}
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    }
   },
-  "result": {"item": "cursedchests:iron_to_gold_conversion_kit"}
+  "result": {
+    "item": "cursedchests:iron_to_gold_conversion_kit"
+  }
 }

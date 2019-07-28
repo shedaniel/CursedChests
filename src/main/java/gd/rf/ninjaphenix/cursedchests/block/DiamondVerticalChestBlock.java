@@ -9,8 +9,11 @@ import net.minecraft.world.BlockView;
 
 public class DiamondVerticalChestBlock extends VerticalChestBlock
 {
-	DiamondVerticalChestBlock(){ super(FabricBlockSettings.copy(Blocks.DIAMOND_BLOCK).build()); }
+    DiamondVerticalChestBlock() { super(FabricBlockSettings.copy(Blocks.DIAMOND_BLOCK).build()); }
 
-	@Override public BlockEntity createBlockEntity(BlockView view){ return new DiamondVerticalChestBlockEntity(); }
-	@Override public String getName(){ return "diamond_chest"; }
+    @Override
+    public BlockEntity createBlockEntity(BlockView view) { return new DiamondVerticalChestBlockEntity(); }
+
+    @Override
+    public String getName() { return "diamond_chest"; }
 }
