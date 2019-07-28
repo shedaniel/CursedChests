@@ -5,13 +5,13 @@
   "name": "CursedChests",
   "description": "Adds cursed chests to minecraft.",
   "authors": [
-    "NinjaPhenix1"
+    "NinjaPhenix"
   ],
   "contact": {
     "homepage": "https://minecraft.curseforge.com/projects/cursed-chests",
     "sources": "https://github.com/NinjaPhenix/CursedChests"
   },
-  "license": "GPL-3.0",
+  "license": "MIT",
   "icon": "assets/cursedchests/icon.png",
   "environment": "*",
   "entrypoints": {

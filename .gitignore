@@ -1,27 +1,11 @@
-# gradle
-
 .gradle/
 build/
 out/
-
-# idea
-
+run/
+venv/
+classes/
 .idea/
+
 *.iml
 *.ipr
 *.iws
-
-# vscode
-
-.settings/
-.vscode/
-bin/
-.classpath
-.project
-
-# fabric
-
-run/
-/venv/
-/classes/
-/.idea/
