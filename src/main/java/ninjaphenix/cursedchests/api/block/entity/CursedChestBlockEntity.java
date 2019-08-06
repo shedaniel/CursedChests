@@ -6,23 +6,20 @@ import net.fabricmc.api.EnvironmentInterface;
 import net.fabricmc.api.EnvironmentInterfaces;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.client.block.ChestAnimationProgress;
-import net.minecraft.container.Container;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Tickable;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import ninjaphenix.cursedchests.api.CursedChestRegistry;
@@ -89,8 +86,8 @@ public class CursedChestBlockEntity extends BaseChestBlockEntity implements Ches
     protected void initialize(Identifier block)
     {
         this.block = block;
-        defaultContainerName = CursedChestRegistry.getDefaultContainerName(block);
-        inventorySize = CursedChestRegistry.getSlots(block);
+        defaultContainerName = CursedChestRegistry.getDefaultContainerName(block, false);
+        inventorySize = CursedChestRegistry.getSlots(block, false);
         inventory = DefaultedList.ofSize(inventorySize, ItemStack.EMPTY);
         SLOTS = new int[inventorySize];
         for (int i = 0; i < inventorySize; i++) SLOTS[i] = i;

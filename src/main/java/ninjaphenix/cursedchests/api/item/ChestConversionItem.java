@@ -24,6 +24,11 @@ import ninjaphenix.cursedchests.api.block.CursedChestType;
 
 public class ChestConversionItem extends ChestModifierItem
 {
+    /*
+        UPDATE THIS CLASS
+        UPDATE THIS CLASS
+        UPDATE THIS CLASS
+     */
     private Identifier from, to;
 
     public ChestConversionItem(Identifier from, Identifier to)

@@ -33,6 +33,11 @@ import java.util.List;
 
 public class ChestMutatorItem extends ChestModifierItem
 {
+    /*
+        UPDATE THIS CLASS
+        UPDATE THIS CLASS
+        UPDATE THIS CLASS
+     */
     private static final Text[] modes = new Text[]{ new TranslatableText("tooltip.cursedchests.chest_mutator.merge"),
             new TranslatableText("tooltip.cursedchests.chest_mutator.unmerge"), new TranslatableText("tooltip.cursedchests.chest_mutator.rotate") };
 

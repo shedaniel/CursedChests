@@ -3,6 +3,7 @@ package ninjaphenix.cursedchests.mixins;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -29,7 +30,7 @@ public class ItemDynamicRenderer
             Block block = ((BlockItem) item).getBlock();
             if (block instanceof CursedChestBlock)
             {
-                CursedChestBlockEntity blockEntity = CursedChestRegistry.getChestBlockEntity(Registry.BLOCK.getId(block));
+                BlockEntity blockEntity = CursedChestRegistry.getChestBlockEntity(Registry.BLOCK.getId(block), false);
                 if (blockEntity != null)
                 {
                     BlockEntityRenderDispatcher.INSTANCE.renderEntity(blockEntity);

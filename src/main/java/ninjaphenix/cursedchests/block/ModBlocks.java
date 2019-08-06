@@ -58,19 +58,23 @@ public class ModBlocks
                 new Identifier("cursedchests", "textures/entity/obsidian_chest/tall.png"),
                 new Identifier("cursedchests", "textures/entity/obsidian_chest/long.png"));
 
-        old_wood_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "old_wood_chest", 3);
+        old_wood_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "old_wood_chest", 3,
+                new TranslatableText("container.cursedchests.wood_chest"));
         // todo: move to api
         CURSED_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "cursed_chest"),
                 BlockEntityType.Builder.create(CursedChestBlockEntity::new, wood_chest, iron_chest, gold_chest, diamond_chest, obsidian_chest).build(null));
 
         FULL_CURSED_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "old_cursed_chest"),
-                BlockEntityType.Builder.create(OldChestBlockEntity::new, old_wood_chest, old_iron_chest, old_gold_chest, old_diamond_chest, old_obsidian_chest).build(null));
+                //BlockEntityType.Builder.create(OldChestBlockEntity::new, old_wood_chest, old_iron_chest, old_gold_chest, old_diamond_chest, old_obsidian_chest)
+                BlockEntityType.Builder.create(OldChestBlockEntity::new, old_wood_chest)
+                                       .build(null));
     }
 
-    private static OldChestBlock registerOld(OldChestBlock block, String name, int rows)
+    private static OldChestBlock registerOld(OldChestBlock block, String name, int rows, TranslatableText containerName)
     {
         Registry.register(Registry.BLOCK, new Identifier("cursedchests", name), block);
         Registry.register(Registry.ITEM, new Identifier("cursedchests", name), new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
+        CursedChestRegistry.registerOldChest(new Identifier("cursedchests", name), rows, containerName);
         return block;
     }
 

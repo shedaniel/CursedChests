@@ -20,8 +20,8 @@ public class OldChestBlockEntity extends BaseChestBlockEntity
     protected void initialize(Identifier block)
     {
         this.block = block;
-        defaultContainerName = CursedChestRegistry.getDefaultContainerName(block);
-        inventorySize = CursedChestRegistry.getSlots(block);
+        defaultContainerName = CursedChestRegistry.getDefaultContainerName(block, true);
+        inventorySize = CursedChestRegistry.getSlots(block, true);
         inventory = DefaultedList.ofSize(inventorySize, ItemStack.EMPTY);
         SLOTS = new int[inventorySize];
         for (int i = 0; i < inventorySize; i++) SLOTS[i] = i;

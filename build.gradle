@@ -26,20 +26,18 @@ dependencies {
     modCompile "net.fabricmc.fabric-api:fabric-object-builders-${project.fabric_object_builders}"
     // Dependency of fabric-object-builders
     modCompile "net.fabricmc.fabric-api:fabric-mining-levels-${project.fabric_mining_levels}"
+    // Dependency of fabric-mining-levels
+    modCompile "net.fabricmc.fabric-api:fabric-tag-extensions-${project.fabric_tag_extensions}"
+    // Dependency of fabric-tag-extensions
+    modCompile "net.fabricmc.fabric-api:fabric-resource-loader-${project.fabric_resource_loader}"
 
-    //REI
-
-    modCompile "net.fabricmc.fabric-api:fabric-keybindings-v0:0.1.1+7dfef87c"
-    modCompile "net.fabricmc.fabric-api:fabric-events-lifecycle-v0:0.1.0+5914746342"
-    modCompile "net.fabricmc.fabric-api:fabric-resource-loader-v0:0.1.1+59147463"
-
-    compile "blue.endless:jankson:1.1.0"
-    modCompile "cloth:ClothEvents:0.3.1.23"
-    modCompile "me.shedaniel.cloth:config-2:0.4.1"
-    modCompile 'roughly-enough-items:RoughlyEnoughItems:2.9.7+build.143'
+    modCompile ("blue.endless:jankson:1.1.0"){ transitive = false}
+    modCompile ("cloth:ClothEvents:0.3.1.23"){ transitive = false}
+    modCompile ("me.shedaniel.cloth:config-2:0.4.1"){ transitive = false}
+    modImplementation ('roughly-enough-items:RoughlyEnoughItems:2.9.7+build.143'){ transitive = false}
 }
 
-processResources{
+processResources {
     inputs.property "version", project.version
     from(sourceSets.main.resources.srcDirs) {
         include 'fabric.mod.json'

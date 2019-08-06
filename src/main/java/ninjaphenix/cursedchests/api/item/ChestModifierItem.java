@@ -17,6 +17,11 @@ import ninjaphenix.cursedchests.api.block.CursedChestType;
 
 public abstract class ChestModifierItem extends Item
 {
+    /*
+        UPDATE THIS CLASS
+        UPDATE THIS CLASS
+        UPDATE THIS CLASS
+     */
     public ChestModifierItem(Settings settings) { super(settings); }
 
     @Override
