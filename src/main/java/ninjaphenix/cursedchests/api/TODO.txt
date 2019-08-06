@@ -7,8 +7,10 @@ possible todo:
   Maybe add custom open stat for each chest type
   Curse of binding to lock a chest to a specific player (make upgrade ?)
   Trapped chest variant (make upgrade ?)
-  Ender chest variant
+  Ender chest variant (maybe too far out of scope)
 
-update todo:
-  Fix Rendering
-  Test functionality compare to pre-update.
+
+
+current todo:
+  find common elements in FullChestBlock and CursedChestBlock and make a base class.
+  And the block entity

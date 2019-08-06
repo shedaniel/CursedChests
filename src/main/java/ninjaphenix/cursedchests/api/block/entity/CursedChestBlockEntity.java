@@ -35,19 +35,12 @@ import java.util.Iterator;
 import java.util.List;
 
 @EnvironmentInterfaces({ @EnvironmentInterface(value = EnvType.CLIENT, itf = ChestAnimationProgress.class) })
-public class CursedChestBlockEntity extends LootableContainerBlockEntity implements ChestAnimationProgress, Tickable, SidedInventory
+public class CursedChestBlockEntity extends BaseChestBlockEntity implements ChestAnimationProgress, Tickable
 {
-    private Text defaultContainerName;
-    private int inventorySize;
-    private DefaultedList<ItemStack> inventory;
     private float animationAngle;
     private float lastAnimationAngle;
     private int viewerCount;
     private int ticksOpen;
-    private int[] SLOTS;
-
-    // May be Identifier("null", "null")
-    private Identifier block;
 
     public CursedChestBlockEntity()
     {
@@ -61,8 +54,7 @@ public class CursedChestBlockEntity extends LootableContainerBlockEntity impleme
 
     public CursedChestBlockEntity(BlockEntityType type, Identifier block)
     {
-        super(type);
-        this.initialize(block);
+        super(type, block);
     }
 
     private static int tickViewerCount(World world, CursedChestBlockEntity instance, int ticksOpen, int x, int y, int z, int viewCount)
@@ -93,7 +85,8 @@ public class CursedChestBlockEntity extends LootableContainerBlockEntity impleme
         }
     }
 
-    private void initialize(Identifier block)
+    @Override
+    protected void initialize(Identifier block)
     {
         this.block = block;
         defaultContainerName = CursedChestRegistry.getDefaultContainerName(block);
@@ -114,76 +107,9 @@ public class CursedChestBlockEntity extends LootableContainerBlockEntity impleme
         else { return super.onBlockAction(actionId, value); }
     }
 
-    public Identifier getBlock() { return block; }
-
-    public void setBlock(Identifier verticalChestBlock) { block = verticalChestBlock; }
-
-    @Override
-    protected DefaultedList<ItemStack> getInvStackList() { return inventory; }
-
-    @Override
-    public void setInvStackList(DefaultedList<ItemStack> defaultedList_1) { inventory = defaultedList_1; }
-
     @Environment(EnvType.CLIENT)
     @Override
     public float getAnimationProgress(float float_1) { return MathHelper.lerp(float_1, lastAnimationAngle, animationAngle); }
-
-    @Override
-    protected Container createContainer(int int_1, PlayerInventory playerInventory) { return null; }
-
-    @Override
-    public int[] getInvAvailableSlots(Direction direction) { return SLOTS; }
-
-    @Override
-    public boolean canInsertInvStack(int slot, ItemStack stack, Direction direction) { return this.isValidInvStack(slot, stack); }
-
-    @Override
-    public boolean canExtractInvStack(int slot, ItemStack stack, Direction direction) { return true; }
-
-    @Override
-    public int getInvSize() { return inventorySize; }
-
-    @Override
-    protected Text getContainerName() { return defaultContainerName; }
-
-    @Override
-    public boolean isInvEmpty()
-    {
-        Iterator<ItemStack> inventoryIterator = inventory.iterator();
-        ItemStack stack;
-        do
-        {
-            if (!inventoryIterator.hasNext()) return true;
-            stack = inventoryIterator.next();
-        } while (stack.isEmpty());
-        return false;
-    }
-
-    @Override
-    public void fromTag(CompoundTag tag)
-    {
-        super.fromTag(tag);
-        Identifier id = new Identifier(tag.getString("type"));
-        this.initialize(id);
-        if (!deserializeLootTable(tag)) Inventories.fromTag(tag, inventory);
-    }
-
-    @Override
-    public CompoundTag toTag(CompoundTag tag)
-    {
-        super.toTag(tag);
-        tag.putString("type", block.toString());
-        if (!serializeLootTable(tag)) Inventories.toTag(tag, inventory);
-        return tag;
-    }
-
-    @Override
-    public CompoundTag toInitialChunkDataTag()
-    {
-        CompoundTag initialChunkTag = super.toTag(new CompoundTag());
-        initialChunkTag.putString("type", block.toString());
-        return initialChunkTag;
-    }
 
     @Override
     public void tick()

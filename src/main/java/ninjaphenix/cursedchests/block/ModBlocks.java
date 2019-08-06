@@ -11,17 +11,26 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import ninjaphenix.cursedchests.api.CursedChestRegistry;
 import ninjaphenix.cursedchests.api.block.CursedChestBlock;
+import ninjaphenix.cursedchests.api.block.OldChestBlock;
 import ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
+import ninjaphenix.cursedchests.api.block.entity.OldChestBlockEntity;
 
 public class ModBlocks
 {
     public static BlockEntityType<CursedChestBlockEntity> CURSED_CHEST;
+    public static BlockEntityType<OldChestBlockEntity> FULL_CURSED_CHEST;
 
     public static CursedChestBlock wood_chest;
     public static CursedChestBlock iron_chest;
     public static CursedChestBlock gold_chest;
     public static CursedChestBlock diamond_chest;
     public static CursedChestBlock obsidian_chest;
+
+    public static OldChestBlock old_wood_chest;
+    public static OldChestBlock old_iron_chest;
+    public static OldChestBlock old_gold_chest;
+    public static OldChestBlock old_diamond_chest;
+    public static OldChestBlock old_obsidian_chest;
 
     public static void init()
     {
@@ -48,9 +57,21 @@ public class ModBlocks
                 new Identifier("cursedchests", "textures/entity/obsidian_chest/vanilla.png"),
                 new Identifier("cursedchests", "textures/entity/obsidian_chest/tall.png"),
                 new Identifier("cursedchests", "textures/entity/obsidian_chest/long.png"));
+
+        old_wood_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "old_wood_chest", 3);
         // todo: move to api
         CURSED_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "cursed_chest"),
                 BlockEntityType.Builder.create(CursedChestBlockEntity::new, wood_chest, iron_chest, gold_chest, diamond_chest, obsidian_chest).build(null));
+
+        FULL_CURSED_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "old_cursed_chest"),
+                BlockEntityType.Builder.create(OldChestBlockEntity::new, old_wood_chest, old_iron_chest, old_gold_chest, old_diamond_chest, old_obsidian_chest).build(null));
+    }
+
+    private static OldChestBlock registerOld(OldChestBlock block, String name, int rows)
+    {
+        Registry.register(Registry.BLOCK, new Identifier("cursedchests", name), block);
+        Registry.register(Registry.ITEM, new Identifier("cursedchests", name), new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
+        return block;
     }
 
     private static CursedChestBlock register(CursedChestBlock block, String name, int rows, TranslatableText containerName, Identifier singleTexture,
