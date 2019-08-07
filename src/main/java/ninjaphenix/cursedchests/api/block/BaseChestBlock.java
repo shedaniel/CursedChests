@@ -1,10 +1,7 @@
 package ninjaphenix.cursedchests.api.block;
 
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.InventoryProvider;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.container.Container;
 import net.minecraft.entity.LivingEntity;
@@ -71,7 +68,7 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(TYPE, CursedChestType.SINGLE));
     }
 
-    private static boolean isChestBlocked(IWorld world, BlockPos pos) { return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos); }
+    protected static boolean isChestBlocked(IWorld world, BlockPos pos) { return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos); }
 
     public static SidedInventory getInventoryStatic(BlockState state, IWorld world, BlockPos pos) { return retrieve(state, world, pos, INVENTORY_RETRIEVER); }
 
@@ -337,6 +334,9 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
             }
         }
     }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState blockState_1) { return BlockRenderType.MODEL; }
 
     interface PropertyRetriever<T>
     {

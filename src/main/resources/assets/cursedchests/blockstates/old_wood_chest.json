@@ -1,0 +1,32 @@
+{
+	"variants": {
+		"facing=south,type=back":  { "model": "cursedchests:block/old_wood_chest", "y": 180},
+		"facing=west,type=front":  { "model": "cursedchests:block/old_wood_chest", "y": 270},
+		"facing=east,type=top":  { "model": "cursedchests:block/old_wood_chest", "y": 90},
+		"facing=north,type=bottom":  { "model": "cursedchests:block/old_wood_chest"},
+		"facing=south,type=right":  { "model": "cursedchests:block/old_wood_chest", "y": 180},
+		"facing=north,type=back":  { "model": "cursedchests:block/old_wood_chest"},
+		"facing=west,type=bottom":  { "model": "cursedchests:block/old_wood_chest", "y": 270},
+		"facing=east,type=back":  { "model": "cursedchests:block/old_wood_chest", "y": 90},
+		"facing=north,type=front":  { "model": "cursedchests:block/old_wood_chest"},
+		"facing=south,type=front":  { "model": "cursedchests:block/old_wood_chest", "y": 180},
+		"facing=west,type=right":  { "model": "cursedchests:block/old_wood_chest", "y": 270},
+		"facing=south,type=top":  { "model": "cursedchests:block/old_wood_chest", "y": 180},
+		"facing=west,type=left":  { "model": "cursedchests:block/old_wood_chest", "y": 270},
+		"facing=east,type=right":  { "model": "cursedchests:block/old_wood_chest", "y": 90},
+		"facing=west,type=back":  { "model": "cursedchests:block/old_wood_chest", "y": 270},
+		"facing=north,type=left":  { "model": "cursedchests:block/old_wood_chest"},
+		"facing=west,type=top":  { "model": "cursedchests:block/old_wood_chest", "y": 270},
+		"facing=east,type=single":  { "model": "cursedchests:block/old_wood_chest", "y": 90},
+		"facing=south,type=bottom":  { "model": "cursedchests:block/old_wood_chest", "y": 180},
+		"facing=west,type=single":  { "model": "cursedchests:block/old_wood_chest", "y": 270},
+		"facing=north,type=single":  { "model": "cursedchests:block/old_wood_chest"},
+		"facing=south,type=left":  { "model": "cursedchests:block/old_wood_chest", "y": 180},
+		"facing=east,type=bottom":  { "model": "cursedchests:block/old_wood_chest", "y": 90},
+		"facing=east,type=front":  { "model": "cursedchests:block/old_wood_chest", "y": 90},
+		"facing=east,type=left":  { "model": "cursedchests:block/old_wood_chest", "y": 90},
+		"facing=north,type=top":  { "model": "cursedchests:block/old_wood_chest"},
+        "facing=north,type=right": { "model": "cursedchests:block/old_wood_chest"},
+		"facing=south,type=single":  { "model": "cursedchests:block/old_wood_chest", "y": 180}
+    }
+}
