@@ -2,7 +2,7 @@
   "parent": "cursedchests:block/old_chest/single",
   "textures": {
     "top": "cursedchests:block/chest_top",
-    "front": "minecraft:block/red_sand",
+    "front": "cursedchests:block/chest_front_bottom",
     "side": "minecraft:block/sand"
   }
 }
