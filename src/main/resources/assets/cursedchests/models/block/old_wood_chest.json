@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-        "top": "cursedchests:block/chest_top",
-        "front": "cursedchests:block/chest_front",
-        "side": "cursedchests:block/chest_side"
-    }
-}

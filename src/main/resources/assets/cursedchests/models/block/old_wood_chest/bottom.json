@@ -1,0 +1,8 @@
+{
+  "parent": "cursedchests:block/old_chest/single",
+  "textures": {
+    "top": "cursedchests:block/chest_top",
+    "front": "minecraft:block/red_sand",
+    "side": "minecraft:block/sand"
+  }
+}
