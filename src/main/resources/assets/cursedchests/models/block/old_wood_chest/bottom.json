@@ -3,6 +3,6 @@
   "textures": {
     "top": "cursedchests:block/chest_top",
     "front": "cursedchests:block/chest_front_bottom",
-    "side": "minecraft:block/sand"
+    "side": "cursedchests:block/chest_front_bottom"
   }
 }

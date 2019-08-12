@@ -129,8 +129,9 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
 
     private static boolean hasBlockOnTop(BlockView view, BlockPos pos)
     {
-        BlockPos blockPos_2 = pos.up();
-        return view.getBlockState(blockPos_2).isSimpleFullBlock(view, blockPos_2);
+        BlockPos up = pos.up();
+        BlockState state = view.getBlockState(up);
+        return state.isSimpleFullBlock(view, up) && !(state.getBlock() instanceof BaseChestBlock);
     }
 
     private static boolean hasOcelotOnTop(IWorld world, BlockPos pos)
