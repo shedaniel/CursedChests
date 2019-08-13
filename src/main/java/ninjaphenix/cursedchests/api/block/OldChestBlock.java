@@ -7,9 +7,11 @@ import ninjaphenix.cursedchests.api.block.entity.OldChestBlockEntity;
 
 public class OldChestBlock extends BaseChestBlock
 {
-
-    public OldChestBlock(Settings settings) { super(settings); }
+    public OldChestBlock(Settings settings)
+    {
+        super(settings);
+    }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView blockView) { return new OldChestBlockEntity(Registry.BLOCK.getId(this)); }
+    public BlockEntity createBlockEntity(BlockView view) { return new OldChestBlockEntity(Registry.BLOCK.getId(this)); }
 }

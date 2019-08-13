@@ -336,7 +336,7 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState blockState_1) { return BlockRenderType.MODEL; }
+    public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.MODEL; }
 
     interface PropertyRetriever<T>
     {

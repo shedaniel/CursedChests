@@ -13,8 +13,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -28,8 +26,6 @@ import ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 public class CursedChestBlock extends BaseChestBlock implements Waterloggable
 {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
-    public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
-    public static final EnumProperty<CursedChestType> TYPE = EnumProperty.of("type", CursedChestType.class);
     private static final VoxelShape SINGLE_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 14, 15);
     private static final VoxelShape TOP_SHAPE = Block.createCuboidShape(1, -16, 1, 15, 14, 15);
     private static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(1, 0, 1, 15, 30, 15);
@@ -55,7 +51,7 @@ public class CursedChestBlock extends BaseChestBlock implements Waterloggable
     public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.ENTITYBLOCK_ANIMATED; }
 
     @Override
-    public FluidState getFluidState(BlockState state) { return state.get(WATERLOGGED) ? Fluids.WATER.getDefaultState() : super.getFluidState(state); }
+    public FluidState getFluidState(BlockState state) { return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state); }
 
     @Override
     protected void appendProperties(StateFactory.Builder<Block, BlockState> stateBuilder)
