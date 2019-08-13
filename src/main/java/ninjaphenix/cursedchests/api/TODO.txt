@@ -12,5 +12,9 @@ possible todo:
 
 
 current todo:
-  find common elements in FullChestBlock and CursedChestBlock and make a base class.
-  And the block entity
+    Add assets for other block types (iron -> obsidian)
+    Perhaps convert to model instead of json
+    Spend like 20 hours making new textures
+    +33 other steps?
+    Play test
+    Release
