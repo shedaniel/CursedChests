@@ -22,7 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import ninjaphenix.cursedchests.api.CursedChestRegistry;
+import ninjaphenix.cursedchests.api.Registries;
 import ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import ninjaphenix.cursedchests.api.block.CursedChestType;
 import ninjaphenix.cursedchests.api.container.ScrollableContainer;
@@ -41,7 +41,7 @@ public class CursedChestBlockEntity extends BaseChestBlockEntity implements Ches
 
     public CursedChestBlockEntity()
     {
-        this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "cursed_chest")), new Identifier("null", "null"));
+        this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "cursed_chest")), new Identifier("cursedchests", "null"));
     }
 
     public CursedChestBlockEntity(Identifier block)
@@ -86,8 +86,8 @@ public class CursedChestBlockEntity extends BaseChestBlockEntity implements Ches
     protected void initialize(Identifier block)
     {
         this.block = block;
-        defaultContainerName = CursedChestRegistry.getDefaultContainerName(block, false);
-        inventorySize = CursedChestRegistry.getSlots(block, false);
+        defaultContainerName = Registries.REGULAR.get(block).getContainerName();
+        inventorySize = Registries.REGULAR.get(block).getSlotCount();
         inventory = DefaultedList.ofSize(inventorySize, ItemStack.EMPTY);
         SLOTS = new int[inventorySize];
         for (int i = 0; i < inventorySize; i++) SLOTS[i] = i;

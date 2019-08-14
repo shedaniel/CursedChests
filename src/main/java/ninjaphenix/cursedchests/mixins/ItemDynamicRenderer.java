@@ -3,14 +3,13 @@ package ninjaphenix.cursedchests.mixins;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.registry.Registry;
-import ninjaphenix.cursedchests.api.CursedChestRegistry;
 import ninjaphenix.cursedchests.api.block.CursedChestBlock;
+import ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 public class ItemDynamicRenderer
 {
+    private static final CursedChestBlockEntity REGULAR_RENDER_ENTITY = new CursedChestBlockEntity();
+
     @Inject(at = @At("HEAD"), method = "render", cancellable = true)
     private void render(ItemStack itemStack, CallbackInfo info)
     {
@@ -29,12 +30,9 @@ public class ItemDynamicRenderer
             Block block = ((BlockItem) item).getBlock();
             if (block instanceof CursedChestBlock)
             {
-                BlockEntity blockEntity = CursedChestRegistry.getChestBlockEntity(Registry.BLOCK.getId(block), false);
-                if (blockEntity != null)
-                {
-                    BlockEntityRenderDispatcher.INSTANCE.renderEntity(blockEntity);
-                    info.cancel();
-                }
+                REGULAR_RENDER_ENTITY.setBlock(Registry.BLOCK.getId(block));
+                BlockEntityRenderDispatcher.INSTANCE.renderEntity(REGULAR_RENDER_ENTITY);
+                info.cancel();
             }
         }
     }

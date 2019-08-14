@@ -9,7 +9,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import ninjaphenix.cursedchests.api.CursedChestRegistry;
+import ninjaphenix.cursedchests.api.Registries;
 import ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import ninjaphenix.cursedchests.api.block.OldChestBlock;
 import ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
@@ -72,18 +72,20 @@ public class ModBlocks
 
     private static OldChestBlock registerOld(OldChestBlock block, String name, int rows, TranslatableText containerName)
     {
-        Registry.register(Registry.BLOCK, new Identifier("cursedchests", name), block);
-        Registry.register(Registry.ITEM, new Identifier("cursedchests", name), new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
-        CursedChestRegistry.registerOldChest(new Identifier("cursedchests", name), rows, containerName);
+        Identifier id = new Identifier("cursedchests", name);
+        Registry.register(Registry.BLOCK, id, block);
+        Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
+        Registries.OLD.add(id, new Registries.Base(rows * 9, containerName));
         return block;
     }
 
     private static CursedChestBlock register(CursedChestBlock block, String name, int rows, TranslatableText containerName, Identifier singleTexture,
             Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
     {
-        Registry.register(Registry.BLOCK, new Identifier("cursedchests", name), block);
-        Registry.register(Registry.ITEM, new Identifier("cursedchests", name), new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
-        CursedChestRegistry.registerChest(new Identifier("cursedchests", name), rows, containerName, singleTexture, vanillaTexture, tallTexture, longTexture);
+        Identifier id = new Identifier("cursedchests", name);
+        Registry.register(Registry.BLOCK, id, block);
+        Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
+        Registries.REGULAR.add(id, new Registries.Regular(rows * 9, containerName, singleTexture, vanillaTexture, tallTexture, longTexture));
         return block;
     }
 }

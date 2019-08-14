@@ -10,7 +10,7 @@ import net.minecraft.client.render.entity.model.LargeChestEntityModel;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
-import ninjaphenix.cursedchests.api.CursedChestRegistry;
+import ninjaphenix.cursedchests.api.Registries;
 import ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import ninjaphenix.cursedchests.api.block.CursedChestType;
 import ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
@@ -83,7 +83,7 @@ public class CursedChestBlockEntityRenderer extends BlockEntityRenderer<CursedCh
     {
         Identifier identifier_5;
         if (breaking_stage >= 0) identifier_5 = DESTROY_STAGE_TEXTURES[breaking_stage];
-        else identifier_5 = CursedChestRegistry.getChestTexture(block, chestType);
+        else identifier_5 = Registries.REGULAR.get(block).getChestTexture(chestType);
         bindTexture(identifier_5);
         switch (chestType)
         {
