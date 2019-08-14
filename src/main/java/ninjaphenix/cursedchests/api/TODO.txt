@@ -16,5 +16,8 @@ current todo:
     Perhaps convert to model instead of json
     Spend like 20 hours making new textures
     +33 other steps?
+    Crafting recipes
+    Fix Upgrades to work on new chest types
+    Small -> Full -> Small recipe
     Play test
     Release
