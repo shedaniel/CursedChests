@@ -58,7 +58,7 @@ public class ModBlocks
                 new Identifier("cursedchests", "textures/entity/obsidian_chest/tall.png"),
                 new Identifier("cursedchests", "textures/entity/obsidian_chest/long.png"));
 
-        old_wood_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "old_wood_chest", 3,
+        old_wood_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "wood_chest", 3,
                 new TranslatableText("container.cursedchests.wood_chest"));
         // todo: move to api
         CURSED_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "cursed_chest"),
@@ -72,10 +72,10 @@ public class ModBlocks
 
     private static OldChestBlock registerOld(OldChestBlock block, String name, int rows, TranslatableText containerName)
     {
-        Identifier id = new Identifier("cursedchests", name);
+        Identifier id = new Identifier("cursedchests", "old_"+name);
         Registry.register(Registry.BLOCK, id, block);
         Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
-        Registries.OLD.add(id, new Registries.Base(rows * 9, containerName));
+        Registries.OLD.add(new Identifier("cursedchests", name), new Registries.Base(rows * 9, containerName));
         return block;
     }
 
