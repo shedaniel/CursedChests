@@ -1,19 +1,25 @@
 package ninjaphenix.cursedchests.client;
 
+import me.shedaniel.math.api.Rectangle;
 import me.shedaniel.rei.api.BaseBoundsHandler;
 import me.shedaniel.rei.api.DisplayHelper;
-import me.shedaniel.rei.api.REIPluginEntry;
+import me.shedaniel.rei.api.plugins.REIPluginV0;
+import net.fabricmc.loader.api.SemanticVersion;
+import net.fabricmc.loader.util.version.VersionParsingException;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import ninjaphenix.cursedchests.api.client.gui.container.ScrollableScreen;
 
-import java.awt.*;
 import java.util.ArrayList;
 
-public class CursedChestREIPlugin implements REIPluginEntry
+public class CursedChestREIPlugin implements REIPluginV0
 {
-    @Override
-    public void registerBounds(DisplayHelper displayHelper)
+    @Override public SemanticVersion getMinimumVersion() throws VersionParsingException
+    {
+        return SemanticVersion.parse("3.0-pre");
+    }
+
+    @Override public void registerBounds(DisplayHelper displayHelper)
     {
         BaseBoundsHandler handler = displayHelper.getBaseBoundsHandler();
         handler.registerExclusionZones(ScrollableScreen.class, isOnRightSide ->
@@ -26,6 +32,5 @@ public class CursedChestREIPlugin implements REIPluginEntry
         });
     }
 
-    @Override
-    public Identifier getPluginIdentifier() { return new Identifier("cursedchests", "reiplugin"); }
+    @Override public Identifier getPluginIdentifier(){ return new Identifier("cursedchests", "reiplugin"); }
 }
