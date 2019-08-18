@@ -18,10 +18,7 @@ dependencies {
     modCompile "net.fabricmc:fabric-loader:${loader_version}"
     modCompile "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-    modCompile ("blue.endless:jankson:1.1.0"){ transitive = false }
-    modCompile ('me.shedaniel.cloth:cloth-events:0.4.0'){ transitive = false }
-    modCompile ('me.shedaniel.cloth:config-2:0.5.3'){ transitive = false }
-    modImplementation ('roughly-enough-items:RoughlyEnoughItems:2.9.8+build.149'){ transitive = false }
+    modImplementation ('me.shedaniel:RoughlyEnoughItems:3.0-pre+build.1')
 }
 
 processResources{
