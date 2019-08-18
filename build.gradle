@@ -19,7 +19,7 @@ dependencies {
     modCompile "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
     modApi ('me.shedaniel:RoughlyEnoughItems:3.0-pre+build.1') {
-        exclude group: "io.github.prospector.modmenu", module: "ModMenu"
+        exclude(group: "io.github.prospector.modmenu", module: "ModMenu")
     }
 }
 
