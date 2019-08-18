@@ -14,8 +14,8 @@ public class Registries
     static
     {
         Identifier nullId = new Identifier("cursedchests", "null");
-        REGULAR.add(nullId, new Regular(0, new LiteralText("Error"), nullId, nullId, nullId, nullId));
-        OLD.add(nullId, new Base(0, new LiteralText("Error")));
+        REGULAR.add(nullId, new Regular(0, new LiteralText("Error"), nullId, nullId, nullId, nullId, nullId));
+        OLD.add(nullId, new Base(0, new LiteralText("Error"), nullId));
     }
 
 
@@ -26,9 +26,10 @@ public class Registries
         protected final Identifier tallTexture;
         protected final Identifier longTexture;
 
-        public Regular(int slots, Text containerName, Identifier singleTexture, Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
+        public Regular(int slots, Text containerName, Identifier blockId,
+                Identifier singleTexture, Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
         {
-            super(slots, containerName);
+            super(slots, containerName, blockId);
             this.singleTexture = singleTexture;
             this.vanillaTexture = vanillaTexture;
             this.tallTexture = tallTexture;
@@ -55,11 +56,13 @@ public class Registries
     {
         protected final int slots;
         protected final Text containerName;
+        protected final Identifier blockId;
 
-        public Base(int slots, Text containerName)
+        public Base(int slots, Text containerName, Identifier blockId)
         {
             this.slots = slots;
             this.containerName = containerName;
+            this.blockId = blockId;
         }
 
         public int getSlotCount()

@@ -75,7 +75,7 @@ public class ModBlocks
         Identifier id = new Identifier("cursedchests", "old_"+name);
         Registry.register(Registry.BLOCK, id, block);
         Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
-        Registries.OLD.add(new Identifier("cursedchests", name), new Registries.Base(rows * 9, containerName));
+        Registries.OLD.add(new Identifier("cursedchests", name), new Registries.Base(rows * 9, containerName, id));
         return block;
     }
 
@@ -85,7 +85,7 @@ public class ModBlocks
         Identifier id = new Identifier("cursedchests", name);
         Registry.register(Registry.BLOCK, id, block);
         Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
-        Registries.REGULAR.add(id, new Registries.Regular(rows * 9, containerName, singleTexture, vanillaTexture, tallTexture, longTexture));
+        Registries.REGULAR.add(id, new Registries.Regular(rows * 9, containerName, id, singleTexture, vanillaTexture, tallTexture, longTexture));
         return block;
     }
 }

@@ -17,9 +17,11 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
+import ninjaphenix.cursedchests.api.Registries;
 import ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 
 @SuppressWarnings("deprecation")
@@ -135,5 +137,11 @@ public class CursedChestBlock extends BaseChestBlock implements Waterloggable
     {
         if (state.get(WATERLOGGED)) world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         return super.getStateForNeighborUpdate(state, direction, otherState, world, pos, otherPos);
+    }
+
+    @Override
+    public SimpleRegistry<? extends Registries.Base> getRegistry()
+    {
+        return Registries.REGULAR;
     }
 }

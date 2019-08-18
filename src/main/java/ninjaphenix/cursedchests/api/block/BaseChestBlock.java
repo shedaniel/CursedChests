@@ -24,9 +24,11 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import ninjaphenix.cursedchests.api.Registries;
 import ninjaphenix.cursedchests.api.block.entity.BaseChestBlockEntity;
 import ninjaphenix.cursedchests.api.inventory.DoubleSidedInventory;
 
@@ -343,5 +345,10 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
         T getFromDoubleChest(BaseChestBlockEntity var1, BaseChestBlockEntity var2);
 
         T getFromSingleChest(BaseChestBlockEntity var1);
+    }
+
+    public SimpleRegistry<? extends Registries.Base> getRegistry()
+    {
+        return null;
     }
 }
