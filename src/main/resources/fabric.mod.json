@@ -19,7 +19,7 @@
       "ninjaphenix.cursedchests.CursedChests"
     ],
     "client": [
-      "ninjaphenix.cursedchests.CursedChests"
+      "ninjaphenix.cursedchests.CursedChestsClient"
     ],
     "rei_plugins_v0": [
       "ninjaphenix.cursedchests.client.CursedChestREIPlugin"

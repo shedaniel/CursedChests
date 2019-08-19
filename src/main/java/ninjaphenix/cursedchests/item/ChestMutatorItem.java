@@ -1,4 +1,4 @@
-package ninjaphenix.cursedchests.api.item;
+package ninjaphenix.cursedchests.item;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,6 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -25,26 +26,23 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import ninjaphenix.cursedchests.api.block.AbstractChestBlock;
 import ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import ninjaphenix.cursedchests.api.block.CursedChestType;
+import ninjaphenix.cursedchests.api.item.ChestModifierItem;
 import ninjaphenix.cursedchests.block.ModBlocks;
 
 import java.util.List;
 
 public class ChestMutatorItem extends ChestModifierItem
 {
-    /*
-        UPDATE THIS CLASS
-        UPDATE THIS CLASS
-        UPDATE THIS CLASS
-     */
+    private static final DirectionProperty FACING = Properties.FACING;
+    private static final EnumProperty<CursedChestType> TYPE = AbstractChestBlock.TYPE;
+
     private static final Text[] modes = new Text[]{ new TranslatableText("tooltip.cursedchests.chest_mutator.merge"),
             new TranslatableText("tooltip.cursedchests.chest_mutator.unmerge"), new TranslatableText("tooltip.cursedchests.chest_mutator.rotate") };
 
-    public ChestMutatorItem()
-    {
-        super(new Item.Settings().maxCount(1).group(ItemGroup.TOOLS));
-    }
+    public ChestMutatorItem() { super(new Item.Settings().maxCount(1).group(ItemGroup.TOOLS)); }
 
     @Override
     protected ActionResult useModifierOnChestBlock(ItemUsageContext context, BlockState mainState, BlockPos mainBlockPos, BlockState otherState,
@@ -53,8 +51,6 @@ public class ChestMutatorItem extends ChestModifierItem
         PlayerEntity player = context.getPlayer();
         World world = context.getWorld();
         ItemStack stack = context.getStack();
-        DirectionProperty FACING = CursedChestBlock.FACING;
-        EnumProperty<CursedChestType> TYPE = CursedChestBlock.TYPE;
         switch (getOrSetMode(stack))
         {
             case 0:
@@ -122,7 +118,7 @@ public class ChestMutatorItem extends ChestModifierItem
                         return ActionResult.SUCCESS;
                 }
             default:
-                player.sendMessage(new LiteralText("Not yet implemented."));
+                player.sendMessage(new LiteralText("Invalid mode."));
                 stack.getOrCreateTag().putByte("mode", (byte) 0);
                 break;
         }

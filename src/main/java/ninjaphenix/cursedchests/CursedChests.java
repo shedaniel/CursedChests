@@ -1,25 +1,17 @@
 package ninjaphenix.cursedchests;
 
-import net.fabricmc.api.*;
-import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry;
-import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import ninjaphenix.cursedchests.api.block.AbstractChestBlock;
-import ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
-import ninjaphenix.cursedchests.api.block.entity.OldChestBlockEntity;
-import ninjaphenix.cursedchests.api.client.gui.container.ScrollableScreen;
 import ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import ninjaphenix.cursedchests.block.ModBlocks;
-import ninjaphenix.cursedchests.client.render.block.entity.CursedChestBlockEntityRenderer;
-import ninjaphenix.cursedchests.client.render.block.entity.OldChestBlockEntityRenderer;
 import ninjaphenix.cursedchests.item.ModItems;
 
-@EnvironmentInterface(itf = ClientModInitializer.class, value = EnvType.CLIENT)
-public class CursedChests implements ModInitializer, ClientModInitializer
+public class CursedChests implements ModInitializer
 {
     @Override
     public void onInitialize()
@@ -29,19 +21,9 @@ public class CursedChests implements ModInitializer, ClientModInitializer
         ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->
         {
             BlockPos pos = buf.readBlockPos();
-            Text containerName = buf.readText();
+            Text name = buf.readText();
             World world = player.getEntityWorld();
-            return new ScrollableContainer(syncId, player.inventory, AbstractChestBlock.getInventoryStatic(world.getBlockState(pos), world, pos),
-                    containerName);
+            return new ScrollableContainer(syncId, player.inventory, AbstractChestBlock.getInventoryStatic(world, pos), name);
         }));
-    }
-
-    @Environment(EnvType.CLIENT)
-    @Override
-    public void onInitializeClient()
-    {
-        BlockEntityRendererRegistry.INSTANCE.register(CursedChestBlockEntity.class, new CursedChestBlockEntityRenderer());
-        BlockEntityRendererRegistry.INSTANCE.register(OldChestBlockEntity.class, new OldChestBlockEntityRenderer());
-        ScreenProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ScrollableScreen::createScreen);
     }
 }

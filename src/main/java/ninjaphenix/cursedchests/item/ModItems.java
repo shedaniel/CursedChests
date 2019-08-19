@@ -5,7 +5,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import ninjaphenix.cursedchests.api.item.ChestConversionItem;
-import ninjaphenix.cursedchests.api.item.ChestMutatorItem;
 import ninjaphenix.cursedchests.block.ModBlocks;
 
 public class ModItems

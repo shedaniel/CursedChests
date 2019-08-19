@@ -74,7 +74,7 @@ public abstract class AbstractChestBlock extends BlockWithEntity implements Inve
 
     private static boolean isChestBlocked(IWorld world, BlockPos pos) { return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos); }
 
-    public static SidedInventory getInventoryStatic(BlockState state, IWorld world, BlockPos pos) { return retrieve(state, world, pos, INVENTORY_RETRIEVER); }
+    public static SidedInventory getInventoryStatic(IWorld world, BlockPos pos) { return retrieve(world.getBlockState(pos), world, pos, INVENTORY_RETRIEVER); }
 
     public static CursedChestType getChestType(Direction facing, Direction offset)
     {

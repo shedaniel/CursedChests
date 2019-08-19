@@ -6,17 +6,23 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import ninjaphenix.cursedchests.api.block.CursedChestBlock;
+import ninjaphenix.cursedchests.api.block.AbstractChestBlock;
 import ninjaphenix.cursedchests.api.block.CursedChestType;
 
 public abstract class ChestModifierItem extends Item
 {
+
+    private static final DirectionProperty FACING = AbstractChestBlock.FACING;
+    private static final EnumProperty<CursedChestType> TYPE = AbstractChestBlock.TYPE;
+
     /*
         UPDATE THIS CLASS
         UPDATE THIS CLASS
@@ -30,11 +36,11 @@ public abstract class ChestModifierItem extends Item
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
         BlockState state = world.getBlockState(pos);
-        if (state.getBlock() instanceof CursedChestBlock)
+        if (state.getBlock() instanceof AbstractChestBlock)
         {
             ActionResult result = ActionResult.FAIL;
-            CursedChestType type = state.get(CursedChestBlock.TYPE);
-            Direction facing = state.get(CursedChestBlock.FACING);
+            CursedChestType type = state.get(TYPE);
+            Direction facing = state.get(FACING);
             if (type == CursedChestType.SINGLE) result = useModifierOnChestBlock(context, state, pos, null, null);
             else if (type == CursedChestType.BOTTOM)
             {
