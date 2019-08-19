@@ -26,6 +26,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
@@ -339,10 +340,9 @@ public abstract class AbstractChestBlock extends BlockWithEntity implements Inve
         }
     }
 
-    public SimpleRegistry<? extends Registries.TierData> getRegistry()
-    {
-        return null;
-    }
+    public SimpleRegistry<? extends Registries.TierData> getRegistry() { return null; }
+
+    public Identifier getTierId() { return Registry.BLOCK.getId(this); }
 
     @Environment(EnvType.CLIENT)
     @Override

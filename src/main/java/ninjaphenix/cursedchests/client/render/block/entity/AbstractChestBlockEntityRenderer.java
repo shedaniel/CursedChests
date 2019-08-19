@@ -8,7 +8,6 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.entity.model.ChestEntityModel;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import ninjaphenix.cursedchests.api.block.AbstractChestBlock;
 import ninjaphenix.cursedchests.api.block.CursedChestBlock;
 import ninjaphenix.cursedchests.api.block.CursedChestType;
@@ -41,7 +40,7 @@ public abstract class AbstractChestBlockEntityRenderer<T extends AbstractChestBl
         CursedChestType chestType = state.get(CursedChestBlock.TYPE);
         if (!chestType.isRenderedType() && breaking_stage < 0) return;
         Identifier b = blockEntity.getBlock();
-        if (b == null) b = Registry.BLOCK.getId(block);
+        if (b == null) b = block.getTierId(); // fix this
         ChestEntityModel chestModel = getChestModelAndBindTexture(b, breaking_stage, chestType);
         if (chestModel == null) return;
         GlStateManager.enableDepthTest();

@@ -61,8 +61,9 @@ public class ModBlocks
 
         old_wood_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "wood_chest", 3,
                 new TranslatableText("container.cursedchests.wood_chest"), new Identifier("cursedchests", "textures/entity/old_wood_chest/single.png"),
-                new Identifier("minecraft", "textures/entity/chest/normal_double.png"), new Identifier("cursedchests", "textures/entity/wood_chest/tall.png"),
-                new Identifier("cursedchests", "textures/entity/wood_chest/long.png"));
+                new Identifier("cursedchests", "textures/entity/old_wood_chest/vanilla.png"),
+                new Identifier("cursedchests", "textures/entity/old_wood_chest/tall.png"),
+                new Identifier("cursedchests", "textures/entity/old_wood_chest/long.png"));
         // todo: move to api
         CURSED_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "cursed_chest"),
                 BlockEntityType.Builder.create(CursedChestBlockEntity::new, wood_chest, iron_chest, gold_chest, diamond_chest, obsidian_chest).build(null));
@@ -79,9 +80,8 @@ public class ModBlocks
         Identifier id = new Identifier("cursedchests", "old_" + name);
         Registry.register(Registry.BLOCK, id, block);
         Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
-        Registries.OLD
-                .add(new Identifier("cursedchests", name), new Registries.TierData(rows * 9, containerName, id, singleTexture, vanillaTexture, tallTexture,
-                        longTexture));
+        Registries.OLD.add(new Identifier("cursedchests", name), new Registries.TierData(rows * 9, containerName, id,
+                singleTexture, vanillaTexture, tallTexture, longTexture));
         return block;
     }
 

@@ -13,7 +13,6 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
@@ -40,7 +39,7 @@ public class CursedChestBlock extends AbstractChestBlock implements Waterloggabl
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView var1) { return new CursedChestBlockEntity(Registry.BLOCK.getId(this)); }
+    public BlockEntity createBlockEntity(BlockView var1) { return new CursedChestBlockEntity(getTierId()); }
 
     @Override
     public FluidState getFluidState(BlockState state) { return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state); }
@@ -52,7 +51,7 @@ public class CursedChestBlock extends AbstractChestBlock implements Waterloggabl
         stateBuilder.add(WATERLOGGED);
     }
 
-    // Todo: tidy this up.
+    // Todo: tidy this up. (replace with if statements)
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext verticalEntityPosition)
     {
@@ -130,8 +129,5 @@ public class CursedChestBlock extends AbstractChestBlock implements Waterloggabl
     }
 
     @Override
-    public SimpleRegistry<? extends Registries.TierData> getRegistry()
-    {
-        return Registries.REGULAR;
-    }
+    public SimpleRegistry<? extends Registries.TierData> getRegistry() { return Registries.REGULAR; }
 }

@@ -1,5 +1,4 @@
 {
-  "parent": "item/chest",
   "textures": {
     "particle": "block/oak_planks"
   }
