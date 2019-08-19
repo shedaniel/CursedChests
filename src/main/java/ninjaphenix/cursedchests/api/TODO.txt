@@ -18,6 +18,5 @@ current todo:
     +33 other steps?
     Crafting recipes
     Fix Upgrades to work on new chest types
-    Small -> Full -> Small recipe
     Play test
     Release

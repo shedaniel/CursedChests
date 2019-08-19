@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import ninjaphenix.cursedchests.api.Registries;
 
-public class OldChestBlockEntity extends BaseChestBlockEntity
+public class OldChestBlockEntity extends AbstractChestBlockEntity
 {
 
     public OldChestBlockEntity()

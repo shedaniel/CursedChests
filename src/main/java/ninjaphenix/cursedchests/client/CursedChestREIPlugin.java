@@ -14,12 +14,14 @@ import java.util.ArrayList;
 
 public class CursedChestREIPlugin implements REIPluginV0
 {
-    @Override public SemanticVersion getMinimumVersion() throws VersionParsingException
+    @Override
+    public SemanticVersion getMinimumVersion() throws VersionParsingException
     {
         return SemanticVersion.parse("3.0-pre");
     }
 
-    @Override public void registerBounds(DisplayHelper displayHelper)
+    @Override
+    public void registerBounds(DisplayHelper displayHelper)
     {
         BaseBoundsHandler handler = displayHelper.getBaseBoundsHandler();
         handler.registerExclusionZones(ScrollableScreen.class, isOnRightSide ->
@@ -32,5 +34,6 @@ public class CursedChestREIPlugin implements REIPluginV0
         });
     }
 
-    @Override public Identifier getPluginIdentifier(){ return new Identifier("cursedchests", "reiplugin"); }
+    @Override
+    public Identifier getPluginIdentifier() { return new Identifier("cursedchests", "reiplugin"); }
 }

@@ -15,7 +15,7 @@ import net.minecraft.util.math.Direction;
 
 import java.util.Iterator;
 
-public abstract class BaseChestBlockEntity extends LootableContainerBlockEntity implements SidedInventory
+public abstract class AbstractChestBlockEntity extends LootableContainerBlockEntity implements SidedInventory
 {
     protected Text defaultContainerName;
     protected int inventorySize;
@@ -25,7 +25,7 @@ public abstract class BaseChestBlockEntity extends LootableContainerBlockEntity 
     // May be Identifier("cursedchests", "null")
     protected Identifier block;
 
-    public BaseChestBlockEntity(BlockEntityType type, Identifier block)
+    public AbstractChestBlockEntity(BlockEntityType type, Identifier block)
     {
         super(type);
         this.initialize(block);

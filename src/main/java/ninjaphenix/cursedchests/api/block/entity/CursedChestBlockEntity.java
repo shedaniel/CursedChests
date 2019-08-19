@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @EnvironmentInterfaces({ @EnvironmentInterface(value = EnvType.CLIENT, itf = ChestAnimationProgress.class) })
-public class CursedChestBlockEntity extends BaseChestBlockEntity implements ChestAnimationProgress, Tickable
+public class CursedChestBlockEntity extends AbstractChestBlockEntity implements ChestAnimationProgress, Tickable
 {
     private float animationAngle;
     private float lastAnimationAngle;

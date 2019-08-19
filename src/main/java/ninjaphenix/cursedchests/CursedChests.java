@@ -8,12 +8,14 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import ninjaphenix.cursedchests.api.block.BaseChestBlock;
+import ninjaphenix.cursedchests.api.block.AbstractChestBlock;
 import ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
+import ninjaphenix.cursedchests.api.block.entity.OldChestBlockEntity;
 import ninjaphenix.cursedchests.api.client.gui.container.ScrollableScreen;
 import ninjaphenix.cursedchests.api.container.ScrollableContainer;
 import ninjaphenix.cursedchests.block.ModBlocks;
 import ninjaphenix.cursedchests.client.render.block.entity.CursedChestBlockEntityRenderer;
+import ninjaphenix.cursedchests.client.render.block.entity.OldChestBlockEntityRenderer;
 import ninjaphenix.cursedchests.item.ModItems;
 
 @EnvironmentInterface(itf = ClientModInitializer.class, value = EnvType.CLIENT)
@@ -29,7 +31,8 @@ public class CursedChests implements ModInitializer, ClientModInitializer
             BlockPos pos = buf.readBlockPos();
             Text containerName = buf.readText();
             World world = player.getEntityWorld();
-            return new ScrollableContainer(syncId, player.inventory, BaseChestBlock.getInventoryStatic(world.getBlockState(pos), world, pos), containerName);
+            return new ScrollableContainer(syncId, player.inventory, AbstractChestBlock.getInventoryStatic(world.getBlockState(pos), world, pos),
+                    containerName);
         }));
     }
 
@@ -38,6 +41,7 @@ public class CursedChests implements ModInitializer, ClientModInitializer
     public void onInitializeClient()
     {
         BlockEntityRendererRegistry.INSTANCE.register(CursedChestBlockEntity.class, new CursedChestBlockEntityRenderer());
+        BlockEntityRendererRegistry.INSTANCE.register(OldChestBlockEntity.class, new OldChestBlockEntityRenderer());
         ScreenProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ScrollableScreen::createScreen);
     }
 }

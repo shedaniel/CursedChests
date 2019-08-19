@@ -1,4 +1,4 @@
-package ninjaphenix.cursedchests.client.render.entity.model;
+package ninjaphenix.cursedchests.client.render.entity.model.cursed;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

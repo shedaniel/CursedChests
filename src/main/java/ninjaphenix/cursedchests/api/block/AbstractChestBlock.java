@@ -1,5 +1,7 @@
 package ninjaphenix.cursedchests.api.block;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -29,13 +31,13 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import ninjaphenix.cursedchests.api.Registries;
-import ninjaphenix.cursedchests.api.block.entity.BaseChestBlockEntity;
+import ninjaphenix.cursedchests.api.block.entity.AbstractChestBlockEntity;
 import ninjaphenix.cursedchests.api.inventory.DoubleSidedInventory;
 
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public abstract class BaseChestBlock extends BlockWithEntity implements InventoryProvider
+public abstract class AbstractChestBlock extends BlockWithEntity implements InventoryProvider
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final EnumProperty<CursedChestType> TYPE = EnumProperty.of("type", CursedChestType.class);
@@ -43,16 +45,16 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
     private static final PropertyRetriever<SidedInventory> INVENTORY_RETRIEVER = new PropertyRetriever<SidedInventory>()
     {
         @Override
-        public SidedInventory getFromDoubleChest(BaseChestBlockEntity mainBlockEntity, BaseChestBlockEntity secondaryBlockEntity)
+        public SidedInventory getFromDoubleChest(AbstractChestBlockEntity mainBlockEntity, AbstractChestBlockEntity secondaryBlockEntity)
         { return new DoubleSidedInventory(mainBlockEntity, secondaryBlockEntity); }
 
         @Override
-        public SidedInventory getFromSingleChest(BaseChestBlockEntity mainBlockEntity) { return mainBlockEntity; }
+        public SidedInventory getFromSingleChest(AbstractChestBlockEntity mainBlockEntity) { return mainBlockEntity; }
     };
     private static final PropertyRetriever<Text> NAME_RETRIEVER = new PropertyRetriever<Text>()
     {
         @Override
-        public Text getFromDoubleChest(BaseChestBlockEntity mainBlockEntity, BaseChestBlockEntity secondaryBlockEntity)
+        public Text getFromDoubleChest(AbstractChestBlockEntity mainBlockEntity, AbstractChestBlockEntity secondaryBlockEntity)
         {
             if (mainBlockEntity.hasCustomName()) return mainBlockEntity.getDisplayName();
             if (secondaryBlockEntity.hasCustomName()) return secondaryBlockEntity.getDisplayName();
@@ -60,16 +62,16 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
         }
 
         @Override
-        public Text getFromSingleChest(BaseChestBlockEntity mainBlockEntity) { return mainBlockEntity.getDisplayName(); }
+        public Text getFromSingleChest(AbstractChestBlockEntity mainBlockEntity) { return mainBlockEntity.getDisplayName(); }
     };
 
-    public BaseChestBlock(Settings settings)
+    public AbstractChestBlock(Settings settings)
     {
         super(settings);
         setDefaultState(getDefaultState().with(FACING, Direction.NORTH).with(TYPE, CursedChestType.SINGLE));
     }
 
-    protected static boolean isChestBlocked(IWorld world, BlockPos pos) { return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos); }
+    private static boolean isChestBlocked(IWorld world, BlockPos pos) { return hasBlockOnTop(world, pos) || hasOcelotOnTop(world, pos); }
 
     public static SidedInventory getInventoryStatic(BlockState state, IWorld world, BlockPos pos) { return retrieve(state, world, pos, INVENTORY_RETRIEVER); }
 
@@ -100,8 +102,8 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
     private static <T> T retrieve(BlockState clickedState, IWorld world, BlockPos clickedPos, PropertyRetriever<T> propertyRetriever)
     {
         BlockEntity clickedBlockEntity = world.getBlockEntity(clickedPos);
-        if (!(clickedBlockEntity instanceof BaseChestBlockEntity) || isChestBlocked(world, clickedPos)) return null;
-        BaseChestBlockEntity clickedChestBlockEntity = (BaseChestBlockEntity) clickedBlockEntity;
+        if (!(clickedBlockEntity instanceof AbstractChestBlockEntity) || isChestBlocked(world, clickedPos)) return null;
+        AbstractChestBlockEntity clickedChestBlockEntity = (AbstractChestBlockEntity) clickedBlockEntity;
         CursedChestType clickedChestType = clickedState.get(TYPE);
         if (clickedChestType == CursedChestType.SINGLE) return propertyRetriever.getFromSingleChest(clickedChestBlockEntity);
         BlockPos pairedPos = getPairedPos(world, clickedPos);
@@ -113,15 +115,15 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
             {
                 if (isChestBlocked(world, pairedPos)) return null;
                 BlockEntity pairedBlockEntity = world.getBlockEntity(pairedPos);
-                if (pairedBlockEntity instanceof BaseChestBlockEntity)
+                if (pairedBlockEntity instanceof AbstractChestBlockEntity)
                 {
                     if (clickedChestType.isRenderedType())
                     {
-                        return propertyRetriever.getFromDoubleChest(clickedChestBlockEntity, (BaseChestBlockEntity) pairedBlockEntity);
+                        return propertyRetriever.getFromDoubleChest(clickedChestBlockEntity, (AbstractChestBlockEntity) pairedBlockEntity);
                     }
                     else
                     {
-                        return propertyRetriever.getFromDoubleChest((BaseChestBlockEntity) pairedBlockEntity, clickedChestBlockEntity);
+                        return propertyRetriever.getFromDoubleChest((AbstractChestBlockEntity) pairedBlockEntity, clickedChestBlockEntity);
                     }
                 }
             }
@@ -133,7 +135,7 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
     {
         BlockPos up = pos.up();
         BlockState state = view.getBlockState(up);
-        return state.isSimpleFullBlock(view, up) && !(state.getBlock() instanceof BaseChestBlock);
+        return state.isSimpleFullBlock(view, up) && !(state.getBlock() instanceof AbstractChestBlock);
     }
 
     private static boolean hasOcelotOnTop(IWorld world, BlockPos pos)
@@ -164,7 +166,7 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
 
     private Stat<Identifier> getOpenStat() { return Stats.CUSTOM.getOrCreateStat(Stats.OPEN_CHEST); }
 
-    // todo: go over this to optimize it
+    // todo: go over this to optimize it aka just rewrite it
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
@@ -261,7 +263,7 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
         if (stack.hasCustomName())
         {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof BaseChestBlockEntity) ((BaseChestBlockEntity) blockEntity).setCustomName(stack.getName());
+            if (blockEntity instanceof AbstractChestBlockEntity) ((AbstractChestBlockEntity) blockEntity).setCustomName(stack.getName());
         }
     }
 
@@ -302,9 +304,9 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
         BlockPos pairedPos = getPairedPos(world, pos);
         if (pairedPos == null)
         {
-            if (clickedBlockEntity instanceof BaseChestBlockEntity)
+            if (clickedBlockEntity instanceof AbstractChestBlockEntity)
             {
-                BaseChestBlockEntity cursedClickBlockEntity = (BaseChestBlockEntity) clickedBlockEntity;
+                AbstractChestBlockEntity cursedClickBlockEntity = (AbstractChestBlockEntity) clickedBlockEntity;
                 if (cursedClickBlockEntity.checkUnlocked(player))
                 {
                     cursedClickBlockEntity.checkLootInteraction(player);
@@ -319,10 +321,10 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
         else
         {
             BlockEntity pairedBlockEntity = world.getBlockEntity(pairedPos);
-            if (clickedBlockEntity instanceof BaseChestBlockEntity && pairedBlockEntity instanceof BaseChestBlockEntity)
+            if (clickedBlockEntity instanceof AbstractChestBlockEntity && pairedBlockEntity instanceof AbstractChestBlockEntity)
             {
-                BaseChestBlockEntity cursedClickBlockEntity = (BaseChestBlockEntity) clickedBlockEntity;
-                BaseChestBlockEntity cursedPairedBlockEntity = (BaseChestBlockEntity) pairedBlockEntity;
+                AbstractChestBlockEntity cursedClickBlockEntity = (AbstractChestBlockEntity) clickedBlockEntity;
+                AbstractChestBlockEntity cursedPairedBlockEntity = (AbstractChestBlockEntity) pairedBlockEntity;
                 if (cursedClickBlockEntity.checkUnlocked(player) && cursedPairedBlockEntity.checkUnlocked(player))
                 {
                     cursedClickBlockEntity.checkLootInteraction(player);
@@ -337,18 +339,22 @@ public abstract class BaseChestBlock extends BlockWithEntity implements Inventor
         }
     }
 
+    public SimpleRegistry<? extends Registries.TierData> getRegistry()
+    {
+        return null;
+    }
+
+    @Environment(EnvType.CLIENT)
     @Override
-    public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.MODEL; }
+    public boolean hasBlockEntityBreakingRender(BlockState state) { return true; }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.ENTITYBLOCK_ANIMATED; }
 
     interface PropertyRetriever<T>
     {
-        T getFromDoubleChest(BaseChestBlockEntity var1, BaseChestBlockEntity var2);
+        T getFromDoubleChest(AbstractChestBlockEntity var1, AbstractChestBlockEntity var2);
 
-        T getFromSingleChest(BaseChestBlockEntity var1);
-    }
-
-    public SimpleRegistry<? extends Registries.Base> getRegistry()
-    {
-        return null;
+        T getFromSingleChest(AbstractChestBlockEntity var1);
     }
 }

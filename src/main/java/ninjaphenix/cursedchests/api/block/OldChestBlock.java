@@ -8,12 +8,9 @@ import net.minecraft.world.BlockView;
 import ninjaphenix.cursedchests.api.Registries;
 import ninjaphenix.cursedchests.api.block.entity.OldChestBlockEntity;
 
-public class OldChestBlock extends BaseChestBlock
+public class OldChestBlock extends AbstractChestBlock
 {
-    public OldChestBlock(Settings settings)
-    {
-        super(settings);
-    }
+    public OldChestBlock(Settings settings) { super(settings); }
 
     @Override
     public BlockEntity createBlockEntity(BlockView view)
@@ -23,7 +20,7 @@ public class OldChestBlock extends BaseChestBlock
     }
 
     @Override
-    public SimpleRegistry<? extends Registries.Base> getRegistry()
+    public SimpleRegistry<? extends Registries.TierData> getRegistry()
     {
         return Registries.OLD;
     }
