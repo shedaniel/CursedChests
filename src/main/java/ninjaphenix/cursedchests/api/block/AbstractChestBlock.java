@@ -1,7 +1,5 @@
 package ninjaphenix.cursedchests.api.block;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,12 +24,9 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import ninjaphenix.cursedchests.api.Registries;
 import ninjaphenix.cursedchests.api.block.entity.AbstractChestBlockEntity;
 import ninjaphenix.cursedchests.api.inventory.DoubleSidedInventory;
 
@@ -340,16 +335,11 @@ public abstract class AbstractChestBlock extends BlockWithEntity implements Inve
         }
     }
 
-    public SimpleRegistry<? extends Registries.TierData> getRegistry() { return null; }
-
-    public Identifier getTierId() { return Registry.BLOCK.getId(this); }
-
-    @Environment(EnvType.CLIENT)
     @Override
-    public boolean hasBlockEntityBreakingRender(BlockState state) { return true; }
-
-    @Override
-    public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.ENTITYBLOCK_ANIMATED; }
+    public BlockRenderType getRenderType(BlockState blockState_1)
+    {
+        return BlockRenderType.MODEL;
+    }
 
     interface PropertyRetriever<T>
     {

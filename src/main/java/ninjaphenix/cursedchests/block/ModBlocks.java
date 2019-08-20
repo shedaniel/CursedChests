@@ -34,7 +34,6 @@ public class ModBlocks
 
     public static void init()
     {
-        // todo: move to api (wood chest)
         wood_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "wood_chest", 3,
                 new TranslatableText("container.cursedchests.wood_chest"), new Identifier("minecraft", "textures/entity/chest/normal.png"),
                 new Identifier("minecraft", "textures/entity/chest/normal_double.png"), new Identifier("cursedchests", "textures/entity/wood_chest/tall.png"),
@@ -52,36 +51,35 @@ public class ModBlocks
                 new Identifier("cursedchests", "textures/entity/diamond_chest/vanilla.png"),
                 new Identifier("cursedchests", "textures/entity/diamond_chest/tall.png"),
                 new Identifier("cursedchests", "textures/entity/diamond_chest/long.png"));
+        // todo: Make obsidian chests an upgrade (when I implement crystal chests)
         obsidian_chest = register(new CursedChestBlock(FabricBlockSettings.copy(Blocks.OBSIDIAN).build()), "obsidian_chest", 12,
                 new TranslatableText("container.cursedchests.obsidian_chest"), new Identifier("cursedchests", "textures/entity/obsidian_chest/single.png"),
                 new Identifier("cursedchests", "textures/entity/obsidian_chest/vanilla.png"),
                 new Identifier("cursedchests", "textures/entity/obsidian_chest/tall.png"),
                 new Identifier("cursedchests", "textures/entity/obsidian_chest/long.png"));
-
-
         old_wood_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.OAK_PLANKS).build()), "wood_chest", 3,
-                new TranslatableText("container.cursedchests.wood_chest"), new Identifier("cursedchests", "textures/entity/old_wood_chest/single.png"),
-                new Identifier("cursedchests", "textures/entity/old_wood_chest/vanilla.png"),
-                new Identifier("cursedchests", "textures/entity/old_wood_chest/tall.png"),
-                new Identifier("cursedchests", "textures/entity/old_wood_chest/long.png"));
+                new TranslatableText("container.cursedchests.wood_chest"));
+        old_iron_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.IRON_BLOCK).build()), "iron_chest", 6,
+                new TranslatableText("container.cursedchests.iron_chest"));
+        old_gold_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.GOLD_BLOCK).build()), "gold_chest", 9,
+                new TranslatableText("container.cursedchests.gold_chest"));
+        old_diamond_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.DIAMOND_BLOCK).build()), "diamond_chest", 12,
+                new TranslatableText("container.cursedchests.diamond_chest"));
+        old_obsidian_chest = registerOld(new OldChestBlock(FabricBlockSettings.copy(Blocks.OBSIDIAN).build()), "obsidian_chest", 12,
+                new TranslatableText("container.cursedchests.obsidian_chest"));
         // todo: move to api
         CURSED_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "cursed_chest"),
                 BlockEntityType.Builder.create(CursedChestBlockEntity::new, wood_chest, iron_chest, gold_chest, diamond_chest, obsidian_chest).build(null));
-
-        FULL_CURSED_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "old_cursed_chest"),
-                //BlockEntityType.Builder.create(OldChestBlockEntity::new, old_wood_chest, old_iron_chest, old_gold_chest, old_diamond_chest, old_obsidian_chest)
-                BlockEntityType.Builder.create(OldChestBlockEntity::new, old_wood_chest)
-                                       .build(null));
+        FULL_CURSED_CHEST = Registry.register(Registry.BLOCK_ENTITY, new Identifier("cursedchests", "old_cursed_chest"), BlockEntityType.Builder.create(
+                OldChestBlockEntity::new, old_wood_chest, old_iron_chest, old_gold_chest, old_diamond_chest, old_obsidian_chest).build(null));
     }
 
-    private static OldChestBlock registerOld(OldChestBlock block, String name, int rows, TranslatableText containerName, Identifier singleTexture,
-            Identifier vanillaTexture, Identifier tallTexture, Identifier longTexture)
+    private static OldChestBlock registerOld(OldChestBlock block, String name, int rows, TranslatableText containerName)
     {
         Identifier id = new Identifier("cursedchests", "old_" + name);
         Registry.register(Registry.BLOCK, id, block);
         Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
-        Registries.OLD.add(new Identifier("cursedchests", name), new Registries.TierData(rows * 9, containerName, id,
-                singleTexture, vanillaTexture, tallTexture, longTexture));
+        Registries.OLD.add(new Identifier("cursedchests", name), new Registries.TierData(rows * 9, containerName, id));
         return block;
     }
 
@@ -91,7 +89,7 @@ public class ModBlocks
         Identifier id = new Identifier("cursedchests", name);
         Registry.register(Registry.BLOCK, id, block);
         Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(ItemGroup.DECORATIONS)));
-        Registries.REGULAR.add(id, new Registries.TierData(rows * 9, containerName, id, singleTexture, vanillaTexture, tallTexture, longTexture));
+        Registries.MODELED.add(id, new Registries.ModeledTierData(rows * 9, containerName, id, singleTexture, vanillaTexture, tallTexture, longTexture));
         return block;
     }
 }

@@ -1,0 +1,10 @@
+{
+  "parent": "cursedchests:block/old_chest/other",
+  "textures": {
+    "top": "cursedchests:block/old_wood_chest/chest_top_front",
+    "front": "cursedchests:block/old_wood_chest/chest_front",
+    "back": "cursedchests:block/old_wood_chest/chest_side",
+    "left": "cursedchests:block/old_wood_chest/chest_back_left",
+    "right": "cursedchests:block/old_wood_chest/chest_back_right"
+  }
+}

@@ -9,32 +9,29 @@ import ninjaphenix.cursedchests.api.block.CursedChestType;
 public class Registries
 {
     // Make these defaulted registries to nullId?
-    public static final SimpleRegistry<TierData> REGULAR = new SimpleRegistry<>();
+    // For vanilla styled non-full cube chests
+    public static final SimpleRegistry<ModeledTierData> MODELED = new SimpleRegistry<>();
+    // For full cube chests
     public static final SimpleRegistry<TierData> OLD = new SimpleRegistry<>();
 
     static
     {
         Identifier nullId = new Identifier("cursedchests", "null");
-        REGULAR.add(nullId, new TierData(0, new LiteralText("Error"), nullId, nullId, nullId, nullId, nullId));
-        OLD.add(nullId, REGULAR.get(nullId));
+        MODELED.add(nullId, new ModeledTierData(0, new LiteralText("Error"), nullId, nullId, nullId, nullId, nullId));
+        OLD.add(nullId, new TierData(0, new LiteralText("Error"), nullId));
     }
 
-    public static class TierData
+    public static class ModeledTierData extends TierData
     {
-        protected final int slots;
-        protected final Text containerName;
         protected final Identifier singleTexture;
         protected final Identifier vanillaTexture;
         protected final Identifier tallTexture;
         protected final Identifier longTexture;
-        protected final Identifier blockId;
 
-        public TierData(int slots, Text containerName, Identifier blockId, Identifier singleTexture, Identifier vanillaTexture,
+        public ModeledTierData(int slots, Text containerName, Identifier blockId, Identifier singleTexture, Identifier vanillaTexture,
                 Identifier tallTexture, Identifier longTexture)
         {
-            this.slots = slots;
-            this.containerName = containerName;
-            this.blockId = blockId;
+            super(slots, containerName, blockId);
             this.singleTexture = singleTexture;
             this.vanillaTexture = vanillaTexture;
             this.tallTexture = tallTexture;
@@ -47,6 +44,20 @@ public class Registries
             else if (type == CursedChestType.LEFT) return vanillaTexture;
             else if (type == CursedChestType.FRONT) return longTexture;
             return singleTexture;
+        }
+    }
+
+    public static class TierData
+    {
+        protected final int slots;
+        protected final Text containerName;
+        protected final Identifier blockId;
+
+        public TierData(int slots, Text containerName, Identifier blockId)
+        {
+            this.slots = slots;
+            this.containerName = containerName;
+            this.blockId = blockId;
         }
 
         public int getSlotCount() { return slots; }

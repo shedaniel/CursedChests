@@ -13,38 +13,21 @@ public enum CursedChestType implements StringIdentifiable
 
     public static CursedChestType valueOf(ChestType type)
     {
-        switch (type)
-        {
-            case SINGLE:
-                return SINGLE;
-            case RIGHT:
-                return LEFT;
-            case LEFT:
-                return RIGHT;
-            default:
-                return null;
-        }
+        if (type == ChestType.SINGLE) return SINGLE;
+        else if (type == ChestType.RIGHT) return LEFT;
+        else if (type == ChestType.LEFT) return RIGHT;
+        return null;
     }
 
     public CursedChestType getOpposite()
     {
-        switch (this)
-        {
-            case FRONT:
-                return BACK;
-            case BACK:
-                return FRONT;
-            case BOTTOM:
-                return TOP;
-            case TOP:
-                return BOTTOM;
-            case LEFT:
-                return RIGHT;
-            case RIGHT:
-                return LEFT;
-            default:
-                return null;
-        }
+        if (this == FRONT) return BACK;
+        else if (this == BACK) return FRONT;
+        else if (this == BOTTOM) return TOP;
+        else if (this == TOP) return BOTTOM;
+        else if (this == LEFT) return RIGHT;
+        else if (this == RIGHT) return LEFT;
+        return null;
     }
 
     public boolean isRenderedType() { return this == FRONT || this == BOTTOM || this == LEFT || this == SINGLE; }

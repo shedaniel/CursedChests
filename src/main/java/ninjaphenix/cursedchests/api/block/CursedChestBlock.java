@@ -1,6 +1,9 @@
 package ninjaphenix.cursedchests.api.block;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Waterloggable;
 import net.minecraft.block.entity.BlockEntity;
@@ -13,11 +16,10 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.SimpleRegistry;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
-import ninjaphenix.cursedchests.api.Registries;
 import ninjaphenix.cursedchests.api.block.entity.CursedChestBlockEntity;
 
 @SuppressWarnings("deprecation")
@@ -39,7 +41,7 @@ public class CursedChestBlock extends AbstractChestBlock implements Waterloggabl
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView var1) { return new CursedChestBlockEntity(getTierId()); }
+    public BlockEntity createBlockEntity(BlockView var1) { return new CursedChestBlockEntity(Registry.BLOCK.getId(this)); }
 
     @Override
     public FluidState getFluidState(BlockState state) { return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state); }
@@ -128,6 +130,10 @@ public class CursedChestBlock extends AbstractChestBlock implements Waterloggabl
         return super.getStateForNeighborUpdate(state, direction, otherState, world, pos, otherPos);
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
-    public SimpleRegistry<? extends Registries.TierData> getRegistry() { return Registries.REGULAR; }
+    public boolean hasBlockEntityBreakingRender(BlockState state) { return true; }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.ENTITYBLOCK_ANIMATED; }
 }

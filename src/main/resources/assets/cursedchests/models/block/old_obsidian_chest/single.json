@@ -1,0 +1,8 @@
+{
+  "parent": "cursedchests:block/old_chest/single",
+  "textures": {
+    "top": "cursedchests:block/old_obsidian_chest/chest_top",
+    "front": "cursedchests:block/old_obsidian_chest/chest_front",
+    "side": "cursedchests:block/old_obsidian_chest/chest_side"
+  }
+}

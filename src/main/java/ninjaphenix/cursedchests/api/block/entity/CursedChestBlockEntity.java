@@ -86,8 +86,8 @@ public class CursedChestBlockEntity extends AbstractChestBlockEntity implements 
     protected void initialize(Identifier block)
     {
         this.block = block;
-        defaultContainerName = Registries.REGULAR.get(block).getContainerName();
-        inventorySize = Registries.REGULAR.get(block).getSlotCount();
+        defaultContainerName = Registries.MODELED.get(block).getContainerName();
+        inventorySize = Registries.MODELED.get(block).getSlotCount();
         inventory = DefaultedList.ofSize(inventorySize, ItemStack.EMPTY);
         SLOTS = new int[inventorySize];
         for (int i = 0; i < inventorySize; i++) SLOTS[i] = i;
