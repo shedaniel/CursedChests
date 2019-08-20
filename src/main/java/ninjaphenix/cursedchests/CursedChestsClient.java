@@ -21,6 +21,5 @@ public class CursedChestsClient implements ClientModInitializer
         BlockEntityRendererRegistry.INSTANCE.register(CursedChestBlockEntity.class, new CursedChestBlockEntityRenderer());
         BlockEntityRendererRegistry.INSTANCE.register(OldChestBlockEntity.class, new OldChestBlockEntityRenderer());
         ScreenProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ScrollableScreen::createScreen);
-        //MinecraftClient.getInstance().getSpriteAtlas().upload();
     }
 }
