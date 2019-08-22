@@ -1,6 +1,6 @@
 package ninjaphenix.cursedchests.api.client.gui.container;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -86,7 +86,7 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
     @Override
     protected void drawBackground(float float_1, int int_1, int int_2)
     {
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.color4f(1, 1, 1, 1);
         minecraft.getTextureManager().bindTexture(BASE_TEXTURE);
         int int_3 = (width - containerWidth) / 2;
         int int_4 = (height - containerHeight) / 2;
