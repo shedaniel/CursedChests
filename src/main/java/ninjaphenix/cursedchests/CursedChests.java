@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import ninjaphenix.cursedchests.api.block.AbstractChestBlock;
 import ninjaphenix.cursedchests.api.container.ScrollableContainer;
@@ -16,6 +17,7 @@ public class CursedChests implements ModInitializer
     @Override
     public void onInitialize()
     {
+        Registry.BLOCK.isEmpty(); // Simply here to fix crash.
         ModBlocks.init();
         ModItems.init();
         ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->

@@ -16,9 +16,12 @@ dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings "net.fabricmc:yarn:${minecraft_version}+${yarn_version}"
     modCompile "net.fabricmc:fabric-loader:${loader_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    modCompile("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
+    {
+        exclude(group: "net.fabricmc.fabric-api", module: "fabric-renderer-indigo")
+    }
 
-    modApi ('me.shedaniel:RoughlyEnoughItems:3.0-pre+build.1') {
+    modImplementation ('me.shedaniel:RoughlyEnoughItems:3.0-pre+build.1') {
         exclude(group: "io.github.prospector.modmenu", module: "ModMenu")
     }
 }
