@@ -17,7 +17,7 @@ public class CursedChests implements ModInitializer
     @Override
     public void onInitialize()
     {
-        Bootstrap.initialize();
+        Bootstrap.initialize(); // to fix "everything" (waiting for loader update) //todo: remove
         ModBlocks.init();
         ModItems.init();
         ContainerProviderRegistry.INSTANCE.registerFactory(new Identifier("cursedchests", "scrollcontainer"), ((syncId, identifier, player, buf) ->
