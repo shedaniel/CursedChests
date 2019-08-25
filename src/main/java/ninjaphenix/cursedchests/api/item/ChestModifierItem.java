@@ -19,7 +19,6 @@ import ninjaphenix.cursedchests.api.block.CursedChestType;
 
 public abstract class ChestModifierItem extends Item
 {
-
     private static final DirectionProperty FACING = AbstractChestBlock.FACING;
     private static final EnumProperty<CursedChestType> TYPE = AbstractChestBlock.TYPE;
 

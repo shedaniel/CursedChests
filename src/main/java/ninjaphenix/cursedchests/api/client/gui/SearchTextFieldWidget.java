@@ -1,48 +1,44 @@
 package ninjaphenix.cursedchests.api.client.gui;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
+@Environment(EnvType.CLIENT)
 public class SearchTextFieldWidget extends TextFieldWidget
 {
-
     private boolean ignoreNextChar;
 
-    public SearchTextFieldWidget(TextRenderer textRenderer_1, int int_1, int int_2, int int_3, int int_4, String string_1)
+    public SearchTextFieldWidget(TextRenderer textRenderer, int x, int y, int width, int height, String message)
     {
-        super(textRenderer_1, int_1, int_2, int_3, int_4, string_1);
+        super(textRenderer, x, y, width, height, message);
         ignoreNextChar = false;
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public boolean mouseClicked(double x, double y, int button)
     {
-        if (isVisible() && button == 1 && clicked(mouseX, mouseY))
+        if (isVisible() && button == 1 && clicked(x, y))
         {
-            this.setText("");
+            setText("");
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(x, y, button);
     }
 
     @Override
-    public boolean charTyped(char char_1, int int_1)
+    public boolean charTyped(char character, int int_1)
     {
         if (ignoreNextChar)
         {
             ignoreNextChar = false;
             return false;
         }
-        return super.charTyped(char_1, int_1);
+        return super.charTyped(character, int_1);
     }
 
-    public boolean mouseInBounds(double mouseX, double mouseY)
-    {
-        return this.clicked(mouseX, mouseY);
-    }
+    public boolean mouseInBounds(double x, double y) { return clicked(x, y); }
 
-    public void ignoreNextChar()
-    {
-        ignoreNextChar = true;
-    }
+    public void ignoreNextChar() { ignoreNextChar = true; }
 }

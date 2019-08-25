@@ -19,8 +19,8 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
 {
     private static final Identifier BASE_TEXTURE = new Identifier("textures/gui/container/generic_54.png");
     private static final Identifier SCROLL_TEXTURE = new Identifier("cursedchests", "textures/gui/container/scroll.png");
-    private final int rows;
-    private final int realRows;
+    private final int displayedRows;
+    private final int totalRows;
     private int topRow;
     private double progress;
     private boolean dragging;
@@ -30,11 +30,11 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
     public ScrollableScreen(ScrollableContainer container, PlayerInventory playerInventory, Text containerTitle)
     {
         super(container, playerInventory, containerTitle);
-        realRows = container.getRows();
+        totalRows = container.getRows();
         topRow = 0;
-        rows = hasScrollbar() ? 6 : realRows;
+        displayedRows = hasScrollbar() ? 6 : totalRows;
         if (hasScrollbar() && !FabricLoader.getInstance().isModLoaded("roughlyenoughitems")) containerWidth += 22;
-        containerHeight = 114 + rows * 18;
+        containerHeight = 114 + displayedRows * 18;
         progress = 0;
         container.setSearchTerm("");
         searchBoxOldText = "";
@@ -68,37 +68,37 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
     public void tick() { searchBox.tick(); }
 
     @Override
-    public void render(int mouseX, int mouseY, float float_1)
+    public void render(int mouseX, int mouseY, float lastFrameDuration)
     {
         renderBackground();
-        drawBackground(float_1, mouseX, mouseY);
-        super.render(mouseX, mouseY, float_1);
+        drawBackground(lastFrameDuration, mouseX, mouseY);
+        super.render(mouseX, mouseY, lastFrameDuration);
         drawMouseoverTooltip(mouseX, mouseY);
     }
 
     @Override
-    protected void drawForeground(int int_1, int int_2)
+    protected void drawForeground(int mouseX, int mouseY)
     {
         font.draw(title.asFormattedString(), 8, 6, 4210752);
         font.draw(playerInventory.getDisplayName().asFormattedString(), 8, containerHeight - 94, 4210752);
     }
 
     @Override
-    protected void drawBackground(float float_1, int int_1, int int_2)
+    protected void drawBackground(float lastFrameDuration, int mouseX, int mouseY)
     {
         RenderSystem.color4f(1, 1, 1, 1);
         minecraft.getTextureManager().bindTexture(BASE_TEXTURE);
-        int int_3 = (width - containerWidth) / 2;
-        int int_4 = (height - containerHeight) / 2;
-        blit(int_3, int_4, 0, 0, containerWidth, rows * 18 + 17);
-        blit(int_3, int_4 + rows * 18 + 17, 0, 126, containerWidth, 96);
+        int x = (width - containerWidth) / 2;
+        int y = (height - containerHeight) / 2;
+        blit(x, y, 0, 0, containerWidth, displayedRows * 18 + 17);
+        blit(x, y + displayedRows * 18 + 17, 0, 126, containerWidth, 96);
         if (hasScrollbar())
         {
             minecraft.getTextureManager().bindTexture(SCROLL_TEXTURE);
-            blit(int_3 + 172, int_4, 0, 0, 22, 132);
-            blit(int_3 + 174, (int) (int_4 + 18 + 91 * progress), 22, 0, 12, 15);
-            blit(int_3 + 79, int_4 + 126, 34, 0, 90, 11);
-            searchBox.render(int_1, int_2, float_1);
+            blit(x + 172, y, 0, 0, 22, 132);
+            blit(x + 174, (int) (y + 18 + 91 * progress), 22, 0, 12, 15);
+            blit(x + 79, y + 126, 34, 0, 90, 11);
+            searchBox.render(mouseX, mouseY, lastFrameDuration);
         }
     }
 
@@ -108,7 +108,7 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
         if (hasScrollbar())
         {
             setTopRow(topRow - (int) scrollDelta);
-            progress = ((double) topRow) / ((double) (realRows - 6));
+            progress = ((double) topRow) / ((double) (totalRows - 6));
             return true;
         }
         return false;
@@ -128,7 +128,7 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
     {
         if (!dragging) return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
         progress = MathHelper.clamp((mouseY - top - 25.5) / 90, 0, 1);
-        setTopRow((int) (progress * (realRows - 6)));
+        setTopRow((int) (progress * (totalRows - 6)));
         return true;
     }
 
@@ -155,11 +155,9 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
-    private void setTopRow(int value)
+    private void setTopRow(int row)
     {
-        topRow = value;
-        if (topRow < 0) topRow = 0;
-        else if (topRow > realRows - 6) topRow = realRows - 6;
+        topRow = MathHelper.clamp(row, 0, totalRows - 6);
         container.updateSlotPositions(topRow, false);
     }
 
@@ -186,18 +184,18 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
     }
 
     @Override
-    public boolean charTyped(char char_1, int int_1)
+    public boolean charTyped(char character, int int_1)
     {
-        if (searchBox.isFocused()) return searchBox.charTyped(char_1, int_1);
-        return super.charTyped(char_1, int_1);
+        if (searchBox.isFocused()) return searchBox.charTyped(character, int_1);
+        return super.charTyped(character, int_1);
     }
 
     @Override
-    public void resize(MinecraftClient client, int int_1, int int_2)
+    public void resize(MinecraftClient client, int width, int height)
     {
         String text = searchBox.getText();
         boolean focused = searchBox.isFocused();
-        super.resize(client, int_1, int_2);
+        super.resize(client, width, height);
         searchBox.setText(text);
         if (focused)
         {
@@ -206,10 +204,10 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
         }
     }
 
-    public int getTop() {return this.top;}
+    public int getTop() { return this.top; }
 
-    public int getLeft() {return this.left;}
+    public int getLeft() { return this.left; }
 
-    public boolean hasScrollbar() { return realRows > 6; }
+    public boolean hasScrollbar() { return totalRows > 6; }
 }
 
