@@ -4,6 +4,8 @@ import me.shedaniel.math.api.Rectangle;
 import me.shedaniel.rei.api.BaseBoundsHandler;
 import me.shedaniel.rei.api.DisplayHelper;
 import me.shedaniel.rei.api.plugins.REIPluginV0;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.util.version.VersionParsingException;
 import net.minecraft.client.MinecraftClient;
@@ -12,6 +14,7 @@ import ninjaphenix.cursedchests.api.client.gui.container.ScrollableScreen;
 
 import java.util.ArrayList;
 
+@Environment(EnvType.CLIENT)
 public class CursedChestREIPlugin implements REIPluginV0
 {
     @Override
