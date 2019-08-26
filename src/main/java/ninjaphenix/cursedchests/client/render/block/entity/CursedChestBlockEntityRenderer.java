@@ -93,6 +93,6 @@ public class CursedChestBlockEntityRenderer extends BlockEntityRenderer<CursedCh
     private void setLidPitch(CursedChestBlockEntity blockEntity, float lidPitch, SingleChestEntityModel model)
     {
         float newPitch = 1.0F - blockEntity.getAnimationProgress(lidPitch);
-        model.getLid().pitch = -((1.0F - newPitch * newPitch * newPitch) * 1.5707964F);
+        model.setLidPitch(-((1.0F - newPitch * newPitch * newPitch) * 1.5707964F));
     }
 }
