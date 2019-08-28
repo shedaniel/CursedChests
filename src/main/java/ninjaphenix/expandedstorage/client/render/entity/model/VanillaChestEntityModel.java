@@ -8,7 +8,7 @@ public class VanillaChestEntityModel extends SingleChestEntityModel
 {
     public VanillaChestEntityModel()
     {
-        super(128, 64);
+        super(96, 48);
         lid.addCuboid(0, -5, -14, 30, 5, 14, 0);
         lid.addCuboid(14, -2, -15, 2, 4, 1, 0);
         lid.setRotationPoint(1, 7, 15);

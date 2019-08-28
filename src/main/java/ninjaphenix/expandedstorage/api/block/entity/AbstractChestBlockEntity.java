@@ -22,7 +22,7 @@ public abstract class AbstractChestBlockEntity extends LootableContainerBlockEnt
     protected DefaultedList<ItemStack> inventory;
     protected int[] SLOTS;
 
-    // May be Identifier("cursedchests", "null")
+    // May be Identifier("expandedstorage", "null")
     protected Identifier block;
 
     public AbstractChestBlockEntity(BlockEntityType type, Identifier block)

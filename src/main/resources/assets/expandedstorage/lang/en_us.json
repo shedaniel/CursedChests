@@ -5,6 +5,7 @@
   "container.expandedstorage.diamond_chest": "Diamond Chest",
   "container.expandedstorage.obsidian_chest": "Obsidian Chest",
   "container.expandedstorage.generic_double": "Large %s",
+  "container.expandedstorage.error": "Error",
   "block.expandedstorage.wood_chest": "Chest",
   "block.expandedstorage.iron_chest": "Iron Chest",
   "block.expandedstorage.gold_chest": "Gold Chest",
@@ -29,5 +30,6 @@
   "tooltip.expandedstorage.chest_mutator.merge": "Merge",
   "tooltip.expandedstorage.chest_mutator.unmerge": "Unmerge",
   "tooltip.expandedstorage.chest_mutator.rotate": "Rotate",
+  "tooltip.expandedstorage.chest_mutator.invalid": "Invalid",
   "tooltip.expandedstorage.tool_mode": "Tool Mode: %s"
 }

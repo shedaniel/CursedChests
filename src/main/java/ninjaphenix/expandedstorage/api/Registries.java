@@ -1,9 +1,10 @@
 package ninjaphenix.expandedstorage.api;
 
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.SimpleRegistry;
+import ninjaphenix.expandedstorage.ExpandedStorage;
 import ninjaphenix.expandedstorage.api.block.CursedChestType;
 
 public class Registries
@@ -16,9 +17,9 @@ public class Registries
 
     static
     {
-        Identifier nullId = new Identifier("cursedchests", "null");
-        MODELED.add(nullId, new ModeledTierData(0, new LiteralText("Error"), nullId, nullId, nullId, nullId, nullId));
-        OLD.add(nullId, new TierData(0, new LiteralText("Error"), nullId));
+        Identifier nullId = ExpandedStorage.getId("null");
+        MODELED.add(nullId, new ModeledTierData(0, new TranslatableText("container.expandedstorage.error"), nullId, nullId, nullId, nullId, nullId));
+        OLD.add(nullId, new TierData(0, new TranslatableText("container.expandedstorage.error"), nullId));
     }
 
     public static class ModeledTierData extends TierData

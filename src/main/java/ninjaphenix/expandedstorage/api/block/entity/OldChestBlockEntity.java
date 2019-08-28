@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import ninjaphenix.expandedstorage.ExpandedStorage;
 import ninjaphenix.expandedstorage.api.Registries;
 
 public class OldChestBlockEntity extends AbstractChestBlockEntity
@@ -12,10 +13,10 @@ public class OldChestBlockEntity extends AbstractChestBlockEntity
 
     public OldChestBlockEntity()
     {
-        this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "old_cursed_chest")), new Identifier("cursedchests", "null"));
+        this(Registry.BLOCK_ENTITY.get(ExpandedStorage.getId("old_cursed_chest")), ExpandedStorage.getId("null"));
     }
 
-    public OldChestBlockEntity(Identifier block) { this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "old_cursed_chest")), block); }
+    public OldChestBlockEntity(Identifier block) { this(Registry.BLOCK_ENTITY.get(ExpandedStorage.getId("old_cursed_chest")), block); }
 
     public OldChestBlockEntity(BlockEntityType type, Identifier block) { super(type, block); }
 

@@ -27,6 +27,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import ninjaphenix.expandedstorage.ExpandedStorage;
 import ninjaphenix.expandedstorage.api.block.entity.AbstractChestBlockEntity;
 import ninjaphenix.expandedstorage.api.inventory.DoubleSidedInventory;
 
@@ -37,7 +38,7 @@ public abstract class AbstractChestBlock extends BlockWithEntity implements Inve
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final EnumProperty<CursedChestType> TYPE = EnumProperty.of("type", CursedChestType.class);
-    private static final String DOUBLE_PREFIX = "container.cursedchests.generic_double";
+    private static final String DOUBLE_PREFIX = "container.expandedstorage.generic_double";
     private static final PropertyRetriever<SidedInventory> INVENTORY_RETRIEVER = new PropertyRetriever<SidedInventory>()
     {
         @Override
@@ -306,7 +307,7 @@ public abstract class AbstractChestBlock extends BlockWithEntity implements Inve
                 if (cursedClickBlockEntity.checkUnlocked(player))
                 {
                     cursedClickBlockEntity.checkLootInteraction(player);
-                    ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
+                    ContainerProviderRegistry.INSTANCE.openContainer(ExpandedStorage.getId("scrollcontainer"), player, (packetByteBuf ->
                     {
                         packetByteBuf.writeBlockPos(pos);
                         packetByteBuf.writeText(containerName);
@@ -325,7 +326,7 @@ public abstract class AbstractChestBlock extends BlockWithEntity implements Inve
                 {
                     cursedClickBlockEntity.checkLootInteraction(player);
                     cursedPairedBlockEntity.checkLootInteraction(player);
-                    ContainerProviderRegistry.INSTANCE.openContainer(new Identifier("cursedchests", "scrollcontainer"), player, (packetByteBuf ->
+                    ContainerProviderRegistry.INSTANCE.openContainer(ExpandedStorage.getId("scrollcontainer"), player, (packetByteBuf ->
                     {
                         packetByteBuf.writeBlockPos(pos);
                         packetByteBuf.writeText(containerName);
@@ -336,10 +337,7 @@ public abstract class AbstractChestBlock extends BlockWithEntity implements Inve
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState blockState_1)
-    {
-        return BlockRenderType.MODEL;
-    }
+    public BlockRenderType getRenderType(BlockState blockState_1) { return BlockRenderType.MODEL; }
 
     interface PropertyRetriever<T>
     {

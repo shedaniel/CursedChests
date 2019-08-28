@@ -118,7 +118,7 @@ public class ChestMutatorItem extends ChestModifierItem
                         return ActionResult.SUCCESS;
                 }
             default:
-                player.sendMessage(new LiteralText("Invalid mode."));
+                player.sendMessage(new TranslatableText("tooltip.expandedstorage.chest_mutato.invalid"));
                 stack.getOrCreateTag().putByte("mode", (byte) 0);
                 break;
         }

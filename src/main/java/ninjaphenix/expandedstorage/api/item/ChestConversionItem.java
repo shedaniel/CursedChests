@@ -14,6 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import ninjaphenix.expandedstorage.ExpandedStorage;
 import ninjaphenix.expandedstorage.api.block.CursedChestBlock;
 
 public class ChestConversionItem extends ChestModifierItem
@@ -95,7 +96,7 @@ public class ChestConversionItem extends ChestModifierItem
     @Override
     protected ActionResult useModifierOnBlock(ItemUsageContext context, BlockState state)
     {
-        if (state.getBlock() == Blocks.CHEST && from.equals(new Identifier("cursedchests", "wood_chest")))
+        if (state.getBlock() == Blocks.CHEST && from.equals(ExpandedStorage.getId("wood_chest")))
         {
             World world = context.getWorld();
             BlockPos mainpos = context.getBlockPos();

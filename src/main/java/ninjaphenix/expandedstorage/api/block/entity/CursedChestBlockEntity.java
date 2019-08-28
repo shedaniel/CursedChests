@@ -22,6 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import ninjaphenix.expandedstorage.ExpandedStorage;
 import ninjaphenix.expandedstorage.api.Registries;
 import ninjaphenix.expandedstorage.api.block.CursedChestBlock;
 import ninjaphenix.expandedstorage.api.block.CursedChestType;
@@ -39,15 +40,9 @@ public class CursedChestBlockEntity extends AbstractChestBlockEntity implements 
     private int viewerCount;
     private int ticksOpen;
 
-    public CursedChestBlockEntity()
-    {
-        this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "cursed_chest")), new Identifier("cursedchests", "null"));
-    }
+    public CursedChestBlockEntity() { this(Registry.BLOCK_ENTITY.get(ExpandedStorage.getId("cursed_chest")), ExpandedStorage.getId("null")); }
 
-    public CursedChestBlockEntity(Identifier block)
-    {
-        this(Registry.BLOCK_ENTITY.get(new Identifier("cursedchests", "cursed_chest")), block);
-    }
+    public CursedChestBlockEntity(Identifier block) { this(Registry.BLOCK_ENTITY.get(ExpandedStorage.getId("cursed_chest")), block); }
 
     public CursedChestBlockEntity(BlockEntityType type, Identifier block)
     {

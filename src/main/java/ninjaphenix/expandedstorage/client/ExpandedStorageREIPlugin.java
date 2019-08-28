@@ -9,6 +9,7 @@ import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.util.version.VersionParsingException;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
+import ninjaphenix.expandedstorage.ExpandedStorage;
 import ninjaphenix.expandedstorage.api.client.gui.container.ScrollableScreen;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class ExpandedStorageREIPlugin implements REIPluginV0
     public SemanticVersion getMinimumVersion() throws VersionParsingException { return SemanticVersion.parse("3.0-pre"); }
 
     @Override
-    public Identifier getPluginIdentifier() { return new Identifier("cursedchests", "reiplugin"); }
+    public Identifier getPluginIdentifier() { return ExpandedStorage.getId("reiplugin"); }
 
     @Override
     public void registerBounds(DisplayHelper displayHelper)

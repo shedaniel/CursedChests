@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import ninjaphenix.expandedstorage.ExpandedStorage;
 import ninjaphenix.expandedstorage.api.client.gui.SearchTextFieldWidget;
 import ninjaphenix.expandedstorage.api.container.ScrollableContainer;
 
@@ -18,7 +19,7 @@ import ninjaphenix.expandedstorage.api.container.ScrollableContainer;
 public class ScrollableScreen extends AbstractContainerScreen<ScrollableContainer> implements ContainerProvider<ScrollableContainer>
 {
     private static final Identifier BASE_TEXTURE = new Identifier("textures/gui/container/generic_54.png");
-    private static final Identifier SCROLL_TEXTURE = new Identifier("cursedchests", "textures/gui/container/scroll.png");
+    private static final Identifier SCROLL_TEXTURE = ExpandedStorage.getId("textures/gui/container/scroll.png");
     private final int displayedRows;
     private final int totalRows;
     private int topRow;
