@@ -1,33 +1,33 @@
 {
   "schemaVersion": 1,
-  "id": "cursedchests",
+  "id": "expandedstorage",
   "version": "${version}",
-  "name": "CursedChests",
-  "description": "Adds cursed chests to minecraft.",
+  "name": "ExpandedStorage",
+  "description": "Adds new storage blocks with varying capacities.",
   "authors": [
     "NinjaPhenix"
   ],
   "contact": {
-    "homepage": "https://minecraft.curseforge.com/projects/cursed-chests",
-    "sources": "https://github.com/NinjaPhenix/CursedChests"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/expanded-storage",
+    "sources": "https://github.com/NinjaPhenix/ExpandedStorage/tree/1.15-snapshot"
   },
   "license": "MIT",
-  "icon": "assets/cursedchests/icon.png",
+  "icon": "assets/expandedstorage/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ninjaphenix.cursedchests.CursedChests"
+      "ninjaphenix.expandedstorage.ExpandedStorage"
     ],
     "client": [
-      "ninjaphenix.cursedchests.CursedChestsClient"
+      "ninjaphenix.expandedstorage.ExpandedStorageClient"
     ],
     "rei_plugins_v0": [
-      "ninjaphenix.cursedchests.client.CursedChestREIPlugin"
+      "ninjaphenix.expandedstorage.client.ExpandedStorageREIPlugin"
     ]
   },
   "mixins": [
     {
-      "config": "cursedchests.mixins.client.json",
+      "config": "expandedstorage.mixins.client.json",
       "environment": "client"
     }
   ],

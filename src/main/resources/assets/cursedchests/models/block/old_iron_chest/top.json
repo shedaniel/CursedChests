@@ -1,8 +1,0 @@
-{
-  "parent": "cursedchests:block/old_chest/single",
-  "textures": {
-    "top": "cursedchests:block/old_iron_chest/chest_top",
-    "front": "cursedchests:block/old_iron_chest/chest_front_top",
-    "side": "cursedchests:block/old_iron_chest/chest_side_top"
-  }
-}
