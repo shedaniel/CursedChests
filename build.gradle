@@ -51,3 +51,7 @@ jar {
 tasks.withType(JavaCompile) {
     options.setEncoding("UTF-8")
 }
+
+runClient {
+    args = ["--username", "Dev"]
+}
