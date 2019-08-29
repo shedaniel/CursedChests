@@ -14,19 +14,23 @@ repositories {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings "net.fabricmc:yarn:${minecraft_version}+${yarn_version}"
-    modCompile "net.fabricmc:fabric-loader:${loader_version}"
-    modCompile("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
+    minecraft ("com.mojang:minecraft:${minecraft_version}")
+    mappings ("net.fabricmc:yarn:${minecraft_version}+${yarn_version}")
+    modCompile ("net.fabricmc:fabric-loader:${loader_version}")
+    modCompile ("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
 
-    modApi ("me.shedaniel:RoughlyEnoughItems:3.1-pre+build.4")
+    modApi ("me.shedaniel:RoughlyEnoughItems:${rei_version}")
 	{
-	    exclude(group: "net.fabricmc", module: "fabric-loader")
-		exclude(group: "net.fabricmc.fabric-api")
-		exclude(group: "io.github.prospector", module: "modmenu")
+	    exclude (group: "net.fabricmc", module: "fabric-loader")
+		exclude (group: "net.fabricmc.fabric-api")
+		exclude (group: "io.github.prospector", module: "modmenu")
 	}
-	
-	modApi ("io.github.prospector:modmenu:1.7.9-unstable.19w34a+build.1")
+
+	modApi ("io.github.prospector:modmenu:${modmenu_version}")
+    {
+        exclude (group: "net.fabricmc", module: "fabric-loader")
+        exclude (group: "net.fabricmc.fabric-api")
+    }
 }
 
 processResources {
@@ -45,5 +49,5 @@ jar {
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+    options.setEncoding("UTF-8")
 }

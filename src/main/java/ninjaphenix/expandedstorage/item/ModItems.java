@@ -2,18 +2,20 @@ package ninjaphenix.expandedstorage.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 import ninjaphenix.expandedstorage.ExpandedStorage;
+import ninjaphenix.expandedstorage.api.item.ChestConversionItem;
 
 public class ModItems
 {
     public static void init()
     {
-        Identifier wood = ExpandedStorage.getId("wood_chest");
-        Identifier iron = ExpandedStorage.getId("iron_chest");
-        Identifier gold = ExpandedStorage.getId("gold_chest");
-        Identifier diamond = ExpandedStorage.getId("diamond_chest");
-        Identifier obsidian = ExpandedStorage.getId("obsidian_chest");
+        Pair<Identifier, String> wood = new Pair<>(ExpandedStorage.getId("wood_chest"), "wood");
+        Pair<Identifier, String> iron = new Pair<>(ExpandedStorage.getId("iron_chest"), "iron");
+        Pair<Identifier, String> gold = new Pair<>(ExpandedStorage.getId("gold_chest"), "gold");
+        Pair<Identifier, String> diamond = new Pair<>(ExpandedStorage.getId("diamond_chest"), "diamond");
+        Pair<Identifier, String> obsidian = new Pair<>(ExpandedStorage.getId("obsidian_chest"), "obsidian");
         registerConversionItem(wood, iron);
         registerConversionItem(wood, gold);
         registerConversionItem(wood, diamond);
@@ -29,14 +31,10 @@ public class ModItems
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    private static Item registerConversionItem(Identifier from, Identifier to)
+    private static Item registerConversionItem(Pair<Identifier, String> from, Pair<Identifier, String>  to)
     {
-        //String fromName = Registry.BLOCK.getId(from).getPath();
-        //String toName = Registry.BLOCK.getId(to).getPath();
-        //Item conversionKit = new ChestConversionItem(from, to);
-        //Registry.register(Registry.ITEM, new Identifier("cursedchests",
-        //        fromName.substring(0, fromName.indexOf('_')) + "_to_" + toName.substring(0, toName.indexOf('_')) + "_conversion_kit"), conversionKit);
-        //return conversionKit;
-        return new Item(new Item.Settings()); // to fix errors untill I actually implement changes
+        Item conversionKit = new ChestConversionItem(from.getLeft(), to.getLeft());
+        Registry.register(Registry.ITEM, ExpandedStorage.getId(from.getRight() + "_to_" + to.getRight() + "_conversion_kit"), conversionKit);
+        return conversionKit;
     }
 }
