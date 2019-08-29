@@ -21,7 +21,7 @@ public class SingleChestEntityModel extends Model
 
     public SingleChestEntityModel()
     {
-        this(64, 64);
+        this(64, 48);
         lid.addCuboid(0, -5, -14, 14, 5, 14, 0);
         lid.addCuboid(6, -2, -15, 2, 4, 1, 0);
         lid.setRotationPoint(1, 7, 15);

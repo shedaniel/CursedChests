@@ -8,7 +8,7 @@ public class LongChestEntityModel extends SingleChestEntityModel
 {
     public LongChestEntityModel()
     {
-        super(96, 96);
+        super(96, 80);
         lid.addCuboid(0, -5, -30, 14, 5, 30, 0);
         lid.addCuboid(6, -2, -31, 2, 4, 1, 0);
         lid.setRotationPoint(1, 7, 31);
