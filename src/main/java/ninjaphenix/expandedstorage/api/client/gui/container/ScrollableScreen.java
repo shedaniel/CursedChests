@@ -19,7 +19,7 @@ import ninjaphenix.expandedstorage.api.container.ScrollableContainer;
 public class ScrollableScreen extends AbstractContainerScreen<ScrollableContainer> implements ContainerProvider<ScrollableContainer>
 {
     private static final Identifier BASE_TEXTURE = new Identifier("textures/gui/container/generic_54.png");
-    private static final Identifier SCROLL_TEXTURE = ExpandedStorage.getId("textures/gui/container/scroll.png");
+    private static final Identifier WIDGETS_TEXTURE = ExpandedStorage.getId("textures/gui/container/widgets.png");
     private final int displayedRows;
     private final int totalRows;
     private int topRow;
@@ -95,7 +95,7 @@ public class ScrollableScreen extends AbstractContainerScreen<ScrollableContaine
         blit(x, y + displayedRows * 18 + 17, 0, 126, containerWidth, 96);
         if (hasScrollbar())
         {
-            minecraft.getTextureManager().bindTexture(SCROLL_TEXTURE);
+            minecraft.getTextureManager().bindTexture(WIDGETS_TEXTURE);
             blit(x + 172, y, 0, 0, 22, 132);
             blit(x + 174, (int) (y + 18 + 91 * progress), 22, 0, 12, 15);
             blit(x + 79, y + 126, 34, 0, 90, 11);
